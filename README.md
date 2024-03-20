@@ -1,2 +1,3 @@
-# Thesis
-This will be used for the development for thesis 2 which is SRS.
+SecuSpire
+
+This application is being developed using Next.js, Firebase, Typescript, and Tailwind CSS for our Graduating Thesis Project.  
