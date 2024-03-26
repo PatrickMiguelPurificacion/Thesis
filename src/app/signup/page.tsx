@@ -39,157 +39,91 @@ export default function Signup() {
   
   return (
     <>
-    <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">
-    <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-40 py-6 max-w-md">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-            alt="Your Company"
-          />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
-            Sign up
-          </h2>
-        </div>
+    <br/><br/><br/>
+    <div className="min-h-screen py-39 bg-gradient-to-t(115deg, (#9F7AEA, #FEE2FE)">
+    <div className="container mx-auto">
+        <div className="flex w-8/12 bg-white rounded-x1 mx-auto shadow-ig overflow-hidden">
+          <div className="w-1/2">
+          <img className="w-1/18 h-50" src="https://i.ibb.co/6XmvNCT/register-logo.png" alt="regsi"/>
+          </div>
+        <div className="w-1/2 py-16 px-12">
+          <p className="mb-5 text-2xl">
+            Create your Account
+          </p>
+          <form action="#">
+            <div className="grid grid-cols-2 gap-5">
+              <input type="text" placeholder="First Name" className="border border-black py-1 px-2"
+              id="firstname"
+              name="firstname"
+              value={newUser.firstname}
+              onChange={(e) => setUser({...newUser, firstname: e.target.value})}
+              autoComplete="firstname"
+              required
+            />
 
-      
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          
-        <div className="space-y-6">
-            <div>
-              <label htmlFor="firstname" className="block text-sm font-medium leading-6 text-black">
-                First Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="firstname"
-                  name="firstname"
-                  type="text"
-                  value={newUser.firstname}
-                  onChange={(e) => setUser({...newUser, firstname: e.target.value})}
-                  autoComplete="firstname"
-                  required
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            
-
-            <div className="space-y-6">
-            <div>
-              <label htmlFor="lastname" className="block text-sm font-medium leading-6 text-black">
-                Last Name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="lastname"
-                  name="lastname"
-                  type="text"
-                  value={newUser.lastname}
-                  onChange={(e) => setUser({...newUser, lastname: e.target.value})}
-                  autoComplete="lastname"
-                  required
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                />
-              </div>
+              <input type="text" placeholder="Last Name" className="border border-black py-1 px-2"/>
             </div>
 
-            <div className="space-y-6">
-            <div>
-              <label htmlFor="studentNum" className="block text-sm font-medium leading-6 text-black">
-                Student Number
-              </label>
-              <div className="mt-2">
-                <input
-                  id="studentNum"
-                  name="studentNum"
-                  type="number"
-                  value={newUser.studentNum}
-                  onChange={(e) => setUser({...newUser, studentNum: e.target.value})}
-                  autoComplete="studentNum"
-                  required
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                />
-              </div>
+            <div className="mt-5">
+            <input type="email" placeholder="Email" className="border border-black py-1 px-2 w-full"
+            id="email"
+            name="email"
+            value={newUser.email}
+            autoComplete="email"
+            onChange={(e) => {setEmail(e.target.value); setUser({...newUser, email: e.target.value})}}
+            required
+            />
             </div>
 
-          <div className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-black">
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={newUser.email}
-                  autoComplete="email"
-                  onChange={(e) => {setEmail(e.target.value); setUser({...newUser, email: e.target.value})}}
-                  required
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                />
-              </div>
+            <div className="mt-5">
+            <input type="number" placeholder="Student Number" className="border border-black py-1 px-2 w-full"
+            id="studentNum"
+            name="studentNum"
+            value={newUser.studentNum}
+            onChange={(e) => setUser({...newUser, studentNum: e.target.value})}
+            autoComplete="studentNum"
+            required
+            />
             </div>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-black">
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                />
-              </div>
+            <div className="mt-5">
+            <input type="password" placeholder="Password" className="border border-black py-1 px-2 w-full"
+             id="password"
+             name="password"
+             autoComplete="current-password"
+             onChange={(e) => setPassword(e.target.value)}
+             required
+            />
             </div>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-black">
-                  Password Again
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="passwordAgain"
-                  name="passwordAgain"
-                  type="password"
-                  autoComplete="current-password"
-                  onChange={(e) => setPasswordAgain(e.target.value)}
-                  required
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                />
-              </div>
+            <div className="mt-5">
+            <input type="password" placeholder="Confirm Password" className="border border-black py-1 px-2 w-full"
+             id="passwordAgain"
+             name="passwordAgain"
+             autoComplete="current-password"
+             onChange={(e) => setPasswordAgain(e.target.value)}
+             required
+            />
             </div>
 
-            <div>
-              <button
+            <div className="mt-5">
+            <button
                 disabled={(!email || !password || !passwordAgain) || (password !== passwordAgain)}
                 onClick={async () => {await signup(); router.push('signin')}}
-                className="disabled:opacity-40 flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-black hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Sign Up
               </button>
-              
-              <button onClick={() => router.push('signin')} className="font-semibold mt-3 text-center leading-6 text-indigo-400 hover:text-indigo-300">
+              <button onClick={() => router.push('signin')} className="font-semibold mt-3 text-center leading-6 text-indigo-400 hover:text-indigo-700">
               Back
             </button>
             </div>
-          </div>
+
+          </form>
         </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
+        </div>
+    </div>
+    </div>
     </>
   )
 }
