@@ -4,12 +4,13 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { auth, db } from '../firebase';
 import { collection, addDoc } from "firebase/firestore";
+import {toast} from 'sonner';
 
 export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordAgain, setPasswordAgain] = useState('');
-  const [newUser, setUser] = useState({firstname: '', lastname:'', studentNum:'', email:''});
+  const [newUser, setUser] = useState({firstname: '', lastname:'', studentNum:''});
 
   const router = useRouter();
 
@@ -24,15 +25,17 @@ export default function Signup() {
         firstname: newUser.firstname.trim(),
         lastname: newUser.lastname.trim(),
         studentNum: newUser.studentNum.trim(),
-        email: newUser.email.trim(),
+        email: email.trim(),
         uid: user.uid // adding UID for reference
       });
-  
+      
       // Redirect to sign-in page
       router.push('signin');
+
     } catch (error:any) {
       console.error('Error creating user:', error.message);
       // Handle error
+      toast.error('Error creating account');
     }
   };
   
@@ -50,7 +53,7 @@ export default function Signup() {
           <p className="mb-5 text-2xl">
             Create your Account
           </p>
-          <form action="#">
+          
             <div className="grid grid-cols-2 gap-5">
               <input type="text" placeholder="First Name" className="border border-black py-1 px-2"
               id="firstname"
@@ -61,16 +64,21 @@ export default function Signup() {
               required
             />
 
-              <input type="text" placeholder="Last Name" className="border border-black py-1 px-2"/>
+              <input type="text" placeholder="Last Name" className="border border-black py-1 px-2"
+              id="lastname"
+              name="lastname"
+              value={newUser.lastname}
+              onChange={(e) => setUser({...newUser, lastname: e.target.value})}
+              autoComplete="lastname"
+              required/>
             </div>
 
             <div className="mt-5">
             <input type="email" placeholder="Email" className="border border-black py-1 px-2 w-full"
             id="email"
             name="email"
-            value={newUser.email}
             autoComplete="email"
-            onChange={(e) => {setEmail(e.target.value); setUser({...newUser, email: e.target.value})}}
+            onChange={(e) => setEmail(e.target.value)}
             required
             />
             </div>
@@ -109,8 +117,8 @@ export default function Signup() {
             <div className="mt-5">
             <button
                 disabled={(!email || !password || !passwordAgain) || (password !== passwordAgain)}
-                onClick={async () => {await signup(); router.push('signin')}}
-                className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-black hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                onClick={async () => {await signup(); toast.success('Account Successfully Created!');}}
+                className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Sign Up
               </button>
@@ -118,8 +126,6 @@ export default function Signup() {
               Back
             </button>
             </div>
-
-          </form>
         </div>
         </div>
     </div>

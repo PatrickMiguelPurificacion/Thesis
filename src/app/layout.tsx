@@ -1,6 +1,8 @@
+'use client';
+
 import './globals.css'
 import SessionProvider from './SessionProvider';
-
+import {Toaster} from 'sonner';
 
 export default async function RootLayout({
   children,
@@ -12,6 +14,7 @@ export default async function RootLayout({
       <body className="h-full">
       <SessionProvider>
         {children}
+        <Toaster richColors position = "top-center"/>
       </SessionProvider>
       </body>
     </html>
