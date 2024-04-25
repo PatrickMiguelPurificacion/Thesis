@@ -9,12 +9,14 @@ const EditDeckModal = (props: {
   deckDetails: any;
   deckID: any;
 }) => {
+  //sets the value of deck as the deck details passed from the flashcards page
   const [deck, setDeck] = useState(props.deckDetails);
 
   const { data: session } = useSession();
 
   const editDeck = async () => {
     try {
+      //For checking in the console
       console.log('Editing deck:', deck);
       console.log('Deck ID:', props.deckID);
       console.log('User ID:', session?.user?.email);
@@ -33,6 +35,7 @@ const EditDeckModal = (props: {
         cardNum: props.deckDetails.cardNum,
       });
   
+      //Removes the modal state
       props.setEditModalState(false);
       toast.success('Deck Updated Successfully!');
     } catch (error) {
@@ -41,6 +44,7 @@ const EditDeckModal = (props: {
     }
   };
     
+  //Handles the change of input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setDeck({ ...deck, [name]: value });
@@ -48,8 +52,8 @@ const EditDeckModal = (props: {
 
   return (
     <>
-      <div className="w-full max-w-xs">
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+       <div className="relative bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-xl">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Deck Name

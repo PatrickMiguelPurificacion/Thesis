@@ -1,6 +1,7 @@
 'use client';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect, useRouter } from 'next/navigation';
+import NavBar from '../components/NavBar';
 
 export default function Learn() {
   const session = useSession({
@@ -13,39 +14,14 @@ export default function Learn() {
   const router = useRouter();
 
   return (
-    <div className="p-8">
-      <div className='text-white'>{session?.data?.user?.email }</div>
-      <button onClick={() => router.push('home')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Home
-      </button>
-      <br/>
-      <button onClick={() => router.push('user-profile')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        User Profile
-      </button>
-      <br/>
-      <button onClick={() => router.push('flashcards')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Flashcards
-      </button>
-      <br/>
-      <button onClick={() => router.push('kanban')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Kanban Board
-      </button>
-      <br/>
-      <button onClick={() => router.push('learn')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Learn Page
-      </button>
-      <br/>
-      <button onClick={() => router.push('notebook')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Notebook
-      </button>
+    <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
+      <NavBar userEmail={session?.data?.user?.email} /> {/*Calls the NavBar component*/}
       
-      <br/><br/>
+      <div className="flex-grow bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
       
-      <p className = "text-white"> This is the LEARN PAGE</p>
+      <p className = "text-black"> This is the LEARN PAGE</p>
 
-      <br/><br/><br/><br/><br/>
-      
-      <button className='text-white' onClick={() => signOut()}>Logout</button>
+    </div>
     </div>
   )
 }

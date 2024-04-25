@@ -39,7 +39,8 @@ export default function Signup() {
     }
   };
   
-  
+ 
+  //Return the UI
   return (
     <>
     <br/><br/><br/>
@@ -122,6 +123,7 @@ export default function Signup() {
               >
                 Sign Up
               </button>
+
               <button onClick={() => router.push('signin')} className="font-semibold mt-3 text-center leading-6 text-indigo-400 hover:text-indigo-700">
               Back
             </button>

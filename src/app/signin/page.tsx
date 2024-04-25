@@ -8,6 +8,8 @@ export default function Signin() {
   const [password, setPassword] = useState('');
   
   const router = useRouter();
+
+  //SignIn uses next-auth from react, but authentication is firebase
   return (
     <>
     <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">

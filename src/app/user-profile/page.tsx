@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
+import NavBar from '../components/NavBar';
 
 interface UserDetails {
   firstname: string;
@@ -23,9 +24,11 @@ export default function Profile() {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const router = useRouter();
 
+  // Fetches the user details
   useEffect(() => {
     const fetchUserDetails = () => {
       if (session?.user?.email) {
+        // Calls the user database and finds the user with the same email as the current session
         const usersRef = collection(db, 'users');
         const q = query(usersRef, where('email', '==', session.user.email));
         getDocs(q)
@@ -33,7 +36,6 @@ export default function Profile() {
             if (!querySnapshot.empty) {
               querySnapshot.forEach((doc) => {
                 const userData = doc.data() as UserDetails;
-                console.log('User details:', userData);
                 setUserDetails(userData);
               });
             } else {
@@ -56,42 +58,27 @@ export default function Profile() {
   }
 
   return (
-    <div className="p-8">
+    <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
       {session && (
         <>
-        <button onClick={() => router.push('home')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Home
-      </button>
-      <br/>
-      <button onClick={() => router.push('user-profile')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        User Profile
-      </button>
-      <br/>
-      <button onClick={() => router.push('flashcards')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Flashcards
-      </button>
-      <br/>
-      <button onClick={() => router.push('kanban')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Kanban Board
-      </button>
-      <br/>
-      <button onClick={() => router.push('learn')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Learn Page
-      </button>
-      <br/>
-      <button onClick={() => router.push('notebook')} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-800">
-        Notebook
-      </button>
-      
-      <br/><br/><br/>
-          <div className="text-white">Email: {session.user?.email}</div>
-          {userDetails && (
-            <>
-              <div className="text-white">First Name: {userDetails.firstname}</div>
-              <div className="text-white">Last Name: {userDetails.lastname}</div>
-              <div className="text-white">Student Number: {userDetails.studentNum}</div>
-            </>
-          )}
+          <NavBar userEmail={session?.user?.email} /> {/* Calls the NavBar component */}
+          <div className="flex-grow bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
+            <div className="text-gray-800 text-2xl font-bold mb-4">User Profile</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-gray-800 font-semibold">Email:</div>
+              <div className="text-gray-600">{session.user?.email}</div>
+              {userDetails && (
+                <>
+                  <div className="text-gray-800 font-semibold">First Name:</div>
+                  <div className="text-gray-600">{userDetails.firstname}</div>
+                  <div className="text-gray-800 font-semibold">Last Name:</div>
+                  <div className="text-gray-600">{userDetails.lastname}</div>
+                  <div className="text-gray-800 font-semibold">Student Number:</div>
+                  <div className="text-gray-600">{userDetails.studentNum}</div>
+                </>
+              )}
+            </div>
+          </div>
         </>
       )}
     </div>
