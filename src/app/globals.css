@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.difficulty-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .bg-green-500 {
+    background-color: #6DD13B;
+  }
+  
+  .bg-blue-500 {
+    background-color: #7D94FF;
+  }
+  
+  .bg-yellow-500 {
+    background-color: #FFEA5C;
+  }
+  
+  .bg-red-500 {
+    background-color: #E3534C;
+  }
+  
+  
+  /* Hover effect */
+  .hover\:bg-green-600:hover {
+    background-color: #5fae2b;
+  }
+  
+  .hover\:bg-blue-600:hover {
+    background-color: #6c82e8;
+  }
+  
+  .hover\:bg-yellow-600:hover {
+    background-color: #e8d02c;
+  }
+  
+  .hover\:bg-red-600:hover {
+    background-color: #cc3d36;
+  }
+  

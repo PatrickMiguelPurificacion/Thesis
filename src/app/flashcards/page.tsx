@@ -13,14 +13,10 @@ import { db } from '../firebase';
 
 //Components
 import NavBar from '../components/NavBar';
-import AddFlashcardModal from '../components/AddFlashcards';
-import ReviewModal from '../components/ReviewDeck';
 
-interface Flashcard {
-  id: string;
-  question: string;
-  answer: string;
-}
+//Modals
+import AddFlashcardModal from '../modals/AddFlashcards';
+import ReviewModal from '../modals/ReviewDeck';
 
 const FlashcardsPage = () => {
   const router = useRouter();
@@ -59,6 +55,7 @@ const FlashcardsPage = () => {
       setReviewModalState(false);
     };
 
+  //Gets the Flashcard Data from the Database and stores them in an array
   useEffect(() => {
     const fetchFlashcards = async () => {
       if (addDeckID) {
@@ -73,7 +70,7 @@ const FlashcardsPage = () => {
     };
     fetchFlashcards();
 
-    // Fetch deck name
+    //Fetch deck name
     const fetchDeckName = async () => {
       if (addDeckID) {
         const deckSnapshot = await getDoc(doc(db, 'decks', addDeckID));
@@ -91,6 +88,7 @@ const FlashcardsPage = () => {
     return (
       <div className="flex h-screen">
       <NavBar userEmail={session?.data?.user?.email} />
+      
       <div className="flex-grow bg-gray-100 p-8">
         <header className="bg-indigo-600 text-white py-6 px-8 flex justify-between items-center">
           <div>

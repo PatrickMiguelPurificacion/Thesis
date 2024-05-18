@@ -23,6 +23,9 @@ const AddFlashcardModal = ({ setAddCardModalState, deckId }: Props) => {
         cardAnswer: newFlashcard.cardAnswer.trim(),
         deckID: newFlashcard.deckID,
         userID: session?.user?.email,
+        lastReviewTime: new Date(), //Initial value for lastReviewTime
+        interval: 1, //Initial value for interval
+        easeFactor: 2.5, //Initial value for easeFactor
       });
   
       // Check if deckId is not null before updating cardNum
@@ -36,6 +39,7 @@ const AddFlashcardModal = ({ setAddCardModalState, deckId }: Props) => {
   
       setAddCardModalState(false);
       toast.success('Flashcard Created Successfully!');
+      
     } catch (error: any) {
       console.error('Error creating flashcard:', error.message);
       toast.error('Error creating Flashcard');

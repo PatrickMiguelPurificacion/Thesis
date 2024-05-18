@@ -74,18 +74,21 @@ const CrammingPage = () => {
     return(
       <div className="flex h-screen">
       <NavBar userEmail={session?.data?.user?.email} />
-      <div className="flex-grow bg-gray-100 p-8 flex flex-col justify-center items-center">
-        <header className="bg-indigo-600 text-white py-6 px-8 flex justify-between items-center">
-          {/* Header content */}
-        </header>
-        <div className="text-white mb-4">This is the Cramming Page for {deckName}</div>
-        <div className="max-w-lg w-full bg-white rounded-lg shadow-lg p-6">
+
+      <div className="flex-grow bg-gray-100 p-8">
+      <header className="bg-indigo-600 text-white py-6 px-8">
+        <h1 className="text-2xl font-semibold text-center">Cramming Page for {deckName}</h1>
+      </header>
+      
+      <div className="flex-grow flex justify-center items-center">
+      <div className="flex flex-wrap mt-4">
+        <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-6">
           {/* Display flashcard question or answer */}
           <div className="flashcard mb-4">
-            <h3 className="font-semibold">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
-            {showAnswer && <p>{flashcardsArray[currentCardIndex]?.cardAnswer}</p>}
+          <h3 className="font-semibold text-lg">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3> {/* Increased font size */}
+          {showAnswer && <p className="text-lg">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>} {/* Increased font size */}
           </div>
-  
+      
           {/* Buttons for navigation */}
           <div className="flex justify-between">
             <button onClick={handlePrevCard} disabled={currentCardIndex === 0} className="btn">Back</button>
@@ -94,6 +97,8 @@ const CrammingPage = () => {
           </div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
     );
 };

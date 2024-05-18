@@ -6,18 +6,18 @@ import { toast } from 'sonner';
 
 const Modal = (props: { setModalState: (arg0: boolean) => void }) => {
   
-  const [selectedColor, setSelectedColor] = useState(""); // State to store selected color
+  const [selectedColor, setSelectedColor] = useState(""); //State to store selected color
   const [newDeck, setDeck] = useState({deckName: '', deckColor:'', cardNum:0, userID:''});
   
   function colorSelected(element: { value: string }) {
-    setSelectedColor(element.value); // Update selected color state
+    setSelectedColor(element.value); //Update selected color state
   }
 
   const { data: session, status } = useSession();
   
   const addDeck = async () => {
 
-    // Add user details to Firestore
+    //Add user details to Firestore
     try{ 
       await addDoc(collection(db, 'decks'), {
         deckName: newDeck.deckName.trim(),

@@ -9,8 +9,10 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 //Components
 import NavBar from '../components/NavBar';
-import Modal from '../components/AddDeck';
-import EditDeckModal from '../components/EditDeck';
+
+//Modals
+import Modal from '../modals/AddDeck';
+import EditDeckModal from '../modals/EditDeck';
 
 //Firebase
 import { getDocs, collection, query, where} from 'firebase/firestore';
@@ -70,7 +72,7 @@ export default function Decks() {
       deckColor: string;
       cardNum: number;
       userID: string;
-    }>({
+    }>({ //Prepares the deck details to hold the new details
       deckName: '',
       deckColor: '',
       cardNum: 0,
@@ -106,16 +108,18 @@ export default function Decks() {
   }; 
 
   return (
-    <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
-      <NavBar userEmail={session?.data?.user?.email} /> {/* Calls the NavBar component */}
-      <div className="flex-grow bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
+    <div className="flex h-screen bg-gray-100">
+      <NavBar userEmail={session?.data?.user?.email} />
+       
+      <div className="flex-grow p-8">
       
-      <header className="bg-indigo-600 text-white py-6 px-8">
+      <header className="text-white py-6 px-8 mb-2" style={{ backgroundColor: '#142059' }}>
         <h1 className="text-2xl font-semibold text-center">Flashcard Decks</h1>
       </header>
 
       <button
-        className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+        className="disabled:opacity-40 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+        style={{ backgroundColor: '#364BA8' }}
         onClick={() => setModalState(true)}>
         Add New Deck
       </button>    
@@ -156,7 +160,8 @@ export default function Decks() {
               <div className="mt-auto">
                 <button
                   onClick={() => handleReview(deck.id)}
-                  className="w-full text-sm text-white bg-violet-800 hover:bg-blue-900 py-2 px-4 rounded-b-md"
+                  className="w-full text-sm text-white hover:bg-blue-900 py-2 px-4 rounded-b-md"
+                  style={{ backgroundColor: '#364BA8' }}
                 >
                   View Flashcards
                 </button>

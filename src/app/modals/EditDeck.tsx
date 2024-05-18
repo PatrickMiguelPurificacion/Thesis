@@ -7,9 +7,9 @@ import { toast } from 'sonner';
 const EditDeckModal = (props: {
   setEditModalState: (arg0: boolean) => void;
   deckDetails: any;
-  deckID: any;
+  deckID: any; //Takes the deckID passed from the flashcard-decks page
 }) => {
-  //sets the value of deck as the deck details passed from the flashcards page
+  //sets the value of deck as the deck details passed from the flashcards-deck page
   const [deck, setDeck] = useState(props.deckDetails);
 
   const { data: session } = useSession();
@@ -37,7 +37,7 @@ const EditDeckModal = (props: {
   
       //Removes the modal state
       props.setEditModalState(false);
-      toast.success('Deck Updated Successfully!');
+      toast.success('Deck Updated Successfully! Reload Page to See Changes');
     } catch (error) {
       console.error('Error updating deck:', error);
       toast.error('Error updating Deck');

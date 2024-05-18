@@ -57,32 +57,42 @@ export default function Profile() {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
-      {session && (
-        <>
-          <NavBar userEmail={session?.user?.email} /> {/* Calls the NavBar component */}
-          <div className="flex-grow bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
-            <div className="text-gray-800 text-2xl font-bold mb-4">User Profile</div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-gray-800 font-semibold">Email:</div>
-              <div className="text-gray-600">{session.user?.email}</div>
-              {userDetails && (
-                <>
-                  <div className="text-gray-800 font-semibold">First Name:</div>
-                  <div className="text-gray-600">{userDetails.firstname}</div>
-                  <div className="text-gray-800 font-semibold">Last Name:</div>
-                  <div className="text-gray-600">{userDetails.lastname}</div>
-                  <div className="text-gray-800 font-semibold">Student Number:</div>
-                  <div className="text-gray-600">{userDetails.studentNum}</div>
-                </>
-              )}
+    return (
+      <div className="flex h-screen">
+        <NavBar userEmail={session?.user?.email} />
+        <div className="flex-grow overflow-y-auto bg-gray-300 p-8">
+          <div className="mb-5">
+            <div className="bg-custom-blue p-4 shadow-md mb-4 rounded-lg" style={{ backgroundColor: '#142059' }}>
+              <h2 className="text-xl text-white font-semibold mb-7 mt-2">User Profile</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-white font-semibold">First Name:</div>
+                  <div className="bg-gray-200 p-2 rounded-md">{userDetails?.firstname}</div>
+                </div>
+                <div>
+                  <div className="text-white font-semibold">Last Name:</div>
+                  <div className="bg-gray-200 p-2 rounded-md">{userDetails?.lastname}</div>
+                </div>
+                <div>
+                  <div className="text-white font-semibold">Email:</div>
+                  <div className="bg-gray-200 p-2 rounded-md">{session?.user?.email}</div>
+                </div>
+                <div>
+                  <div className="text-white font-semibold">Student Number:</div>
+                  <div className="bg-gray-200 p-2 rounded-md">{userDetails?.studentNum}</div>
+                </div>
+              </div>
+              <div className="mt-10">
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                  Edit Details
+                </button>
+              </div>
             </div>
           </div>
-        </>
-      )}
-    </div>
-  );
-}
+        </div>
+      </div>
+    );
+  }
+
 
 Profile.requireAuth = true;

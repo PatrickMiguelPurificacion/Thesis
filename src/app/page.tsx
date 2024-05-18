@@ -1,13 +1,19 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import {redirect} from 'next/navigation';
 
 export default function Home() {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      redirect('/signin');
+      if (session) {
+        console.log("User is already authenticated. Redirecting to Home page...");
+        redirect('/home');
+      } else {
+        console.log("User Unauthenticated. Redirecting to Sign In page...");
+        redirect('/signin');
+      }
     },
   });
 
