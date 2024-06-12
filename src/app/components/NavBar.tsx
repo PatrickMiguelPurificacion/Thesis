@@ -52,6 +52,12 @@ const NavBar: React.FC<NavBarProps> = ({ userEmail }) => {
         >
           Notebook
         </button>
+        <button 
+          onClick={() => router.push('/Manual')} 
+          className="nav-link hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"
+        >
+          Manual
+        </button>
       </div>
       
       <div className="py-4 px-6 text-sm border-t border-gray-700 mt-4">

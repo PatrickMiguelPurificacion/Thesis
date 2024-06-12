@@ -118,7 +118,23 @@ export default function Home() {
               <button onClick={() => router.push('/notebook')} className="flex mt-3 text-blue-500"><FaArrowRight className="mr-2 mt-1" />See Notebooks</button>
             </div>
           </div>
-
+            
+         {/* FAQ Section */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold mb-4">FAQ</h2>
+          <div className="bg-white p-6 shadow-md rounded-md">
+            <h3 className="text-xl font-semibold mb-2">What is spaced repetition?</h3>
+            <p className="mb-4">Spaced repetition is a learning technique that involves systematically reviewing information over increasing intervals of time, taking advantage of the spacing effect to move 
+            the information from short-term to long-term memory. The process works by first exposing the learner to new information, then prompting recall after a short period; if recalled successfully, the next review is scheduled for a slightly longer interval, 
+            but if the learner struggles, the next review is scheduled for a shorter interval. </p>
+            <h3 className="text-xl font-semibold mb-2">When does the flashcards shown?</h3>
+            <p className="mb-4">Flashcards are often used in spaced repetition learning, where the learner is shown a card, asked to recall the information on the other side, and if successful, the card is scheduled to be shown again after gradually increasing intervals of time - from minutes, to hours, to days, to weeks - allowing the information to become firmly embedded in long-term memory; 
+            this process takes advantage of how our brains learn, moving information from short-term to long-term recall</p>
+            <h3 className="text-xl font-semibold mb-2">What time do I have to start?</h3>
+            <p className="mb-4">Users can start anytime.The process is flexible and can be done at any time that works best for you.</p>
+          </div>
+        </div>
+          
         </div>
       </div>
     </div>
