@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import NavBar from "../components/NavBar";
+import { fetchFlashcards } from "../services/FlashcardService";
+import { toast } from "sonner";
 
 const CrammingPage = () => {
     const router = useRouter();
@@ -43,18 +45,18 @@ const CrammingPage = () => {
     };
 
     useEffect(() => {
-        const fetchFlashcards = async () => {
-          if (cramDeckID) {
-            const q = query(
-              collection(db, 'flashcards'),
-              where('deckID', '==', cramDeckID)
-            );
-            const querySnapshot = await getDocs(q);
-            const flashcardsData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-            setFlashcardsArray(flashcardsData);
+      const getFlashcards = async () => {
+        if (cramDeckID) {
+          try {
+            const flashcards = await fetchFlashcards(cramDeckID); // Call fetchFlashcards function with the deck ID
+            setFlashcardsArray(flashcards);
+          } catch (error) {
+            console.error('Error fetching flashcards:', error);
+            toast.error('Error Fetching Flashcards');
           }
-        };
-        fetchFlashcards();
+        }
+      };
+      getFlashcards();
     
         // Fetch deck name
         const fetchDeckName = async () => {
@@ -68,8 +70,6 @@ const CrammingPage = () => {
         };
         fetchDeckName();
       }, [session]);
-    
-      console.log('flashcardsArray:', flashcardsArray);
 
     return(
       <div className="flex h-screen">

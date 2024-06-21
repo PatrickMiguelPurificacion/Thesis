@@ -4,25 +4,27 @@
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 //Components
 import NavBar from '../components/NavBar';
 
 //Modals
-import AddNotebookModal from '../modals/AddNotebook';
-import EditNotebookModal from '../modals/EditNotebook';
-import AddNoteModal from '../modals/AddNotes';
+import NotebookModal from '../modals/NotebookModal';
+import NoteModal from '../modals/NoteModal';
 
 //Firebase
 import { getDocs, collection, query, where, getDoc, runTransaction } from 'firebase/firestore';
 import { db } from '../firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 
+//Services
+import { deleteNotebook, fetchNotebooks } from '../services/NotebookService';
+import { deleteNote, fetchNotes } from '../services/NoteService';
+
 //Notifications
 import { toast } from 'sonner';
-import EditNoteModal from '../modals/EditNotes';
 
 export default function Notebook() {
   //Ensures user is in session
@@ -37,57 +39,56 @@ export default function Notebook() {
 
   //Adding Notebook
   const [notebooksArray, setNotebooksArray] = useState<{ [key: string]: any }[]>([]); //Stores notebooks retrieved from database
-  const [addNotebookModalState, setAddNotebookModalState] = useState(false);
-  const [selectedNotebookId, setSelectedNotebookId] = useState('');
+  const [notebookModalState, setNotebookModalState] = useState(false); // For showing the notebook modal or not
+  const [selectedNotebookId, setSelectedNotebookId] = useState(''); // Gets the Notebook Selected for ViewNotes
+  const [currentNotebook, setCurrentNotebook] = useState<any | null>(null); // For Storing the Notebook to be edited
+
+  
+    const getNotebooks = useCallback(async () => {
+      if (session.data?.user?.email) {
+        try {
+          const notebooks = await fetchNotebooks(session.data.user.email); // Call fetchNotebooks function with the user email
+          setNotebooksArray(notebooks);
+        } catch (error) {
+          console.error('Error fetching notebooks:', error);
+          toast.error('Error Fetching Notebooks');
+        }
+      }
+  }, [session]);
 
   useEffect(() => {
-    const getNotebooks = async () => {
-      if (session.data?.user?.email) {
-        const q = query(collection(db, 'notebooks'), where('userID', '==', session.data?.user?.email));
-        const querySnapshot = await getDocs(q);
-        const notebooks = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-        setNotebooksArray(notebooks);
-      }
-    };
     getNotebooks();
-  }, [session]);
+  }, [session, getNotebooks]);
 
   // Function to handle notebook selection and view notes inside
   const handleViewNotes = (notebookId: string) => {
     setSelectedNotebookId(notebookId);
   };
 
+  // Adding a Notebook
+  const handleAddNotebook = () => {
+    setCurrentNotebook(null);
+    setNotebookModalState(true);
+  };
+
   //Editing Notebook
-  const [editNotebookID, setEditNotebookID] = useState(''); //Holds ID of notebook being edited
-  const [editModalState, setEditModalState] = useState(false); // State to manage edit modal visibility
+  const handleEditNotebook = (notebook: any) => {
+    console.log('Editing notebook:', notebook.id);
+    setCurrentNotebook(notebook);
+    setNotebookModalState(true);
+  };
 
-  //Holds the details of the notebook being edited
-  const [editNotebookDetails, setEditNotebookDetails] = useState<{ notebookName: string; notesNum: number; userID: string }>({
-    //Prepares the notebook details to hold the new details
-    notebookName: '',
-    notesNum: 0,
-    userID: '',
-  });
-
-  //Sets the details needed to be passed to the Edit Notebook modal
-  const handleEdit = (notebookId: string) => {
-    const notebook = notebooksArray.find((notebook) => notebook.id === notebookId); //Finds the notebook with the same notebookID passed
-    if (notebook) {
-      const { notebookName, notesNum, userID } = notebook; //Places the existing notebook's details in notebook
-      setEditNotebookDetails({ notebookName, notesNum, userID }); // Passes the details of notebook being edited
-      setEditModalState(true); //Displayes Edit AddNotebookModal
-      setEditNotebookID(notebookId); //Sets ID of notebook to be edited
-    } else {
-      console.error('Error: Notebook not found');
-    }
+  const handleNotebookModalClose = () => {
+    setNotebookModalState(false);
+    getNotebooks(); // Refresh Notebooks after closing the modal
   };
 
   //Function for Deleting the Document based on the notebookID
-  const handleDelete = async (notebookId: string) => {
+  const handleDeleteNotebook = async (notebookId: string) => {
     const confirmation = window.confirm('Are you sure you want to delete this notebook?');
     if (confirmation) {
       try {
-        await deleteDoc(doc(db, 'notebooks', notebookId));
+        await deleteNotebook(notebookId);
         setNotebooksArray(notebooksArray.filter((notebook) => notebook.id !== notebookId));
         toast.success('Notebook Deleted Successfully!');
       } catch (error) {
@@ -101,46 +102,38 @@ export default function Notebook() {
 
 
   //For Notes
-  const [addNoteModalState, setAddNoteModalState] = useState(false);
+  const [noteModalState, setNoteModalState] = useState(false);
   const [notesArray, setNotesArray] = useState<{ [key: string]: any }[]>([]); // Placing the notes in an array
+  const [currentNote, setCurrentNote] = useState<any | null>(null); // For Storing the Notebook to be edited
 
   //Gets the Note Data from the Database and stores them in an array
-  useEffect(() => {
-    const fetchNotes = async () => {
+    const getNotes = useCallback(async () => {
       if (selectedNotebookId) {
-        const q = query(collection(db, 'notes'), where('notebookID', '==', selectedNotebookId));
-        const querySnapshot = await getDocs(q);
-        const notesData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-        setNotesArray(notesData);
+        try {
+          const notes = await fetchNotes(selectedNotebookId); // Call fetchNotes function with the selected notebook ID
+          setNotesArray(notes);
+        } catch (error) {
+          console.error('Error fetching notes:', error);
+          toast.error('Error Fetching Notebooks');
+        }
       }
-    };
-    fetchNotes();
   }, [selectedNotebookId]);
 
-  //Editing Notebook
-  const [editNoteID, setEditNoteID] = useState(''); //Holds ID of note being edited
-  const [editNoteModalState, setEditNoteModalState] = useState(false); // State to manage note edit modal visibility
+  useEffect(() => {
+    getNotes();
+  },[selectedNotebookId, getNotes])
 
-  //Holds the details of the note being edited
-  const [editNoteDetails, setEditNoteDetails] = useState<{ noteTitle: string; noteContent: string; notebookID: string, userID: string }>({
-    //Prepares the notebook details to hold the new details
-    noteTitle: '',
-    noteContent: '',
-    notebookID: '',
-    userID: '',
-  });
+  //Adding Notes
+  const handleAddNote = () => {
+    setCurrentNote(null);
+    setNoteModalState(true);
+  };
 
-  //Sets the details needed to be passed to the Edit Notebook modal
-  const handleNoteEdit = (noteId: string) => {
-    const note = notesArray.find((note) => note.id === noteId); //Finds the note with the same noteID passed
-    if (note) {
-      const { noteTitle, noteContent, notebookID, userID } = note; //Places the existing note's details in note variable
-      setEditNoteDetails({ noteTitle, noteContent, notebookID, userID }); // Passes the details of note being edited
-      setEditNoteModalState(true); //Displayes EditNoteModal
-      setEditNoteID(noteId); //Sets ID of note to be edited
-    } else {
-      console.error('Error: Note not found');
-    }
+  //Edit Note
+  const handleEditNote = (note: any) => {
+    console.log('Editing note:', note.id);
+    setCurrentNote(note);
+    setNoteModalState(true);
   };
 
   //Function for Deleting the Document based on the noteID
@@ -148,29 +141,7 @@ export default function Notebook() {
     const confirmation = window.confirm('Are you sure you want to delete this note?');
     if (confirmation) {
       try {
-        const noteDocRef = doc(db, 'notes', noteId);
-        const noteDoc = await getDoc(noteDocRef);
-        
-        if (!noteDoc.exists()) {
-          toast.error('Note not found');
-          return;
-        }
-  
-        const notebookId = noteDoc.data().notebookID;
-        const notebookDocRef = doc(db, 'notebooks', notebookId);
-  
-        await runTransaction(db, async (transaction) => {
-          const notebookDoc = await transaction.get(notebookDocRef);
-  
-          if (!notebookDoc.exists()) {
-            throw new Error('Notebook does not exist!');
-          }
-  
-          const newNotesNum = notebookDoc.data().notesNum - 1;
-          transaction.update(notebookDocRef, { notesNum: newNotesNum });
-          transaction.delete(noteDocRef);
-        });
-  
+        await deleteNote(noteId,selectedNotebookId);
         setNotesArray(notesArray.filter((note) => note.id !== noteId));
         toast.success('Note Deleted Successfully!');
       } catch (error) {
@@ -179,8 +150,11 @@ export default function Notebook() {
       }
     }
   };
-  
 
+  const handleNoteModalClose = () => {
+    setNoteModalState(false);
+    getNotes(); // Refresh notes after closing the modal
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -206,10 +180,10 @@ export default function Notebook() {
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-lg font-semibold">{notebook.notebookName}</p>
                       <div className="space-x-2">
-                        <button onClick={() => handleEdit(notebook.id)} className="text-gray-500 hover:text-gray-800">
+                        <button onClick={() => handleEditNotebook(notebook)} className="text-gray-500 hover:text-gray-800">
                           <FaEdit />
                         </button>
-                        <button onClick={() => handleDelete(notebook.id)} className="text-gray-500 hover:text-gray-800">
+                        <button onClick={() => handleDeleteNotebook(notebook.id)} className="text-gray-500 hover:text-gray-800">
                           <FaTrash />
                         </button>
                       </div>
@@ -222,11 +196,20 @@ export default function Notebook() {
             <div className="mt-auto">
               <button
                 className="disabled:opacity-40 w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white bg-blue-500 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-                onClick={() => setAddNotebookModalState(true)}
+                onClick={handleAddNotebook}
               >
                 Add New Notebook
               </button>
-              {addNotebookModalState && <AddNotebookModal setAddNotebookModalState={setAddNotebookModalState} />}
+
+              {/* Handles the Modal for Adding and Updating Notebooks */}
+              {notebookModalState && (
+              <NotebookModal 
+                setModalState={handleNotebookModalClose} 
+                initialNotebook={currentNotebook}
+                notebookID={currentNotebook?.id || null}
+                />
+              )}
+
             </div>
           </div>
 
@@ -234,16 +217,23 @@ export default function Notebook() {
           <div className="w-2/3 pl-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Notes</h2>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                onClick={() => setAddNoteModalState(true)}
-              >
-                Add New Note
-              </button>
+              {selectedNotebookId && ( //Ensures that the Add New Note Button only shows up when there is a notebook selected
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                  onClick={handleAddNote}
+                >
+                  Add New Note
+                </button>
+              )}
             </div>
             {/* Render Notes section here based on selectedNotebookId */}
-            {addNoteModalState && (
-              <AddNoteModal setAddNoteModalState={setAddNoteModalState} notebookId={selectedNotebookId} />
+            {noteModalState && (
+              <NoteModal 
+              setModalState={handleNoteModalClose} 
+              initialNote={currentNote}
+              noteID={currentNote?.id || null}
+              notebookID={selectedNotebookId}
+               />
             )}
 
             {/* Displaying the Notes on one side of the screen */}
@@ -254,7 +244,7 @@ export default function Notebook() {
                     <div className="flex justify-between items-center">
                       <h3 className="text-lg font-semibold mb-2">{note.noteTitle}</h3>
                       <div className="space-x-2">
-                        <button onClick={() => handleNoteEdit(note.id)} className="text-gray-500 hover:text-gray-800">
+                        <button onClick={() => handleEditNote(note)} className="text-gray-500 hover:text-gray-800">
                           <FaEdit />
                         </button>
                         <button onClick={() => handleNoteDelete(note.id)} className="text-gray-500 hover:text-gray-800">
@@ -270,22 +260,6 @@ export default function Notebook() {
 
           </div>
         </div>
-
-        {editModalState && (
-          <EditNotebookModal
-            setEditModalState={setEditModalState}
-            notebookDetails={editNotebookDetails}
-            notebookID={editNotebookID}
-          />
-        )}
-
-        {editNoteModalState && (
-          <EditNoteModal
-            setEditNoteModalState={setEditNoteModalState}
-            noteDetails={editNoteDetails}
-            noteID={editNoteID}
-          />
-        )}
       </div>
     </div>
   );
