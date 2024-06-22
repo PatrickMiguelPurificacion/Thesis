@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { query, collection, where, getDocs, getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 import NavBar from '../components/NavBar';
