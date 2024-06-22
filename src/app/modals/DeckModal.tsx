@@ -6,7 +6,7 @@ import { addDeck, updateDeck } from '../services/DeckService';
 interface Props {
   setModalState: (state: boolean) => void;
   initialDeck?: { deckName: string; deckColor: string; cardNum: number; userID: string };
-  deckID?: string | null;
+  deckID: string | null;
 }
 
 const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {

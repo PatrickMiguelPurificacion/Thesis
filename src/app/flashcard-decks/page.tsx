@@ -41,7 +41,7 @@ export default function Decks() {
 
   //Adding Decks
   const [decksArray, setDecksArray] = useState<{ [key: string]: any }[]>([]); //Stores decks retrieved from database
-  const [deckModalState, setDeckModalState] = useState(false)
+  const [deckModalState, setDeckModalState] = useState(false);
   const [currentDeck, setCurrentDeck] = useState<any | null>(null); // For Storing the Deck to be edited
 
     /*When user clicks edit deck, the function searches the database for all the decks with the same userID
