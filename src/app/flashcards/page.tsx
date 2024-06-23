@@ -1,22 +1,20 @@
 'use client';
 
-//Next.js and React.js 
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import {useRouter} from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 
-//Firebase
-import { query, collection, where, getDocs, getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-//Components
 import NavBar from '../components/NavBar';
-
-//Modals
-import AddFlashcardModal from '../modals/AddFlashcards';
+import FlashcardModal from '../modals/FlashcardModal';
 import ReviewModal from '../modals/ReviewDeck';
+import { deleteFlashcard, fetchFlashcards } from '../services/FlashcardService';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 const FlashcardsPage = () => {
   const router = useRouter();
@@ -28,52 +26,48 @@ const FlashcardsPage = () => {
   });
 
   const searchParams = useSearchParams();
-  const addDeckID = searchParams ? searchParams.get('deckId') : null; // For getting the ID of the deck from the passed url
-  const [flashcardsArray, setFlashcardsArray] = useState<{ [key: string]: any }[]>([]); // Placing the flashcards in an array
-  const [addCardModalState, setAddCardModalState] = useState(false); // For showing the modal or not
-  const [deckName, setDeckName] = useState(''); // For the deckname in the display on top
+  const currentDeckID = searchParams ? searchParams.get('deckId') : null;
+  const [flashcardsArray, setFlashcardsArray] = useState<{ [key: string]: any }[]>([]);
+  const [flashcardModalState, setFlashcardModalState] = useState(false);
+  const [currentFlashcard, setCurrentFlashcard] = useState<any | null>(null);
+  const [deckName, setDeckName] = useState('');
 
-  //For Deck Review
   const [reviewModalState, setReviewModalState] = useState(false);
   const [deckIDToReview, setDeckIDToReview] = useState('');
 
-    // Function to handle deck selection and open the modal
-    const handleReview = (deckId: string) => {
-      setDeckIDToReview(deckId);
-      setReviewModalState(true);
-    };
+  const handleReview = (deckId: string) => {
+    setDeckIDToReview(deckId);
+    setReviewModalState(true);
+  };
 
-    // Function to handle choosing Cramming
-    const handleCramming = () => {
-      router.push(`/flashcards-cramming?deckId=${deckIDToReview}`);
-      setReviewModalState(false);
-    };
+  const handleCramming = () => {
+    router.push(`/flashcards-cramming?deckId=${deckIDToReview}`);
+    setReviewModalState(false);
+  };
 
-    // Function to handle choosing Reviewing
-    const handleReviewing = () => {
-      router.push(`/flashcards-reviewing?deckId=${deckIDToReview}`);
-      setReviewModalState(false);
-    };
+  const handleReviewing = () => {
+    router.push(`/flashcards-reviewing?deckId=${deckIDToReview}`);
+    setReviewModalState(false);
+  };
 
-  //Gets the Flashcard Data from the Database and stores them in an array
-  useEffect(() => {
-    const fetchFlashcards = async () => {
-      if (addDeckID) {
-        const q = query(
-          collection(db, 'flashcards'),
-          where('deckID', '==', addDeckID)
-        );
-        const querySnapshot = await getDocs(q);
-        const flashcardsData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-        setFlashcardsArray(flashcardsData);
+  const getFlashcards = useCallback(async () => {
+    if (currentDeckID) {
+      try {
+        const flashcards = await fetchFlashcards(currentDeckID);
+        setFlashcardsArray(flashcards);
+      } catch (error) {
+        console.error('Error fetching flashcards:', error);
+        toast.error('Error Fetching Flashcards');
       }
-    };
-    fetchFlashcards();
+    }
+  }, [currentDeckID]);
 
-    //Fetch deck name
+  useEffect(() => {
+    getFlashcards();
+
     const fetchDeckName = async () => {
-      if (addDeckID) {
-        const deckSnapshot = await getDoc(doc(db, 'decks', addDeckID));
+      if (currentDeckID) {
+        const deckSnapshot = await getDoc(doc(db, 'decks', currentDeckID));
         const deckData = deckSnapshot.data();
         if (deckData) {
           setDeckName(deckData.deckName);
@@ -81,15 +75,40 @@ const FlashcardsPage = () => {
       }
     };
     fetchDeckName();
-  }, [session]);
+  }, [session, currentDeckID, getFlashcards]);
 
-  console.log('flashcardsArray:', flashcardsArray);
+  const handleAddFlashcard = () => {
+    setCurrentFlashcard(null);
+    setFlashcardModalState(true);
+  };
 
-    return (
-      <div className="flex h-screen">
+  const handleEditFlashcard = (flashcard: any) => {
+    setCurrentFlashcard(flashcard);
+    setFlashcardModalState(true);
+  };
+
+  const handleDeleteFlashcard = async (flashcardId: string) => {
+    const confirmation = window.confirm('Are you sure you want to delete this flashcard?');
+    if (confirmation) {
+      try {
+        await deleteFlashcard(flashcardId, currentDeckID);
+        setFlashcardsArray((prevFlashcards) => prevFlashcards.filter((flashcard) => flashcard.id !== flashcardId));
+        console.log('Flashcard deleted successfully');
+      } catch (error) {
+        console.error('Error deleting flashcard:', error);
+      }
+    }
+  };
+
+  const handleModalClose = () => {
+    setFlashcardModalState(false);
+    getFlashcards(); // Refresh flashcards after closing the modal
+  };
+
+  return (
+    <div className="flex h-screen">
       <NavBar userEmail={session?.data?.user?.email} />
-      
-      <div className="flex-grow bg-gray-100 p-8">
+      <div className="flex-grow overflow-y-auto bg-gray-100 p-8">
         <header className="bg-indigo-600 text-white py-6 px-8 flex justify-between items-center">
           <div>
             <button
@@ -102,7 +121,7 @@ const FlashcardsPage = () => {
           <h1 className="text-2xl font-semibold text-center">{deckName}</h1>
           <div>
             <button
-              onClick={() => addDeckID && handleReview(addDeckID)}
+              onClick={() => currentDeckID && handleReview(currentDeckID)}
               className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Review Cards
@@ -111,38 +130,66 @@ const FlashcardsPage = () => {
         </header>
 
         <div>
-        {/* Render the ReviewModal with the appropriate props */}
-        {reviewModalState && 
-        <ReviewModal open={reviewModalState} onClose={() => setReviewModalState(false)} onCramming={handleCramming} onReviewing={handleReviewing} />}
+          {reviewModalState && (
+            <ReviewModal
+              open={reviewModalState}
+              onClose={() => setReviewModalState(false)}
+              onCramming={handleCramming}
+              onReviewing={handleReviewing}
+            />
+          )}
         </div>
 
-          <button
-            className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-            onClick={() => setAddCardModalState(true)}
-          >
-            Add New Flashcard
-          </button>
+        <button
+          className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+          onClick={handleAddFlashcard}
+        >
+          Add New Flashcard
+        </button>
 
-          <div>
-            {addCardModalState && (
-              <AddFlashcardModal setAddCardModalState={setAddCardModalState} deckId={addDeckID} />
-            )}
-          </div>
+        <div>
+          {flashcardModalState && (
+            <FlashcardModal
+              setModalState={handleModalClose} // Use handleModalClose to refresh flashcards after closing the modal
+              initialFlashcard={currentFlashcard}
+              cardID={currentFlashcard?.id || null}
+              reviewID={currentFlashcard?.reviewID || null}
+              deckId={currentDeckID}
+            />
+          )}
+        </div>
 
-          {/* Displaying the Flashcards in a card-like format */}
-          <div className="mt-4 max-h-96 overflow-y-auto">
-            {flashcardsArray.map((flashcard) => (
+        <div className="mt-4 max-h-96 overflow-y-auto">
+          {flashcardsArray.length === 0 ? (
+            <p className="text-center text-gray-600">There are No Flashcards in this Deck</p>
+          ) : (
+            flashcardsArray.map((flashcard) => (
               <div key={flashcard.id} className="w-full mb-4 border rounded-md overflow-hidden shadow-md">
                 <div className="p-4 bg-white">
                   <h3 className="text-lg font-semibold mb-2">{flashcard.cardQuestion}</h3>
                   <p className="text-gray-600">{flashcard.cardAnswer}</p>
+                  <div className="flex justify-end mt-2">
+                    <button
+                      className="text-gray-500 hover:text-gray-800"
+                      onClick={() => handleEditFlashcard(flashcard)}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="ml-5 text-gray-500 hover:text-gray-800"
+                      onClick={() => handleDeleteFlashcard(flashcard.id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            ))
+          )}
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
 export default FlashcardsPage;

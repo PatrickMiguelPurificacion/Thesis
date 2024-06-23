@@ -22,12 +22,7 @@ const NavBar: React.FC<NavBarProps> = ({ userEmail }) => {
         >
           Home
         </button>
-        <button 
-          onClick={() => router.push('/user-profile')} 
-          className="nav-link hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"
-        >
-          User Profile
-        </button>
+        
         <button 
           onClick={() => router.push('/flashcard-decks')} 
           className="nav-link hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"
@@ -60,7 +55,13 @@ const NavBar: React.FC<NavBarProps> = ({ userEmail }) => {
         </button>
       </div>
       
-      <div className="py-4 px-6 text-sm border-t border-gray-700 mt-4">
+      <div className="py-4 border-t border-gray-700 mt-4 space-y-4">
+      <button 
+          onClick={() => router.push('/user-profile')} 
+          className="text-white w-full hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"
+        >
+          User Profile
+        </button>
         <button 
           onClick={() => signOut()}
           className="text-white w-full hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"

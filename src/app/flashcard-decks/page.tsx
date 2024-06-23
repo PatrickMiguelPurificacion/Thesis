@@ -4,15 +4,14 @@
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import {useRouter} from 'next/navigation';
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useCallback} from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 //Components
 import NavBar from '../components/NavBar';
 
 //Modals
-import Modal from '../modals/AddDeck';
-import EditDeckModal from '../modals/EditDeck';
+import DeckModal from '../modals/DeckModal';
 
 //Firebase
 import { getDocs, collection, query, where} from 'firebase/firestore';
@@ -21,7 +20,7 @@ import { doc, deleteDoc } from 'firebase/firestore';
 
 //Notifications
 import { toast } from 'sonner';
-
+import { deleteDeck, fetchDecks } from '../services/DeckService';
 
 export default function Decks() {
   //Ensures user is in session
@@ -42,63 +41,46 @@ export default function Decks() {
 
   //Adding Decks
   const [decksArray, setDecksArray] = useState<{ [key: string]: any }[]>([]); //Stores decks retrieved from database
-  const [modalState, setModalState] = useState(false)
-  
+  const [deckModalState, setDeckModalState] = useState(false);
+  const [currentDeck, setCurrentDeck] = useState<any | null>(null); // For Storing the Deck to be edited
+
     /*When user clicks edit deck, the function searches the database for all the decks with the same userID
     as this session*/
-    useEffect(() => {
-      const getDecks = async () => {
-        if (session.data?.user?.email) {
-          const q = query(
-            collection(db, 'decks'),
-            where('userID', '==', session.data?.user?.email)
-          );
-          const querySnapshot = await getDocs(q);
-          const decks = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const getDecks = useCallback(async () => {
+      if (session.data?.user?.email) {
+        try {
+          const decks = await fetchDecks(session.data.user.email);
           setDecksArray(decks);
+        } catch (error) {
+          console.error('Error fetching decks:', error);
+          toast.error('Error Fetching Decks');
         }
-      };
-      getDecks();
-      
+      }
     }, [session]);
 
-  //Editing Decks
-  const [editDeckID, seteditDeckID] = useState(''); //Holds ID of deck being edited
-  const [editModalState, setEditModalState] = useState(false); // State to manage edit modal visibility
-    
-    //Holds the details of the deck being edited
-    const [editDeckDetails, setEditDeckDetails] = useState<{
-      deckName: string;
-      deckColor: string;
-      cardNum: number;
-      userID: string;
-    }>({ //Prepares the deck details to hold the new details
-      deckName: '',
-      deckColor: '',
-      cardNum: 0,
-      userID: '',
-    });
+    useEffect(() => {
+      getDecks();
+    }, [session, getDecks]);
 
-    //Sets the details needed to be passed to the Edit Deck modal
-    const handleEdit = (deckId: string) => {
-      const deck = decksArray.find(deck => deck.id === deckId); //Finds the deck with the same deckID passed
-      if (deck) {
-        const { deckName, deckColor, cardNum, userID } = deck; //Places the existing deck's details in deck
-        setEditDeckDetails({ deckName, deckColor, cardNum, userID }); // Passes the details of deck being edited
-        setEditModalState(true); //Displayes Edit Modal
-        seteditDeckID(deckId); //Sets ID of deck to be edited
-      } else {
-        console.error('Error: Deck not found');
-      }
-    }  
+    // Adding a Deck
+    const handleAddDeck = () => {
+      setCurrentDeck(null);
+      setDeckModalState(true);
+    };
+
+    //Editing Deck
+    const handleEditDeck = (deck: any) => {
+      setCurrentDeck(deck);
+      setDeckModalState(true);
+    };
 
   //Function for Deleting the Document based on the deckID
   const handleDelete = async (deckId: string) => {
     const confirmation = window.confirm("Are you sure you want to delete this deck?");
     if (confirmation) {
       try {
-        await deleteDoc(doc(db, 'decks', deckId));
-        setDecksArray(decksArray.filter(deck => deck.id !== deckId));
+        await deleteDeck(deckId);
+        setDecksArray(decksArray.filter((deck) => deck.id !== deckId));
         toast.success('Deck Deleted Successfully!');
       } catch (error) {
         console.error('Error deleting deck:', error);
@@ -106,6 +88,11 @@ export default function Decks() {
       }
     }
   }; 
+
+  const handleModalClose = () => {
+    setDeckModalState(false);
+    getDecks(); // Refresh decks after closing the modal
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -120,13 +107,18 @@ export default function Decks() {
       <button
         className="disabled:opacity-40 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
         style={{ backgroundColor: '#364BA8' }}
-        onClick={() => setModalState(true)}>
+        onClick={handleAddDeck}>
         Add New Deck
       </button>    
       
-      {/* Add New Deck Modal */} 
+      {/* Modal to Handle Adding or Updating */} 
       <div>
-        { modalState && <Modal setModalState={setModalState} /> }
+        { deckModalState && (
+        <DeckModal 
+        setModalState={handleModalClose} // Use handleModalClose to refresh decks after closing the modal
+        initialDeck={currentDeck}
+        deckID={currentDeck?.id || null} />
+        )}
       </div>
 
       <div className="flex flex-wrap mt-4">
@@ -142,7 +134,7 @@ export default function Decks() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2"> {/* Icons and Count */}
                   <button
-                    onClick={() => handleEdit(deck.id)}
+                    onClick={() => handleEditDeck(deck)}
                     className="text-white hover:bg-blue-900 py-1 px-2 rounded-md"
                   >
                     <FaEdit />
@@ -153,7 +145,7 @@ export default function Decks() {
                   >
                     <FaTrash />
                   </button>
-                  <p className="text-right text-xs text-gray-500">Count: {deck.cardNum}</p> {/* Count */}
+                  <p className="text-right text-xs text-white">Count: {deck.cardNum}</p> {/* Count */}
                 </div>
               </div>
               <p className="text-center mb-4">{deck.deckName}</p> {/* Deck Name */}
@@ -170,15 +162,6 @@ export default function Decks() {
           </div>
         ))}
       </div>
-
-      {/* Displays Edit Deck Modal and passes the information */}
-      {editModalState &&
-      <EditDeckModal
-        setEditModalState={setEditModalState} // Pass state updater function to control modal visibility
-        deckDetails={editDeckDetails} // Pass deck details to the modal
-        deckID={editDeckID}
-      />}
-      
     </div>
     </div>
   )
