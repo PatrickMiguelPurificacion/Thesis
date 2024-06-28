@@ -157,7 +157,7 @@ export default function Notebook() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-y-auto">
       <NavBar userEmail={session?.data?.user?.email} />
 
       <div className="flex-grow p-8">
@@ -168,7 +168,7 @@ export default function Notebook() {
         {/* This is for the Notebook Section of the Page */}
         <div className="flex">
           <div className="w-1/3 pr-4 border-r border-gray-300">
-            <div className="mt-4">
+            <div className="mt-4 max-h-96 overflow-y-auto">
               {notebooksArray.map((notebook) => (
                 <div key={notebook.id} className="mb-4">
                   <div

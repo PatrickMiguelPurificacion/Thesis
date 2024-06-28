@@ -98,7 +98,7 @@ export default function Decks() {
     <div className="flex h-screen bg-gray-100">
       <NavBar userEmail={session?.data?.user?.email} />
        
-      <div className="flex-grow p-8">
+      <div className="flex-grow overflow-y-auto p-8">
       
       <header className="text-white py-6 px-8 mb-2" style={{ backgroundColor: '#142059' }}>
         <h1 className="text-2xl font-semibold text-center">Flashcard Decks</h1>
@@ -121,7 +121,7 @@ export default function Decks() {
         )}
       </div>
 
-      <div className="flex flex-wrap mt-4">
+      <div className="flex flex-wrap mt-4 ">
         {decksArray.map((deck) => (
           <div
             key={deck.id}

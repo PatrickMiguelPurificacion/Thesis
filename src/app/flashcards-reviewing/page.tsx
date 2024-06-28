@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useSession } from "next-auth/react";
 import { redirect, useSearchParams } from "next/navigation";
@@ -114,6 +114,10 @@ const ReviewingPage = () => {
     setCurrentCardIndex(prevIndex => Math.min(prevIndex + 1, flashcardsArray.length - 1));
   };
 
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
+  };
+
   return (
     <div className="flex h-screen">
       <NavBar userEmail={session?.data?.user?.email} />
@@ -122,28 +126,31 @@ const ReviewingPage = () => {
           <h1 className="text-2xl font-semibold text-center">Reviewing {deckName}</h1>
         </header>
 
-        <div className="flex justify-center items-center">
-          <div className="flex flex-wrap mt-4">
-            <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-6">
-              {flashcardsArray.length === 0 ? (
-                <p className="text-center text-gray-600">There are No Scheduled Reviews Today</p>
-              ) : (
-                <>
-                  <div className="flashcard mb-4">
-                    <h3 className="font-semibold">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
-                    {showAnswer && (
-                      <p className="text-gray-600">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>
-                    )}
-                  </div>
-                  <div className="flex justify-center">
+        <div className="flex justify-center items-center w-full">
+          <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-6 mt-6">
+            {flashcardsArray.length === 0 ? (
+              <p className="text-center text-gray-600">There are No Scheduled Reviews Today</p>
+            ) : (
+              <>
+                <div className="flashcard mb-4">
+                  <h3 className="font-semibold">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
+                  {showAnswer && (
+                    <p className="text-gray-600">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>
+                  )}
+                </div>
+                <div className="flex justify-between">
+                  <div>
                     <button onClick={() => handleRateDifficulty('easy')} className="difficulty-btn bg-green-500 hover:bg-green-600 mr-2">Easy</button>
                     <button onClick={() => handleRateDifficulty('good')} className="difficulty-btn bg-blue-500 hover:bg-blue-600 mr-2">Good</button>
                     <button onClick={() => handleRateDifficulty('hard')} className="difficulty-btn bg-yellow-500 hover:bg-yellow-600 mr-2">Hard</button>
                     <button onClick={() => handleRateDifficulty('again')} className="difficulty-btn bg-red-500 hover:bg-red-600">Again</button>
                   </div>
-                </>
-              )}
-            </div>
+                  <button onClick={handleShowAnswer} className="show-answer-btn bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    Show Answer
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

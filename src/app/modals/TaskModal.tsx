@@ -1,27 +1,27 @@
-import { useSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { updateTask, createTask, Tag } from '../services/TaskService';
-import { v4 as uuidv4 } from "uuid";
+import { createTask, updateTask, Task, Tag } from '../services/TaskService';
+import { useSession } from 'next-auth/react';
+import { v4 as uuidv4 } from 'uuid';
 import { getRandomColors } from '../kanban/GetRandomColorsKanban';
 
 interface Props {
   setModalState: (state: boolean) => void;
-  initialTask?: any;
+  initialTask?: Task;
   taskId?: string | null;
   columnId: string;
 }
 
 const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
   const { data: session } = useSession();
-  const [tagTitle, setTagTitle] = useState("");
-  const [task, setTask] = useState({
+  const [tagTitle, setTagTitle] = useState('');
+  const [task, setTask] = useState<Task>({
     id: '',
     title: '',
     description: '',
     priority: 'low',
     deadline: '',
-    columnId,
+    columnId: columnId || 'todo',
     userId: session?.user?.email || '',
     tags: [] as Tag[],
   });
@@ -31,10 +31,11 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
       setTask({
         ...initialTask,
         userId: session?.user?.email || '',
-        id: uuidv4()
+        id: initialTask.id || uuidv4(),
+        columnId: columnId || 'todo',
       });
     }
-  }, [initialTask, session]);
+  }, [initialTask, session, columnId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,13 +53,13 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
   };
 
   const handleAddTag = () => {
-		if (tagTitle.trim() !== "") {
-			const { bg, text } = getRandomColors();
-			const newTag: Tag = { title: tagTitle.trim(), bg, text };
-			setTask({ ...task, tags: [...task.tags, newTag] });
-			setTagTitle("");
-		}
-	};
+    if (tagTitle.trim() !== '') {
+      const { bg, text } = getRandomColors();
+      const newTag: Tag = { title: tagTitle.trim(), bg, text };
+      setTask({ ...task, tags: [...task.tags, newTag] });
+      setTagTitle('');
+    }
+  };
 
   const saveTask = async () => {
     try {
@@ -69,7 +70,7 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
         await createTask(task);
         toast.success('Task Created Successfully!');
       }
-      setModalState(false);
+      setModalState(false); // Close modal after saving
     } catch (error: any) {
       toast.error('Error saving Task');
     }
@@ -82,7 +83,7 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
         <div className="flex-1 pr-4">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-              Task Title
+            Task Title
             </label>
             <input
               className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
@@ -130,6 +131,24 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
         
         {/* Right Column */}
         <div className="flex-1 pl-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="columnId">
+              Task Progress
+            </label>
+            <select
+              className="w-full h-12 px-2 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
+              id="columnId"
+              name="columnId"
+              value={task.columnId}
+              onChange={handleDropdownChange}
+              required
+            >
+              <option value="todo">To Do</option>
+              <option value="inProgress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deadline">
               Task Deadline
@@ -195,7 +214,7 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 

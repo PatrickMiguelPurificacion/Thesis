@@ -1,10 +1,10 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
 
-interface Note {
+export interface Note {
   noteTitle: string;
   noteContent: string;
-  notebookID: string | null;
+  notebookID?: string | null;
   userID: string;
 }
 
