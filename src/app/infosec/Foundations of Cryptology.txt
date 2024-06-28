@@ -1,0 +1,128 @@
+Foundations of Cryptology
+
+Cryptology has a long and multicultural history
+
+Date                                                                            Event
+
+1900 B.C.                     Egyptian scribes used nonstandard hieroglyphs while inscribing clay tablets; this is the first documented use of written cryptography.
+
+1500 B.C.                     Mesopotamian cryptography surpassed that of the Egyptians. This is demonstrated by a tablet that
+                              was discovered to contain an encrypted formula for pottery glazes; the tablet used symbols that
+                              have different meanings than when used in other contexts.
+
+500 B.C.                      Hebrew scribes writing the book of Jeremiah used a reversed alphabet substitution cipher known
+                              as ATBASH.
+
+487 B.C.                      The Spartans of Greece developed the skytale, a system consisting of a strip of papyrus wrapped
+                              around a wooden staff. Messages were written down the length of the staff, and the papyrus was
+                              unwrapped. The decryption process involved wrapping the papyrus around a shaft of similar
+                              diameter.
+
+50 B.C.                       Julius Caesar used a simple substitution cipher to secure military and government communications.
+                              To form an encrypted text, Caesar shifted the letter of the alphabet three places. In addition to
+                              this monoalphabetic substitution cipher, Caesar strengthened his encryption by substituting Greek
+                              letters for Latin letters.
+
+Fourth                        The Kama Sutra of Vatsayana listed cryptography as the 44th and 45th of the 64 arts (yogas) that
+to sixth                      men and women should practice:(44) The art of understanding writing in cipher, and the writing
+centuries                     of words in a peculiar way; (45) The art of speaking by changing the forms of the word.
+
+
+725                           Abu ‘Abd al-Rahman al-Khalil ibn Ahman ibn ‘Amr ibn Tammam al Farahidi al-Zadi al Yahmadi
+                              wrote a book (now lost) on cryptography; he also solved a Greek cryptogram by guessing the
+                              plaintext introduction.
+
+855                           Abu Wahshiyyaan-Nabati, a scholar, published several cipher alphabets that were used to encrypt
+                              magic formulas.
+
+1250                          Roger Bacon, an English monk, wrote Epistle of Roger Bacon on the Secret Works of Art and of
+                              Nature and Also on the Nullity of Magic, in which he described several simple ciphers.
+  
+1392                          The Equatorie of the Planetis, an early text possibly written by Geoffrey Chaucer, contained a
+                              passage in a simple substitution cipher.
+
+1412                          Subhalasha, a 14-volume Arabic encyclopedia, contained a section on cryptography, including both
+                              substitution and transposition ciphers, as well as ciphers with multiple substitutions, a technique
+                              that had never been used before.
+
+1466                          Leon Battista Alberti, the Father of Western cryptography, worked with polyalphabetic
+                              substitution and also designed a cipher disk.
+
+1518                          Johannes Trithemius wrote the first printed book on cryptography and invented a steganographic
+                              cipher, in which each letter was represented as a word taken from a succession of columns. He also
+                              described a polyalphabetic encryption method using a rectangular substitution format that is now
+                              commonly used. He is credited with introducing the method of changing substitution alphabets
+                              with each letter as it is deciphered.
+
+1553                          Giovan Batista Belaso introduced the idea of the passphrase (password) as a key for encryption;
+                              this polyalphabetic encryption method is misnamed for another person who later used the
+                              technique and is called “The Vigenère Cipher” today.
+
+1563                          Giovanni Battista Porta wrote a classification text on encryption methods, categorizing them as
+                              transposition, substitution, and symbol substitution.
+
+1623                          Sir Francis Bacon described an encryption method employing one of the first uses of steganography; 
+                              he encrypted his messages by slightly changing the type-face of a random text so that
+                              each letter of the cipher was hidden within the text.
+
+1790s                         Thomas Jefferson created a 26-letter wheel cipher, which he used for official communications
+                              while ambassador to France; the concept of the wheel cipher would be reinvented in 1854 and
+                              again in 1913.
+
+1854                          Charles Babbage reinvented Thomas Jefferson’s wheel cipher.
+
+1861–5                        During the U.S. Civil War, Union forces used a substitution encryption method based on specific
+                              words, and the Confederacy used a polyalphabetic cipher whose solution had been published
+                              before the start of the Civil War.
+
+1914–17                       During World War I, the Germans, British, and French used a series of transposition and
+                              substitution ciphers in radio communications throughout the war. All sides expended considerable
+                              effort to try to intercept and decode communications, and thereby created the science of
+                              cryptanalysis. British cryptographers broke the Zimmerman Telegram, in which the Germans
+                              offered Mexico U.S. territory in return for Mexico’s support. This decryption helped to bring the
+                              United States into the war.
+
+1917                          William Frederick Friedman, the father of U.S. cryptanalysis, and his wife, Elizabeth, were
+                              employed as civilian cryptanalysts by the U.S. government. Friedman later founded a school for
+                              cryptanalysis in Riverbank, Illinois.
+
+1917                          Gilbert S. Vernam, an AT&T employee, invented a polyalphabetic cipher machine that used a
+                              nonrepeating random key.
+
+1919                          Hugo Alexander Koch filed a patent in the Netherlands for a rotor-based cipher machine; in 1927,
+                              Koch assigned the patent rights to Arthur Scherbius, the inventor of the Enigma machine, which
+                              was a mechanical substitution cipher.
+
+1927–33                       During Prohibition, criminals in the U.S. began using cryptography to protect the privacy of
+                              messages used in criminal activities.
+
+1937                          The Japanese developed the Purple machine, which was based on principles similar to those of
+                              Enigma and used mechanical relays from telephone systems to encrypt diplomatic messages. By
+                              late 1940, a team headed by William Friedman had broken the code generated by this machine
+                              and constructed a machine that could quickly decode Purple’s ciphers.
+
+1939–42                       The Allies secretly broke the Enigma cipher, undoubtedly shortening World War II.
+
+1942                          Navajo code talkers entered World War II; in addition to speaking a language that was unknown
+                              outside a relatively small group within the United States, the Navajos developed code words for
+                              subjects and ideas that did not exist in their native tongue.
+
+1948                          Claude Shannon suggested using frequency and statistical analysis in the solution of substitution
+                              ciphers.
+
+1970                          Dr. Horst Feistel led an IBM research team in the development of the Lucifer cipher.
+
+1976                          A design based upon Lucifer was chosen by the U.S. National Security Agency as the Data
+                              Encryption Standard and found worldwide acceptance.
+
+1976                          Whitefield Diffie and Martin Hellman introduced the idea of public-key cryptography.
+
+1977                          Ronald Rivest, Adi Shamir, and Leonard Adleman developed a practical public-key cipher for both
+                              confidentiality and digital signatures; the RSA family of computer encryption algorithms was born.
+
+1978                          The initial RSA algorithm was published in the Communication of ACM.
+
+1991                          Phil Zimmermann released the first version of PGP (Pretty Good Privacy); PGP was released as
+                              freeware and became the worldwide standard for public cryptosystems.
+
+2000                          Rijndael’s cipher was selected as the Advanced Encryption Standard.

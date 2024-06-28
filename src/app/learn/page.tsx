@@ -2,32 +2,27 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import NavBar from '../components/NavBar';
 import { toast } from 'sonner';
 import { Highlighter, createHighlight, fetchHighlights, deleteHighlight } from '../services/HighlightService';
+import { redirect } from 'next/navigation';
 
 const topics = [
   'Introduction',
   'Foundations of Cryptology',
-  'Terminology',
   'Cipher Methods',
   'Cryptographic Algorithms',
   'Cryptographic Tools',
   'Protocols for Secure Communications',
   'Attacks on Cryptosystems',
-  'Selected Readings',
-  'Chapter Summary',
-  'Review Questions',
-  'Exercises',
-  'Case Exercises',
-  'Endnotes'
+  'Chapter Summary'
 ];
 
 const highlightColors = ['yellow', '#ff5733', 'lightblue', 'lightgreen', 'pink'];
 
 export default function Learn() {
-  const session = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       redirect('/signin');
@@ -44,8 +39,8 @@ export default function Learn() {
   const [highlightToDelete, setHighlightToDelete] = useState<string | null>(null);
 
   useEffect(() => {
-    if (session.data?.user?.email) {
-      fetchUserHighlights(session.data.user.email);
+    if (session?.user?.email) {
+      fetchUserHighlights(session.user.email);
     }
   }, [session]);
 
@@ -68,10 +63,31 @@ export default function Learn() {
   };
 
   const loadChapterContents = async (topic: string) => {
-    let contents = `Contents of ${topic}`;
-    const filtered = highlights.filter(highlight => highlight.topic === topic);
-    return highlightContents(contents, filtered);
+    try {
+      const response = await fetch(`/api/getContent?topic=${encodeURIComponent(topic)}`);
+      if (response.ok) {
+        const contents = await response.text();
+        const filtered = highlights.filter(highlight => highlight.topic === topic);
+        return formatContent(contents, filtered);
+      } else {
+        toast.error('Failed to load chapter contents');
+        return '';
+      }
+    } catch (error) {
+      console.error('Error loading chapter contents:', error);
+      toast.error('Failed to load chapter contents');
+      return '';
+    }
   };
+  
+  const formatContent = (content: string, highlights: Highlighter[]) => {
+    // Replace single newlines with <br> and double newlines with <p>
+    const paragraphs = content.split('\n\n').map(paragraph => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`).join('');
+  
+    // Apply highlights
+    return highlightContents(paragraphs, highlights);
+  };
+  
 
   const handleHighlightAndNote = () => {
     const selection = window.getSelection();
@@ -91,7 +107,7 @@ export default function Learn() {
         highlightedText: text,
         color,
         topic: selectedTopic,
-        userID: session.data?.user?.email || ''
+        userID: session?.user?.email || ''
       };
       await createHighlight(newHighlight);
       toast.success('Highlight added successfully');
@@ -113,7 +129,7 @@ export default function Learn() {
       try {
         await deleteHighlight(highlightToDelete);
         toast.success('Highlight deleted successfully');
-        fetchUserHighlights(session.data?.user?.email || '');
+        fetchUserHighlights(session?.user?.email || '');
         setShowDeleteConfirmation(false);
       } catch (error) {
         console.error('Error deleting highlight:', error);
@@ -128,7 +144,7 @@ export default function Learn() {
 
     // Update chapter contents to include highlights
     if (selectedTopic === topic) {
-      setChapterContents(loadChapterContentsWithHighlights(`Contents of ${topic}`, filtered));
+      setChapterContents(loadChapterContentsWithHighlights(chapterContents, filtered));
     }
   };
 
@@ -146,7 +162,7 @@ export default function Learn() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <NavBar userEmail={session?.data?.user?.email} />
+      <NavBar userEmail={session?.user?.email} />
 
       <div className="flex-grow p-8">
         <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
@@ -219,7 +235,7 @@ export default function Learn() {
                 ))}
               </div>
               <button
-                className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-md"
+                className="mt-4 px-4 py-2 bg-gray-300 rounded-md"
                 onClick={() => setShowColorPicker(false)}
               >
                 Cancel
@@ -237,21 +253,19 @@ export default function Learn() {
                   className="px-4 py-2 bg-red-500 text-white rounded-md"
                   onClick={confirmDeleteHighlight}
                 >
-                  Yes
+                  Yes, Delete
                 </button>
                 <button
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md"
+                  className="px-4 py-2 bg-gray-300 rounded-md"
                   onClick={() => setShowDeleteConfirmation(false)}
                 >
-                  No
+                  Cancel
                 </button>
               </div>
             </div>
           </div>
-          )}
-        </div>
+        )}
       </div>
-    );
-  }
-
-Learn.requireAuth = true;
+    </div>
+  );
+}

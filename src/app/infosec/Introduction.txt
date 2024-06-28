@@ -1,0 +1,14 @@
+Introduction:
+
+The science of cryptography is not as enigmatic as you might think. A variety of cryptographic techniques are used regularly in everyday life. 
+
+For example, open your newspaper to the entertainment section and you’ll find the Daily Cryptogram, which is a word puzzle that involves unscrambling letters to find a hidden message. Also, although it is a dying art, many secretaries still use shorthand, or stenography, an abbreviated, symbolic writing method, to take rapid dictation. 
+
+A form of cryptography is used even in knitting patterns, where directions are written in a coded form, in such patterns as K1P1 (knit 1, purl 1) that only an initiate can understand. These examples illustrate one important application of cryptography—the efficient and rapid transmittal of information—but cryptography also protects and verifies data transmitted via information systems.
+
+The science of encryption, known as cryptology, encompasses cryptography and cryptanalysis. Cryptography, which comes from the Greek words kryptos, meaning “hidden,” and graphein, meaning “to write,” is the process of making and using codes to secure the transmission of information. Cryptanalysis is the process of obtaining the original message (called the plaintext) from an encrypted message (called the ciphertext) without knowing the algorithms and keys used to perform the encryption. 
+
+Encryption is the process of converting an original message into a form that is unreadable to unauthorized individuals—that is, to anyone without the tools to convert the encrypted message back to its original format.
+
+Decryption is the process of converting the ciphertext message back into plaintext so that it can be readily understood.
+

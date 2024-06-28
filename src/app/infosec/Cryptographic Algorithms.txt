@@ -1,0 +1,183 @@
+Cryptographic Algorithms
+
+In general, cryptographic algorithms are often grouped into two broad categories—symmetric and asymmetric—but in practice, today’s popular cryptosystems use a hybrid combination of
+symmetric and asymmetric algorithms. Symmetric and asymmetric algorithms are distinguished by the types of keys they use for encryption and decryption operations.
+
+
+Symmetric Encryption
+
+Encryption methodologies that require the same secret key to encipher and decipher the message are using what is called private key encryption or symmetric encryption. Symmetric encryption methods use mathematical operations that can be programmed into extremely fast computing algorithms so that the encryption and decryption processes are executed quickly by even small computers. As you can see in Figure 8-5, one of the challenges is that both the sender and the recipient must have the secret key. Also, if either copy of the key falls into the wrong hands, messages can be decrypted by others and the sender and intended receiver may not know the message was intercepted. The primary challenge of symmetric key encryption is getting the key to the receiver, a process that must be conducted out of band (meaning through a channel or band other than the one carrying the ciphertext) to avoid interception. There are a number of popular symmetric encryption cryptosystems. One of the most widely known is the Data Encryption Standard (DES), which was developed by IBM and is based on the company’s Lucifer algorithm, which uses a key length of 128 bits. As implemented, DES uses a 64-bit block size and a 56-bit key. DES was adopted by NIST in 1976 as a federal
+standard for encryption of non-classified information, after which it became widely employed in commercial applications. DES enjoyed increasing popularity for almost twenty years, until 1997, when users realized that a 56-bit key size did not provide acceptable levels of security. In 1998, a group called the Electronic Frontier Foundation (www.eff.org), using a specially
+designed computer, broke a DES key in less than three days (just over 56 hours, to be precise). Since then, it has been theorized that a dedicated attack supported by the proper hardware (not necessarily a specialized computer) can break a DES key in less than four hours. Triple DES (3DES) was created to provide a level of security far beyond that of DES. 3DES was an advanced application of DES, and while it did deliver on its promise of encryption strength beyond DES, it too soon proved too weak to survive indefinitely—especially as The notation used to represent the encryption process varies, depending on its source. The notation in this text uses the letter M to represent the original message, C to represent the ending ciphertext, and E to represent the encryption process: thus, E(M) C,3 in which encryption (E) is applied to a message (M) to create ciphertext (C). In this notation scheme, the letter D represents the decryption or deciphering process, thus the formula D[E(M)] M states that if you decipher (D) an enciphered message [E (M)], you get the original message (M). This can also be stated as D[C] M, or the deciphering of the ciphertext (remember that C E(M)) results in the original message M. Finally, the letter K is used to represent the key, therefore E(M,K) C states that
+encrypting (E) the message (M) with the key (K) results in the ciphertext (C). Similarly, D(C,K) D[E(M,K),K] M, that is, deciphering the ciphertext with key K results in the original plaintext message—or, to translate this formula even more precisely, deciphering with key K the message encrypted with key K results in the original message. To encrypt a plaintext set of data, you can use one of two methods: bit stream and block cipher. In the bit stream method, each bit is transformed into a cipher bit, one after the other. In the block cipher method, the message is divided into blocks, e.g., 8-, 16-, 32-, or 64-bit blocks, and then each block is transformed using the algorithm and key. Bit stream methods most commonly use algorithm functions like XOR, whereas block methods can use XOR, transposition, or substitution. Computing power continued to double every 18 months. Within just a few years, 3DES
+needed to be replaced. The successor to 3DES is the Advanced Encryption Standard (AES). AES is a federal information processing standard (FIPS) that specifies a cryptographic algorithm used within the U.S. government to protect information in federal agencies that are not a part of the national defense infrastructure. (Agencies that are considered a part of national defense use other, more secure methods of encryption, which are provided by the National Security Agency.) The requirements for AES stipulate that the algorithm should be unclassified, publicly disclosed, and available royalty-free worldwide. AES has been developed to replace both DES and 3DES. While 3DES remains an approved algorithm for some uses, its expected useful life is limited. Historically, cryptographic standards approved by FIPS have been adopted on a voluntary basis by organizations outside government entities. The AES selection process involved cooperation between the U.S. government, private industry, and academia from around the world. AES was approved by the Secretary of Commerce as the official federal
+governmental standard on May 26, 2002. AES implements a block cipher called the Rijndael Block Cipher with a variable block length
+and a key length of 128, 192, or 256 bits. Experts estimate that the special computer used by the Electronic Frontier Foundation to crack DES within a couple of days would require approximately 4,698,864 quintillion years (4,698,864,000,000,000,000,000) to crack AES.
+
+Asymmetric Encryption
+
+While symmetric encryption systems use a single key to both encrypt and decrypt a message, asymmetric encryption uses two different but related keys, and either key can be used to
+encrypt or decrypt the message. If, however, key A is used to encrypt the message, only key B can decrypt it, and if key B is used to encrypt a message, only key A can decrypt it. Asymmetric encryption can be used to provide elegant solutions to problems of secrecy and verification. This technique has its highest value when one key is used as a private key, which means that it is kept secret (much like the key in symmetric encryption), known only to the owner of the key pair, and the other key serves as a public key, which means that it is stored
+in a public location where anyone can use it. This is why the more common name for asymmetric encryption is public-key encryption. 3DES was created to provide a level of security far beyond that of standard DES. (In between, there was a 2DES; however, it was statistically shown that the double DES did not provide significantly stronger security than DES.) 3DES uses three 64-bit keys for an overall key length of 192 bits. 3DES encryption is the same as that of standard DES, repeated three times. 3DES can be employed using two or three keys and a combination of encryption or decryption for additional security. The most common implementations involve encrypting and/or decrypting with two or three different keys, a process that is described shortly. 3DES employs forty-eight rounds in its encryption computation, generating ciphers that are approximately 256 times stronger than standard DES ciphers but require only three times longer to process. One example of 3DES encryption is as follows:
+
+1. In the first operation, 3DES encrypts the message with key 1, then decrypts it
+with key 2, and then it encrypts it again with key 1. In cryptographic notation,
+this is [E{D[E(M,K1)],K2},K1]. Decrypting with a different key is essentially another
+encryption, but it reverses the application of the traditional encryption operations.
+
+2. In the second operation, 3DES encrypts the message with key 1, then it encrypts it
+again with key 2, and then it encrypts it a third time with key 1 again, or [E{E[E
+(M,K1)],K2},K1].
+
+3. In the third operation, 3DES encrypts the message three times with three different keys; [E{E[E(M,K1)],K2},K3]. This is the most secure level of encryption possible
+with 3DES.
+
+Of the many ciphers that were submitted from around the world for consideration in the AES selection process, five finalists were chosen: MARS, RC6, Rijndael, Serpent, and Twofish. On October 2, 2000, NIST announced the selection of Rijndael, and this block cipher was approved by the Secretary of Commerce as the official federal governmental standard as of May 26, 2002. The AES version of Rijndael can use a multiple round based system. Depending on the key size, the number of rounds varies from nine to thirteen: for a 128-bit key, nine rounds plus one end round are used; for a 192-bit key, eleven rounds plus one end round are used; and for a 256-bit key, thirteen rounds plus one end round are used. Once Rijndael was adopted as the AES, the ability to use variable-sized blocks was standardized to a single 128-bit block for simplicity. There are four steps within each Rijndael round, and these are described in “The Advanced Encryption Standard (Rijndael),” by John Savard, as follows:
+
+1. “The Byte Sub step. Each byte of the block is replaced by its substitute in an S-box
+(substitution box). [Author’s Note: The S-box consists of a table of computed
+values, the calculation of which is beyond the scope of this text.]
+
+2. The Shift Row step. Considering the block to be made up of bytes 1 to 16, these
+bytes are arranged in a rectangle, and shifted as follows:
+
+from                         to
+1 5 9 13                 1 5 9 13
+2 6 10 14                6 10 14 2
+3 7 11 15                11 15 3 7
+4 8 12 16                16 4 8 12
+
+Other shift tables are used for larger blocks.
+
+3. The Mix Column step. Matrix multiplication is performed; each column is multiplied by the matrix:
+2311
+1231
+1123
+3112
+
+4. The Add Round Key step. This simply XORs in the subkey for the current round.
+The extra final round omits the Mix Column step, but is otherwise the same as a
+regular round.”4
+
+Asymmetric algorithms are one-way functions. A one-way function is simple to compute in one
+direction, but complex to compute in the opposite direction. This is the foundation of public-key
+encryption. Public-key encryption is based on a hash value, which, as you learned earlier in this
+chapter, is calculated from an input number using a hashing algorithm. This hash value is essentially a summary of the original input values. It is virtually impossible to derive the original values without knowing how those values were used to create the hash value. For example, if you multiply 45 by 235 you get 10,575. This is simple enough. But if you are simply given the number 10,575, can you determine which two numbers were multiplied to determine this
+number? Now assume that each multiplier is 200 digits long and prime. The resulting multiplicative product would be up to 400 digits long. Imagine the time you’d need to factor that out. There is a shortcut, however. In mathematics, it is known as a trapdoor (which is different from the software trapdoor). A mathematical trapdoor is a “secret mechanism that enables you to easily accomplish the reverse function in a one-way function.”5 With a trapdoor, you can use a key to encrypt or decrypt the ciphertext, but not both, thus requiring two keys. The public key becomes the true key, and the private key is derived from the public key using the trapdoor.
+
+If you understand modulo mathematics, you can appreciate the complexities of the RSA algorithm. The RSA algorithm is based on the computational difficulty of factoring large composite numbers and computing the eth roots modulo, a composite number for a specified odd integer e. Encryption in RSA is accomplished by raising the message M to a nonnegative integer power e. The product is then divided by the nonnegative modulus n (n should have a bit length of at least 1024 bits), and the remainder is the ciphertext C. This process results in a one-way operation (shown below) when n is a very large number. C Me / mod n In the decryption process, the ciphertext C is raised to the power d, a nonnegative
+integer, as follows:
+
+d e 1 mod ((p 1)(q 1))
+
+C is then reduced by modulo n. In order for the recipient to calculate the decryption
+
+key, the p and q factors must be known. The modulus n, which is a composite number,
+
+is determined by multiplying two large nonnegative prime numbers, p and q:
+
+n p ∞ q
+
+In RSA’s asymmetric algorithm, which is the basis of most modern public-key infrastructure (PKI) systems (a topic covered later in this chapter), the public and private keys are generated using the following procedure, which is from the RSA Corporation: “Choose two large prime numbers, p and q, of equal length, and compute
+p q n, which is the public modulus. Choose a random public key, e, so that e and (p 1)(q 1) are relatively prime.
+
+Compute e d 1 mod (p 1)(q 1), where d is the private key.
+Thus d e 1 mod [(p 1)(q 1)], where “(d, n) is the private key; (e, n) is
+the public key. P is encrypted to generate ciphertext C as C Pe mod n, and
+is decrypted to recover the plaintext, P as P Cd mod n.”6
+
+Essentially, the RSA algorithm can be divided into the following three steps:
+1. Key generation: Prime factors p and q are selected by a statistical technique known as probabilistic primality testing and then multiplied together to form n. The encryption exponent e is selected, and the decryption exponent d is calculated.
+
+2. Encryption: M is raised to the power of e, reduced by modulo n, and remainder C
+is the ciphertext.
+
+3. Decryption: C is raised to the power of d and reduced by modulo n.
+
+The sender publishes the public key, which consists of modulus n and exponent e. The remaining variables d, p, and q are kept secret. A message can then be encrypted by: C Me (recipient) mod n(recipient)
+
+Digitally signed by: C’ M’
+
+d (sender) mod n(sender)
+
+Verified by: M’ C’
+
+e (sender) mod n(sender)
+
+Decrypted by: M Cd (recipient) mod n(recipient)
+
+Table: Encryption:
+
+Plaintext                        Text Value                  (Text)^E                     (Text)^E MOD 
+                                                                                          N Ciphertext
+
+T                                  20                          8000                      8000 MOD 33 14
+E                                  05                          125                        125 MOD 33 26
+C                                  03                          27                          27 MOD 33 27
+H                                  08                          512                        512 MOD 33 17
+N                                  14                         2744                       2744 MOD 33 05
+O                                  15                         3375                       3375 MOD 33 09
+L                                  12                         1728                       1728 MOD 33 12
+O                                  15                         3375                       3375 MOD 33 09
+G                                  07                         343                         343 MOD 33 13
+Y                                  25                         15625                     15625 MOD 33 16
+
+Table: Encryption
+Ciphertext                        (Cipher)^D               (Cipher)^D MOD N |Text|            Plaintext
+
+14                                 105413504                 105413504 MOD 33 20                  T
+26                                 8031810176                8031810176 MOD 33 05                 E
+27                                10460353203                10460353203 MOD 33 03                C
+17                                 410338673                 410338673 MOD 33 08                  H
+05                                  78125                     78125 MOD 33 14                     N
+09                                 4782969                    4782969 MOD 33 15                   O
+12                                 35831808                   35831808 MOD 33 12                  L
+09                                 4782969                     4782969 MOD 33 15                  O
+13                                 62748517                  62748517 MOD 33 07                   G
+16                                 268435456                 268435456 MOD 33 25                  Y
+
+Encryption Key Size
+
+When deploying ciphers, users have to decide on the size of the crypto variable or key. This is very important, because the strength of many encryption applications and cryptosystems is measured by key size. How exactly does key size affect the strength of an algorithm? Typically, the length of the key increases the number of random guesses that have to be made in order to break the code. Creating a larger universe of possibilities increases the time required to make guesses, and thus a longer key directly influences the strength of the encryption. It may surprise you to learn that when it comes to cryptosystems, the security of encrypted data is not dependent on keeping the encrypting algorithm secret; in fact, algorithms should
+be (and often are) published, to enable research to uncover their weaknesses. In fact, the security of any cryptosystem depends on keeping some or all of the elements of the
+crypto variable(s) or key(s) secret, and effective security is maintained by manipulating the size (bit length) of the keys and by following proper procedures and policies for key management. For a simple example of how key size is related to encryption strength, suppose you have an algorithm that uses a three-bit key. You may recall from earlier in the chapter that keyspace is the range from which the key can be drawn. Also, you may recall that in binary notation, three bits can be used to represent values from 000 to 111, which correspond to the numbers 0 to 7 in decimal notation, and thus provide a keyspace of eight keys. This means that an algorithm that uses a three-bit key has eight possible keys (the numbers 0 to 7 in binary are 000, 001, 010, 011, 100, 101, 110, 111). If you know how many keys you have to choose from, you can program a computer to try all the keys to attempt to crack the encrypted message. The preceding statement presumes a few things: (1) you know the algorithm, (2) you have the encrypted message, and (3) you have time on your hands. It is easy to satisfy the first criterion. The encryption tools that use the Data Encryption Standard (DES) can be purchased over the counter. Many of these tools are based on encryption algorithms that are standards, as is DES itself, and therefore it is relatively easy to get a cryptosystem based on DES that enables you to decrypt an encrypted message if you possess the key. The second criterion requires the interception of an encrypted message, which is illegal but not impossible. As for the third criterion, the task required is a brute force attack, in which a computer randomly (or sequentially) selects possible keys of the known size and applies them to the encrypted text or a piece of the encrypted text. If the result is plaintext—bingo! But as indicated earlier in this chapter, it can take quite a long time to exert brute force on the more advanced cryptosystems. In fact, the strength of an algorithm is determined by how long it takes to guess the key. But when it comes to keys, how big is big? At the beginning of this section, you learned that a three-bit system has eight possible keys. An eight-bit system has 256 possible keys. Note, however, that if you use a 32-bit key, puny by modern standards, you have almost 16.8 million possible keys. Even so, a modern PC, such as the one described in Table 8-7, could discover this key in mere seconds. But, as Table 8-7 shows, the amount of time needed to crack a cipher by guessing its key grows very quickly—that is, exponentially with each additional bit. One thing to keep in mind is that even though the estimated time to crack grows rapidly with respect to the number of bits in the encryption key and the odds of cracking seem at first
+glance to be insurmountable, Table 8-7 doesn’t account for the fact that computing power has increased and continues to increase. Therefore, these days even the once-standard 56-bit encryption can’t stand up to brute force attacks by personal computers, especially if multiple computers are used together to crack these keys. Each additional computer reduces the
+amount of time needed. Two computers can divide the keyspace (the entire set of possible combinations of bits that can be the cryptovariable or key) and crack the key in approximately half the time, and so on. Thus, 285 computers can crack a 56-bit key in one year; ten times as many would do it in a little over a month.
+Why do encryption systems such as DES incorporate multiple elements or operations? Consider this: if you use the same operation (XOR, substitution, or transposition) multiple times, you gain no additional benefit. For example, if you use a substitution cipher, and substitute B for A, and then R for B, and then Q for R, it has the same effect as substituting Q for A. Similarly, if you transpose a character in position 1, then position 4, then position 3, you could more easily have transposed the character from position 1 to position 3. There is
+no net advantage for sequential operations unless each subsequent operation is different.
+
+It is estimated that to crack an encryption key using a brute force attack, a computer needs to perform a maximum of 2^k operations (2k guesses), where k is the number of bits in the key. In reality, the average estimated time to crack is half that time. Using an average modern 2008-era dual-core PC performing 30,000 MIPS (million instructions per
+second):
+
+Key Length(bits)                   Maximum Number of Operations (guesses)                  Maximum Time to Crack            Estimated Average  Time to Crack
+
+8                                           256                                             0.0000000085 seconds                 0.0000000043 seconds
+
+16                                         65,636                                            0.0000022 seconds                    0.00000109 seconds
+
+24                                        16,777,216                                          0.00056 seconds                      0.00028 seconds
+
+32                                      4,294,967,296                                         0.143 seconds                         0.072 seconds
+
+56                                      72,057,594,037,927,900                                 27.800 days                            13.9 days
+
+64                                     18,446,744,073,709,600,000                               19.498 years                           9.7 years
+
+128                                    3.40282E 38                                      359,676,102,360,201,000,000 years   179,838,051,180,100,000,000 years
+
+256                                    1.15792E 77                                     122,391,435,436,027,000,000,000,000,  61,195,717,718,013,400,000,000,000,000,000,
+                                                                                       000,000,000,000,000,000,000,000,      000,000,000,000,000,
+                                                                                              000,000,000 years                000,000,000,000 years
+
+512                                      1.3408E                                        154 14,171,960,013,891,600,              7,085,980,006,945,820,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000,                    000,000,000,000,000,
+                                                                                          000,000,000,000,000 years               000,000,000,000,000 years
+
+Therefore, if you substitute, then transpose, then XOR, then substitute again, you have dramatically scrambled, substituted, and recoded the original plaintext with ciphertext that is
+untraceable without the key.
