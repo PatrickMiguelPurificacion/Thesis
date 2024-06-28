@@ -105,8 +105,7 @@ export default function Decks() {
       </header>
 
       <button
-        className="disabled:opacity-40 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-        style={{ backgroundColor: '#364BA8' }}
+        className="disabled:opacity-40 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-600 bg-blue-500 mt-3"
         onClick={handleAddDeck}>
         Add New Deck
       </button>    
@@ -128,36 +127,33 @@ export default function Decks() {
             className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 relative mb-4"
           >
             <div
-              className="w-full h-full rounded-md p-8 text-gray-700 text-base hover:bg-gray-200 transition duration-300 relative flex flex-col justify-between"
+              className="w-full h-full rounded py-16 text-gray-700 relative flex flex-col justify-between"
               style={{ backgroundColor: deck.deckColor }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-2"> {/* Icons and Count */}
-                  <button
-                    onClick={() => handleEditDeck(deck)}
-                    className="text-white hover:bg-blue-900 py-1 px-2 rounded-md"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(deck.id)}
-                    className="text-white hover:bg-blue-900 py-1 px-2 rounded-md"
-                  >
-                    <FaTrash />
-                  </button>
-                  <p className="text-right text-xs text-white">Count: {deck.cardNum}</p> {/* Count */}
-                </div>
-              </div>
-              <p className="text-center mb-4">{deck.deckName}</p> {/* Deck Name */}
-              <div className="mt-auto">
+
+            <div className="mt-auto">
+              <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
                 <button
-                  onClick={() => handleReview(deck.id)}
-                  className="w-full text-sm text-white hover:bg-blue-900 py-2 px-4 rounded-b-md"
-                  style={{ backgroundColor: '#364BA8' }}
+                  onClick={() => handleDelete(deck.id)}
+                  className="text-white hover:bg-gray-800 py-2 px-2 rounded-md"
                 >
-                  View Flashcards
+                  <FaTrash />
+                </button>
+                <button
+                  onClick={() => handleEditDeck(deck)}
+                  className="text-white hover:bg-gray-800 py-2 px-2 rounded-md ml-auto"
+                >
+                  <FaEdit />
                 </button>
               </div>
+              <button
+                onClick={() => handleReview(deck.id)}
+                className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center"
+              >
+                <p className="text-center text-base text-white">{deck.deckName}</p>
+                <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: {deck.cardNum}</p>
+              </button>
+            </div>
             </div>
           </div>
         ))}

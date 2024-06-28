@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useSession } from "next-auth/react";
 import { redirect, useSearchParams } from "next/navigation";
@@ -9,6 +9,7 @@ import { db } from "../firebase";
 import NavBar from "../components/NavBar";
 import { fetchReviewFlashcards, updateFlashcard } from "../services/FlashcardService";
 import { getDoc, doc } from "firebase/firestore";
+import { FaTimes } from "react-icons/fa";
 
 const ReviewingPage = () => {
   const router = useRouter();
@@ -54,14 +55,6 @@ const ReviewingPage = () => {
     getFlashcards();
     fetchDeckName();
   }, [session, cramDeckID]);
-
-  useEffect(() => {
-    const revealAnswerTimer = setTimeout(() => {
-      setShowAnswer(true);
-    }, 30000); // 30 seconds
-
-    return () => clearTimeout(revealAnswerTimer);
-  }, [currentCardIndex]);
 
   const handleRateDifficulty = async (difficulty: string) => {
     const flashcard = flashcardsArray[currentCardIndex];
@@ -115,46 +108,51 @@ const ReviewingPage = () => {
   };
 
   const handleShowAnswer = () => {
-    setShowAnswer(true);
+    setShowAnswer(!showAnswer);
+  };
+
+  const handleStopReviewing = () => {
+    router.push(`/flashcards?deckId=${cramDeckID}`);  
   };
 
   return (
-    <div className="flex h-screen">
-      <NavBar userEmail={session?.data?.user?.email} />
-      <div className="flex-grow bg-gray-100 p-8">
-        <header className="bg-indigo-600 text-white py-6 px-8">
-          <h1 className="text-2xl font-semibold text-center">Reviewing {deckName}</h1>
+    <div className="flex flex-col h-screen justify-center items-center bg-blue-100">
+      <div className="max-w-4xl w-full bg-blue-500 text-white rounded-lg shadow-lg p-6 flex-1 mt-6 mb-6 relative">
+      <header className="text-center mb-4">
+          <h1 className="text-2xl font-semibold mt-6 py-6 mb-6">Reviewing {deckName}</h1>
+          <button onClick={handleStopReviewing} className="absolute top-2 right-2 bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            <FaTimes size={20} />
+          </button>
         </header>
 
-        <div className="flex justify-center items-center w-full">
-          <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-6 mt-6">
+        <div className="flex justify-center items-center w-full mt-6 py-6">
             {flashcardsArray.length === 0 ? (
               <p className="text-center text-gray-600">There are No Scheduled Reviews Today</p>
             ) : (
               <>
-                <div className="flashcard mb-4">
-                  <h3 className="font-semibold">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
+                <div className="flashcard mb-4 mt-6 py-4">
+                  <h3 className="font-semibold text-lg text-center">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
                   {showAnswer && (
-                    <p className="text-gray-600">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>
+                    <p className="text-lg text-center text-white">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>
                   )}
-                </div>
-                <div className="flex justify-between">
-                  <div>
-                    <button onClick={() => handleRateDifficulty('easy')} className="difficulty-btn bg-green-500 hover:bg-green-600 mr-2">Easy</button>
-                    <button onClick={() => handleRateDifficulty('good')} className="difficulty-btn bg-blue-500 hover:bg-blue-600 mr-2">Good</button>
-                    <button onClick={() => handleRateDifficulty('hard')} className="difficulty-btn bg-yellow-500 hover:bg-yellow-600 mr-2">Hard</button>
-                    <button onClick={() => handleRateDifficulty('again')} className="difficulty-btn bg-red-500 hover:bg-red-600">Again</button>
-                  </div>
-                  <button onClick={handleShowAnswer} className="show-answer-btn bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
-                    Show Answer
-                  </button>
                 </div>
               </>
             )}
           </div>
+          <div className="flex justify-center py-6 mt-6">
+                  <div>
+                    <button onClick={() => handleRateDifficulty('easy')} className="difficulty-btn bg-green-500 hover:bg-green-600 mr-2">Easy</button>
+                    <button onClick={() => handleRateDifficulty('good')} className="difficulty-btn bg-yellow-500 hover:bg-yellow-600 mr-2">Good</button>
+                    <button onClick={() => handleRateDifficulty('hard')} className="difficulty-btn bg-red-500 hover:bg-red-600 mr-2">Hard</button>
+                    <button onClick={() => handleRateDifficulty('again')} className="difficulty-btn bg-purple-500 hover:bg-purple-600 mr-2">Again</button>
+                    <button onClick={handleShowAnswer} className="show-answer-btn bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    {showAnswer ? 'Hide Answer' : 'Show Answer'}
+                    </button>
+                  </div>
+                  
+                </div>
         </div>
       </div>
-    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { addDeck, updateDeck } from '../services/DeckService';
+import { FaTrash, FaEdit } from 'react-icons/fa';
 
 interface Props {
   setModalState: (state: boolean) => void;
@@ -12,7 +13,7 @@ interface Props {
 const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
   const { data: session } = useSession();
   
-  const [selectedColor, setSelectedColor] = useState(initialDeck?.deckColor || "");// Initialize with initialDeck color if editing
+  const [selectedColor, setSelectedColor] = useState(initialDeck?.deckColor || "");
   
   const [deck, setDeck] = useState({
     deckName: initialDeck?.deckName || '',
@@ -34,8 +35,8 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
 
   function colorSelected(e: React.ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
-    setSelectedColor(value); // Update selected color state
-    setDeck({ ...deck, deckColor: value }); // Update deck color in deck state
+    setSelectedColor(value);
+    setDeck({ ...deck, deckColor: value });
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +47,9 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
   const saveDeck = async () => {
     try {
       if (deckID) {
-        // Update existing deck
         await updateDeck(deckID, deck);
         toast.success('Deck Updated Successfully!');
       } else {
-        // Create new deck
         await addDeck(deck);
         toast.success('Deck Created Successfully!');
       }
@@ -61,15 +60,15 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
   };
 
   return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div className="relative bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-xl">
-          
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"> 
+      <div className="relative bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-xl flex">
+        <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/2 pr-4">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Deck Name
             </label>
             <input 
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" 
               id="deckName" 
               type="text" 
               name="deckName"
@@ -85,24 +84,15 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
               Pick a Color
             </label>
             <input 
-              className="shadow appearance-none rounded w-full"   
+              className="shadow appearance-none rounded h-10 w-full"   
               id="deckColor" 
               type="color"
               value={deck.deckColor}
               name="deckColor"
               onChange={colorSelected}
             />
+            <p className="text-sm mt-4">Check the Color on the Sample Deck on the Right</p>
           </div>
-            
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Sample Deck
-            </label>      
-          </div>
-          <div className="block text-sm mb-2"
-            style={{ backgroundColor: selectedColor, padding: '1rem', borderRadius: '0.5rem', textAlign:'center' }}>
-            Your Custom Colored Deck
-          </div><br/>
 
           <div className="flex justify-between">
             <button onClick={() => setModalState(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -112,10 +102,27 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
               {deckID ? 'Update' : 'Create'}
             </button>
           </div>
+        </div>
 
+        <div className="w-full md:w-1/3 lg:w-2/3 xl:w-1/2 pl-8 pr-4">
+          <div className="w-full h-full rounded py-16 text-gray-700 relative flex flex-col justify-between" style={{ backgroundColor: selectedColor }}>
+            <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
+              <div className="hover:bg-gray-800 text-white py-2 px-2 rounded-md">
+                <FaTrash />
+              </div>
+              <div className="hover:bg-gray-800 text-white py-2 px-2 rounded-md ml-auto">
+                <FaEdit />
+              </div>
+            </div>
+            <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center">
+              <p className="text-center text-base text-white">{deck.deckName}</p>
+              <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: {deck.cardNum}</p>
+            </div>
+          </div>
         </div>
       </div>
-    )
-  };
+    </div>
+  );
+};
 
 export default DeckModal;

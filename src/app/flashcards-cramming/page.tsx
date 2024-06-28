@@ -1,106 +1,106 @@
 'use client';
 
-import { query, collection, where, getDocs, getDoc, doc } from "firebase/firestore";
-import { useSession } from "next-auth/react";
-import { redirect, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { db } from "../firebase";
-import NavBar from "../components/NavBar";
 import { fetchFlashcards } from "../services/FlashcardService";
 import { toast } from "sonner";
+import { FaAngleLeft, FaAngleRight, FaTimes } from "react-icons/fa";
 
 const CrammingPage = () => {
-    const router = useRouter();
-    const session = useSession({
-      required: true,
-      onUnauthenticated() {
-        redirect('/signin');
-      },
-    });
-  
-    const searchParams = useSearchParams();
-    const cramDeckID = searchParams ? searchParams.get('deckId') : null; // For getting the ID of the deck from the passed url
+  const router = useRouter();
+  const session = useSession({
+    required: true,
+    onUnauthenticated() {
+      redirect('/signin');
+    },
+  });
 
-    const [flashcardsArray, setFlashcardsArray] = useState<{ [key: string]: any }[]>([]); // Placing the flashcards in an array
-    const [deckName, setDeckName] = useState(''); // For the deckname in the display on top
-    const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const [showAnswer, setShowAnswer] = useState(false);
+  const searchParams = useSearchParams();
+  const cramDeckID = searchParams ? searchParams.get('deckId') : null;
 
-    // Function to handle showing the answer
-    const handleShowAnswer = () => {
-        setShowAnswer(true);
-    };
+  const [flashcardsArray, setFlashcardsArray] = useState<any[]>([]);
+  const [deckName, setDeckName] = useState('');
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [answerShown, setAnswerShown] = useState(false);
 
-    // Function to handle moving to the next flashcard
-    const handleNextCard = () => {
-        setCurrentCardIndex((prevIndex) => Math.min(prevIndex + 1, flashcardsArray.length - 1));
-        setShowAnswer(false);
-    };
-
-    // Function to handle moving to the previous flashcard
-    const handlePrevCard = () => {
-        setCurrentCardIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-        setShowAnswer(false);
-    };
-
-    useEffect(() => {
-      const getFlashcards = async () => {
-        if (cramDeckID) {
-          try {
-            const flashcards = await fetchFlashcards(cramDeckID); // Call fetchFlashcards function with the deck ID
-            setFlashcardsArray(flashcards);
-          } catch (error) {
-            console.error('Error fetching flashcards:', error);
-            toast.error('Error Fetching Flashcards');
-          }
+  useEffect(() => {
+    const getFlashcards = async () => {
+      if (cramDeckID) {
+        try {
+          const flashcards = await fetchFlashcards(cramDeckID);
+          setFlashcardsArray(flashcards);
+        } catch (error) {
+          console.error('Error fetching flashcards:', error);
+          toast.error('Error Fetching Flashcards');
         }
-      };
-      getFlashcards();
-    
-        // Fetch deck name
-        const fetchDeckName = async () => {
-          if (cramDeckID) {
-            const deckSnapshot = await getDoc(doc(db, 'decks', cramDeckID));
-            const deckData = deckSnapshot.data();
-            if (deckData) {
-              setDeckName(deckData.deckName);
-            }
-          }
-        };
-        fetchDeckName();
-      }, [session]);
+      }
+    };
 
-    return(
-      <div className="flex h-screen">
-      <NavBar userEmail={session?.data?.user?.email} />
+    const fetchDeckName = async () => {
+      if (cramDeckID) {
+        const deckSnapshot = await getDoc(doc(db, 'decks', cramDeckID));
+        const deckData = deckSnapshot.data();
+        if (deckData) {
+          setDeckName(deckData.deckName);
+        }
+      }
+    };
 
-      <div className="flex-grow bg-gray-100 p-8">
-      <header className="bg-indigo-600 text-white py-6 px-8">
-        <h1 className="text-2xl font-semibold text-center">Cramming Page for {deckName}</h1>
-      </header>
+    getFlashcards();
+    fetchDeckName();
+  }, [session, cramDeckID]);
+
+  const toggleAnswer = () => {
+    setAnswerShown(!answerShown);
+  };
+
+  const handleNextCard = () => {
+    setCurrentCardIndex(prevIndex => Math.min(prevIndex + 1, flashcardsArray.length - 1));
+    setAnswerShown(false);
+  };
+
+  const handlePrevCard = () => {
+    setCurrentCardIndex(prevIndex => Math.max(prevIndex - 1, 0));
+    setAnswerShown(false);
+  };
+
+  const handleStopReviewing = () => {
+    router.push(`/flashcards?deckId=${cramDeckID}`);
+  };
+
+  return (
+    <div className="flex flex-col h-screen justify-center items-center bg-blue-100">
       
-      <div className="flex-grow flex justify-center items-center">
-      <div className="flex flex-wrap mt-4">
-        <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-6">
-          {/* Display flashcard question or answer */}
-          <div className="flashcard mb-4">
-          <h3 className="font-semibold text-lg">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3> {/* Increased font size */}
-          {showAnswer && <p className="text-lg">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>} {/* Increased font size */}
+      <div className="max-w-4xl w-full bg-blue-500 text-white rounded-lg shadow-lg p-6 flex-1 mt-6 mb-6 relative">
+        <header className="text-center mb-4">
+          <h1 className="text-2xl font-semibold mt-6 py-6 mb-6">Cramming {deckName}</h1>
+          <button onClick={handleStopReviewing} className="absolute top-2 right-2 bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            <FaTimes size={20} />
+          </button>
+        </header>
+
+        <div className="flex justify-between mt-6 py-6">
+          <button onClick={handlePrevCard} disabled={currentCardIndex === 0} className="btn hover:bg-blue-600 hover:text-white"><FaAngleLeft size={40} /></button>
+          <div className="flashcard mb-4 mt-6 py-4">
+            <h3 className="font-semibold text-lg text-center">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
+            {answerShown && <p className="text-lg text-center">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>}
           </div>
-      
-          {/* Buttons for navigation */}
-          <div className="flex justify-between">
-            <button onClick={handlePrevCard} disabled={currentCardIndex === 0} className="btn">Back</button>
-            <button onClick={handleShowAnswer} className="btn">Show Answer</button>
-            <button onClick={handleNextCard} disabled={currentCardIndex === flashcardsArray.length - 1} className="btn">Next</button>
-          </div>
+          <button onClick={handleNextCard} disabled={currentCardIndex === flashcardsArray.length - 1} className="btn hover:bg-blue-600 hover:text-white"><FaAngleRight size={40} /></button>
+        </div>
+
+        <div className="flex justify-center mb-6">
+          <button onClick={toggleAnswer} className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4">
+            {answerShown ? 'Hide Answer' : 'Show Answer'}
+          </button>
         </div>
       </div>
+
     </div>
-    </div>
-    </div>
-    );
+  );
 };
 
 export default CrammingPage;

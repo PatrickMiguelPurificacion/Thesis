@@ -95,7 +95,7 @@ export default function KanbanBoard() {
       <NavBar userEmail={session?.user?.email} />
 
       <div className="flex-grow overflow-y-auto bg-gray-100 p-8">
-        <header className="bg-indigo-600 text-white py-6 px-8 flex justify-between items-center">
+        <header className="text-white py-6 px-8 flex justify-between items-center"  style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold">Kanban Board</h1>
         </header>
 
