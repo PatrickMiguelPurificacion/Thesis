@@ -144,6 +144,7 @@ export default function Notebook() {
         await deleteNote(noteId,selectedNotebookId);
         setNotesArray(notesArray.filter((note) => note.id !== noteId));
         toast.success('Note Deleted Successfully!');
+        getNotebooks(); // Refresh getting the Notes
       } catch (error) {
         console.error('Error deleting note:', error);
         toast.error('Error deleting Note');
@@ -188,7 +189,7 @@ export default function Notebook() {
                         </button>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-500">Count: {notebook.notesNum}</p>
+                    <p className="text-sm text-gray-500">Notes: {notebook.notesNum}</p>
                   </div>
                 </div>
               ))}
@@ -216,7 +217,7 @@ export default function Notebook() {
           {/* This is for the Notes Section of the Page */}
           <div className="w-2/3 pl-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Notes</h2>
+              <h2 className="text-lg font-semibold mt-4">Notes</h2>
               {selectedNotebookId && ( //Ensures that the Add New Note Button only shows up when there is a notebook selected
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
@@ -252,7 +253,7 @@ export default function Notebook() {
                         </button>
                       </div>
                     </div>
-                    <p className="text-gray-600">{note.noteContent}</p>
+                    <p className="text-gray-600 break-words">{note.noteContent}</p>
                   </div>
                 </div>
               ))}

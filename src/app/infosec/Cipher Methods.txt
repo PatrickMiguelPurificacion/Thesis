@@ -1,22 +1,13 @@
-Cipher Methods:
-
-There are two methods of encrypting plaintext: the bit stream method or the block cipher
-method. In the bit stream method, each bit in the plaintext is transformed into a cipher bit one bit at a time. In the block cipher method, the message is divided into blocks, for example, sets of 8-, 16-, 32-, or 64-bit blocks, and then each block of plaintext bits is transformed into an encrypted block of cipher bits using an algorithm and a key. Bit stream
-methods commonly use algorithm functions like the exclusive OR operation (XOR), whereas block methods can use substitution, transposition, XOR, or some combination of
-these operations, as described in the following sections. Note that most computer-based encryption methods operate on data at the level of its binary digits (bits), but some operate
-at the byte or character level.
+There are two methods of encrypting plaintext: the bit stream method or the block cipher method. In the bit stream method, each bit in the plaintext is transformed into a cipher bit one bit at a time. In the block cipher method, the message is divided into blocks, for example, sets of 8-, 16-, 32-, or 64-bit blocks, and then each block of plaintext bits is transformed into an encrypted block of cipher bits using an algorithm and a key. Bit stream methods commonly use algorithm functions like the exclusive OR operation (XOR), whereas block methods can use substitution, transposition, XOR, or some combination of these operations, as described in the following sections. Note that most computer-based encryption methods operate on data at the level of its binary digits (bits), but some operate at the byte or character level.
 
 Substitution Cipher
 
-To use a substitution cipher, you substitute one value for another, for example a letter in the alphabet with the letter three values to the right. Or you can substitute one bit for another
-bit that is four places to its left. A three-character substitution to the right results in the following transformation of the standard English alphabet:
+To use a substitution cipher, you substitute one value for another, for example a letter in the alphabet with the letter three values to the right. Or you can substitute one bit for another bit that is four places to its left. A three-character substitution to the right results in the following transformation of the standard English alphabet:
 
 Initial alphabet yields      ABCDEFGHIJKLMNOPQRSTUVWXYZ
 Encryption alphabet          DEFGHIJKLMNOPQRSTUVWXYZABC
 
-Within this substitution scheme, the plaintext MOM would be encrypted into the ciphertext
-PRP. This is a simple enough method by itself but very powerful if combined with other operations. This type of substitution is based on a monoalphabetic substitution, because it only
-uses one alphabet. More advanced substitution ciphers use two or more alphabets, and are referred to as polyalphabetic substitutions.
+Within this substitution scheme, the plaintext MOM would be encrypted into the ciphertext PRP. This is a simple enough method by itself but very powerful if combined with other operations. This type of substitution is based on a monoalphabetic substitution, because it only uses one alphabet. More advanced substitution ciphers use two or more alphabets, and are referred to as polyalphabetic substitutions.
 
 To extend the previous example, consider the following block of text:
 Plaintext                   =     ABCDEFGHIJKLMNOPQRSTUVWXYZ

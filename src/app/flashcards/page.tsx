@@ -159,9 +159,9 @@
             )}
           </div>
 
-          <div className="mt-4 max-h-96 overflow-y-auto">
+          <div className="mt-4">
             {flashcardsArray.length === 0 ? (
-              <p className="text-center text-gray-600">There are No Flashcards in this Deck</p>
+              <p className="text-center text-gray-600 mt-6 py-20">There are No Flashcards in this Deck</p>
             ) : (
               flashcardsArray.map((flashcard) => (
                 <div key={flashcard.id} className="w-full mb-4 border rounded-md overflow-hidden shadow-md">

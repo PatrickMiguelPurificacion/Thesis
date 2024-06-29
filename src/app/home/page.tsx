@@ -18,10 +18,10 @@ export default function Home() {
 
   const router = useRouter();
 
-  // Sample data for the first three cards
-  const nextReviewData = "Next review data from database";
-  const flashcardsData = "Flashcards to review data from database";
-  const nextDeadlineData = "Next deadline data from database";
+  // Sample data to replace placeholders
+  const keepNotes = "Learn from the Learn Page and Highlight your learnings. Note what you learned on your notebook.";
+  const flashcardsToReview = "Make sure to go through your flashcards daily. Check if you have any reviews today.";
+  const nextDeadlines = "Keep track of your upcoming deadlines to stay on top of your studies.";
 
   return (
     <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
@@ -40,25 +40,24 @@ export default function Home() {
 
         </div>
 
-        {/* Three Cards with Database Data */}
+      
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          {/* Next Review Card */}
+       
           <div className="bg-white p-4 shadow-md text-center">
-            <h2 className="text-xl font-semibold mb-2">Your Next Review</h2>
-            <p>{nextReviewData}</p>
+            <h2 className="text-xl font-semibold mb-2">Review Everyday</h2>
+            <p>{flashcardsToReview}</p>
           </div>
 
-          {/* Flashcards to Review Card */}
           <div className="bg-white p-4 shadow-md text-center">
-            <h2 className="text-xl font-semibold mb-2">Flashcards to Review</h2>
-            <p>{flashcardsData}</p>
+            <h2 className="text-xl font-semibold mb-2">Track Deadlines</h2>
+            <p>{nextDeadlines}</p>
+          </div>
+         
+          <div className="bg-white p-4 shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-2">Highlight and Keep Notes</h2>
+            <p>{keepNotes}</p>
           </div>
 
-          {/* Next Deadline Card */}
-          <div className="bg-white p-4 shadow-md text-center">
-            <h2 className="text-xl font-semibold mb-2">Next Deadline</h2>
-            <p>{nextDeadlineData}</p>
-          </div>
         </div>
 
         {/* Divider */}
@@ -72,10 +71,10 @@ export default function Home() {
             
             {/* Card 1 */}
             <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2"> {/* Margin bottom for the icon */}
-                <IoMdCard size={24} className="mx-auto" /> {/* Icon */}
+              <div className="mb-2">
+                <IoMdCard size={24} className="mx-auto" /> 
               </div>
-              <h2 className="text-xl font-semibold mb-2"> {/* Flex to align items */}
+              <h2 className="text-xl font-semibold mb-2"> 
                 Flashcards 
               </h2>
               <p>Review your lessons daily</p>
@@ -84,10 +83,10 @@ export default function Home() {
 
             {/* Card 2 */}
             <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2"> {/* Margin bottom for the icon */}
-                <FaChalkboard size={24} className="mx-auto" /> {/* Icon */}
+              <div className="mb-2">
+                <FaChalkboard size={24} className="mx-auto" />
               </div>
-              <h2 className="text-xl font-semibold mb-2"> {/* Flex to align items */}
+              <h2 className="text-xl font-semibold mb-2"> 
                 Kanban Board
               </h2>
               <p>Manage and organize your tasks</p>
@@ -96,10 +95,10 @@ export default function Home() {
 
             {/* Card 3 */}
             <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2"> {/* Margin bottom for the icon */}
-                <FaBookReader size={24} className="mx-auto" /> {/* Icon */}
+              <div className="mb-2">
+                <FaBookReader size={24} className="mx-auto" /> 
               </div>
-              <h2 className="text-xl font-semibold mb-2"> {/* Flex to align items */}
+              <h2 className="text-xl font-semibold mb-2"> 
                 Learn
               </h2>
               <p>Study your course materials</p>
@@ -108,10 +107,10 @@ export default function Home() {
 
             {/* Card 4 */}
             <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2"> {/* Margin bottom for the icon */}
-                <FaBook size={24} className="mx-auto" /> {/* Icon */}
+              <div className="mb-2">
+                <FaBook size={24} className="mx-auto" /> 
               </div>
-              <h2 className="text-xl font-semibold mb-2"> {/* Flex to align items */}
+              <h2 className="text-xl font-semibold mb-2"> 
                 Notebook
               </h2>
               <p>Add notes on your materials</p>

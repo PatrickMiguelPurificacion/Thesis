@@ -10,14 +10,16 @@ interface Props {
   deckID: string | null;
 }
 
+const DEFAULT_COLOR = '#142059'; // Set your default color here
+
 const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
   const { data: session } = useSession();
   
-  const [selectedColor, setSelectedColor] = useState(initialDeck?.deckColor || "");
+  const [selectedColor, setSelectedColor] = useState(initialDeck?.deckColor || DEFAULT_COLOR);
   
   const [deck, setDeck] = useState({
     deckName: initialDeck?.deckName || '',
-    deckColor: initialDeck?.deckColor || '',
+    deckColor: initialDeck?.deckColor || DEFAULT_COLOR,
     cardNum: initialDeck?.cardNum || 0,
     userID: session?.user?.email || '',
   });
@@ -26,10 +28,11 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
     if (initialDeck) {
       setDeck({
         deckName: initialDeck.deckName || '',
-        deckColor: initialDeck.deckColor || '',
+        deckColor: initialDeck.deckColor || DEFAULT_COLOR,
         cardNum: initialDeck.cardNum || 0,
         userID: session?.user?.email || '',
       });
+      setSelectedColor(initialDeck.deckColor || DEFAULT_COLOR);
     }
   }, [initialDeck, session]);
 
@@ -45,6 +48,11 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
   };
 
   const saveDeck = async () => {
+    if (!deck.deckName.trim()) {
+      toast.error('Deck name is required!');
+      return;
+    }
+
     try {
       if (deckID) {
         await updateDeck(deckID, deck);
@@ -115,7 +123,7 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
               </div>
             </div>
             <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center">
-              <p className="text-center text-base text-white">{deck.deckName}</p>
+              <p className="text-center text-base text-white">Sample Deck</p>
               <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: {deck.cardNum}</p>
             </div>
           </div>
