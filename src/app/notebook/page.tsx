@@ -91,6 +91,7 @@ export default function Notebook() {
         await deleteNotebook(notebookId);
         setNotebooksArray(notebooksArray.filter((notebook) => notebook.id !== notebookId));
         toast.success('Notebook Deleted Successfully!');
+        getNotes();
       } catch (error) {
         console.error('Error deleting notebook:', error);
         toast.error('Error deleting Notebook');

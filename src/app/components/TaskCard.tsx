@@ -16,7 +16,7 @@ const TaskCard = ({ task, onEdit, onDelete }: TaskProps) => {
   };
 
   const handleDeleteClick = () => {
-    onDelete(); // Call onDelete function from props
+    onDelete();
   };
 
   return (

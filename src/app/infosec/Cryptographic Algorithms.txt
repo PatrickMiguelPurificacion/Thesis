@@ -1,7 +1,4 @@
-Cryptographic Algorithms
-
-In general, cryptographic algorithms are often grouped into two broad categories—symmetric and asymmetric—but in practice, today’s popular cryptosystems use a hybrid combination of
-symmetric and asymmetric algorithms. Symmetric and asymmetric algorithms are distinguished by the types of keys they use for encryption and decryption operations.
+In general, cryptographic algorithms are often grouped into two broad categories—symmetric and asymmetric—but in practice, today’s popular cryptosystems use a hybrid combination of symmetric and asymmetric algorithms. Symmetric and asymmetric algorithms are distinguished by the types of keys they use for encryption and decryption operations.
 
 
 Symmetric Encryption
