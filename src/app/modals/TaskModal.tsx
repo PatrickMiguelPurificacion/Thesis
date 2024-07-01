@@ -62,6 +62,11 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
   };
 
   const saveTask = async () => {
+    if (!task.title.trim()) {
+      toast.error('Please add a task title');
+      return;
+    }
+
     try {
       if (taskId) {
         await updateTask(taskId, task);
@@ -83,7 +88,7 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
         <div className="flex-1 pr-4">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-            Task Title
+              Task Title
             </label>
             <input
               className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"

@@ -156,6 +156,7 @@ export default function Notebook() {
   const handleNoteModalClose = () => {
     setNoteModalState(false);
     getNotes(); // Refresh notes after closing the modal
+    getNotebooks(); // Refresh Notebooks after closing the modal
   };
 
   return (

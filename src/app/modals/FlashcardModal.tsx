@@ -1,13 +1,12 @@
 import { useSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { createFlashcard, updateFlashcard} from '../services/FlashcardService';
+import { createFlashcard, updateFlashcard } from '../services/FlashcardService';
 
 interface Props {
   setModalState: (state: boolean) => void;
   initialFlashcard?: any;
   cardID?: string | null;
-  reviewID?: string | null;
   deckId: string | null;
 }
 
@@ -39,6 +38,11 @@ const FlashcardModal = ({ setModalState, initialFlashcard, cardID, deckId }: Pro
   };
 
   const saveFlashcard = async () => {
+    if (!flashcard.cardQuestion || !flashcard.cardAnswer) {
+      toast.error('Please add both a question and an answer');
+      return;
+    }
+
     try {
       if (cardID) {
         // Update existing flashcard
@@ -46,8 +50,7 @@ const FlashcardModal = ({ setModalState, initialFlashcard, cardID, deckId }: Pro
         toast.success('Card Updated Successfully!');
       } else {
         // Create new flashcard
-        const newCardID = await createFlashcard(flashcard, deckId);
-        
+        await createFlashcard(flashcard, deckId);
         toast.success('Flashcard Created Successfully!');
       }
       setModalState(false);

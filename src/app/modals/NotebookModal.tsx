@@ -33,6 +33,11 @@ const NotebookModal = ({ setModalState, initialNotebook, notebookID }: Props) =>
   };
 
   const saveNotebook = async () => {
+    if (!notebook.notebookName) {
+      toast.error('Add a Notebook Name');
+      return;
+    }
+
     try {
       if (notebookID) {
         // Update existing notebook
