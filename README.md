@@ -1,3 +1,7 @@
+SecuSpire
+
+This application is being developed using Next.js, Firebase, Typescript, and Tailwind CSS for our Graduating Thesis Project. 
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
