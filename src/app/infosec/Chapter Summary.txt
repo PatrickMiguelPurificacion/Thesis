@@ -1,0 +1,28 @@
+﻿■ Encryption is the process of converting a message into a form that is unreadable to unauthorized individuals.
+
+■ The science of encryption, known as cryptology, encompasses cryptography (making and using encryption codes) and cryptanalysis (breaking encryption codes). 
+
+■ Cryptology has a long history and continues to change and improve.
+
+■ Two basic processing methods are used to convert plaintext data into encrypted data- bit stream and block ciphering. The other major methods used for scrambling data include substitution ciphers, transposition ciphers, XOR function, Vigenère cipher, and the Vernam cipher.
+
+■ The strength of many encryption applications and cryptosystems is determined by key size. All other things being equal, the length of the key directly affects the strength of the encryption.
+
+■ Hash functions are mathematical algorithms that generate a message summary, or digest, that can be used to confirm the identity of a specific message and to confirm that the message has not been altered.
+
+■ Most cryptographic algorithms can be grouped into two broad categories, symmetric and asymmetric. In practice, most popular cryptosystems are hybrids that combine symmetric and asymmetric algorithms.
+
+■ Public-Key Infrastructure (PKI) is an integrated system of software, encryption methodologies, protocols, legal agreements, and third-party services that enables users to communicate securely. PKI includes digital certificates and certificate authorities. 
+
+■ Digital signatures are encrypted messages that are independently verified by a central facility, and which provide nonrepudiation. A digital certificate is an electronic document, similar to a digital signature, that is attached to a file to certify that the file is from the organization it claims to be from and has not been modified from its original format.
+
+■ Steganography is the hiding of information, and while it is not properly a form of cryptography, like cryptography it is used to protect confidential information while in transit.
+
+
+■ S-HTTP (Secure Hypertext Transfer Protocol), Secure Electronic Transactions (SET), and SSL (Secure Sockets Layer) are protocols designed to enable secure communications across the Internet. IPSec is the protocol used to secure communications across any IP-based network such as LANs, WANs, and the Internet. Secure Multipurpose Internet Mail Extensions (S/MIME), Privacy Enhanced Mail (PEM), and Pretty Good Privacy (PGP) are protocols that are used to secure electronic mail. PGP is a hybrid cryptosystem that combines some of the best available cryptographic algorithms and has become the open source de facto standard for encryption and authentication of e-mail and file storage applications.
+
+■ Wireless networks require their own cryptographic protection. Originally protected with WEP and WPA, most modern Wi-Fi networks are now protected with WPA2. Bluetooth—a short-range wireless protocol used predominantly for wireless phones and PDAs—can be exploited by anyone within its 30-foot range
+
+■ Unauthorized attempts to access to secure communications often use brute force or ciphertext attacks that perform frequency analysis on the encoded text. Therefore, modern algorithms attempt to remove the repetitive and predictable statistical bias from the ciphertext. If attackers obtain duplicate texts, one in ciphertext and one in plaintext, they can reverse-engineer the encryption algorithm. This is referred to as a known-plaintext attack or a selected-plaintext attack. Attacks against cryptosystems include the man-in-the-middle attack, correlation attacks, dictionary attacks, and timing attacks.
+
+■ Most well-known encryption methods are released to the information and computer security communities for testing, which leads to the development of more secure algorithms.

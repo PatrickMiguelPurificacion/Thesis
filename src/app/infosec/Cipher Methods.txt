@@ -1,0 +1,176 @@
+There are two methods of encrypting plaintext: the bit stream method or the block cipher method. In the bit stream method, each bit in the plaintext is transformed into a cipher bit one bit at a time. In the block cipher method, the message is divided into blocks, for example, sets of 8-, 16-, 32-, or 64-bit blocks, and then each block of plaintext bits is transformed into an encrypted block of cipher bits using an algorithm and a key. Bit stream methods commonly use algorithm functions like the exclusive OR operation (XOR), whereas block methods can use substitution, transposition, XOR, or some combination of these operations, as described in the following sections. Note that most computer-based encryption methods operate on data at the level of its binary digits (bits), but some operate at the byte or character level.
+
+Substitution Cipher
+
+To use a substitution cipher, you substitute one value for another, for example a letter in the alphabet with the letter three values to the right. Or you can substitute one bit for another bit that is four places to its left. A three-character substitution to the right results in the following transformation of the standard English alphabet:
+
+Initial alphabet yields      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+Encryption alphabet          DEFGHIJKLMNOPQRSTUVWXYZABC
+
+Within this substitution scheme, the plaintext MOM would be encrypted into the ciphertext PRP. This is a simple enough method by itself but very powerful if combined with other operations. This type of substitution is based on a monoalphabetic substitution, because it only uses one alphabet. More advanced substitution ciphers use two or more alphabets, and are referred to as polyalphabetic substitutions.
+
+To extend the previous example, consider the following block of text:
+Plaintext                   =     ABCDEFGHIJKLMNOPQRSTUVWXYZ
+Substitution cipher 1       =     DEFGHIJKLMNOPQRSTUVWXYZABC
+Substitution cipher 2       =     GHIJKLMNOPQRSTUVWXYZABCDEF
+Substitution cipher 3       =     JKLMNOPQRSTUVWXYZABCDEFGHI
+Substitution cipher 4       =     MNOPQRSTUVWXYZABCDEFGHIJKL
+
+The first row here is the plaintext, and the next four rows are four sets of substitution ciphers, which taken together constitute a single polyalphabetic substitution cipher. To encode the word TEXT with this cipher, you substitute a letter from the second row for the first letter in TEXT, a letter from the third row for the second letter, and so on—a process that yields the ciphertext WKGF. Note how the plaintext letter T is transformed into a W or a F, depending on its order of appearance in the plaintext. 
+
+Complexities like these make this type of encryption substantially more difficult to decipher when one doesn’t have the algorithm (in this case, the rows of ciphers) and the key, which is the method used (in this case the use of the second row for first letter, third for second, and so on). A logical extension to this process is to randomize the cipher rows completely in order to create a more complex operation. 
+
+One example of a substitution cipher is the cryptogram in the daily newspaper (see Figure 8-1); another is the once famous Radio Orphan Annie Decoder Pin (shown in Figure 8-2), which consisted of two alphabetic rings that could be rotated to a predetermined pairing to form a simple substitution cipher. The device was made to be worn as a pin so one could always be at the ready. As mentioned in Table 8-1, Julius Caesar reportedly used a three-position shift to the right to encrypt his messages (so A became D, B became E, and so on), and thus this particular substitution cipher was given his name—the Caesar Cipher. 
+
+An advanced type of substitution cipher that uses a simple polyalphabetic code is the Vigenère cipher. The cipher is implemented using the Vigenère square (or table), which is made up of twenty-six distinct cipher alphabets. In the header row, the alphabet is written in its normal order. In each subsequent row, the alphabet is shifted one letter to the right until a 26 26 block of letters is formed. There are a number of ways to use the Vigenère square. You could perform an encryption bysimply starting in the first row and finding a substitute for the first letter of plaintext, and then moving down the rows for each subsequent letter of plaintext. With this method, the word SECURITY in plaintext becomes TGFYWOAG in ciphertext. 
+
+A much more sophisticated way to use the Vigenère square is to use a keyword to represent the shift. To accomplish this, you begin by writing a keyword above the plaintext message. For example, suppose the plaintext message was “SACK GAUL SPARE NO ONE” and the keyword was ITALY. We thus end up with the following:
+
+ITALYITALYITALYITA
+SACKGAULSPARENOONE
+
+Now you use the keyword letter and the message (plaintext) letter below it in combination. Returning to the Vigenère square, notice how the first column of text, like the first row, forms the normal alphabet. To perform the substitution, start with the first combination of keyword and message letters, IS. Use the keyword letter to locate the column, and the message letter to find the row, and then look for the letter at their intersection. Thus, for column “I” and row “S,” you will find the ciphertext letter “A.” 
+
+After you follow this procedure for each of the letters in the message, you will produce the encrypted ciphertext ATCVEINLDNIKEYMWGE. One weakness of this method is that any keyword-message letter combination containing an “A.” row or column reproduces the plaintext message letter. For example, the third letter in the plaintext message, the C (of SACK), has a combination of AC, and thus is unchanged in the ciphertext. To minimize the effects of this weakness, you should avoid choosing a keyword that contains the letter “A.”
+
+The Vigenère Square
+A B C D E F G H I J K L MN O P Q R S T U V WX Y Z
+1 B C D E F G H I J K L MN O P Q R S T U V WX Y Z A
+2 C D E F G H I J K L MN O P Q R S T U V WX Y Z A B
+3 D E F G H I J K L MN O P Q R S T U V WX Y Z A B C
+4 E F G H I J K L MN O P Q R S T U V WX Y Z A B C D
+5 F G H I J K L MN O P Q R S T U V WX Y Z A B C D E
+6 G H I J K L MN O P Q R S T U V WX Y Z A B C D E F
+7 H I J K L MN O P Q R S T U V WX Y Z A B C D E F G
+8 I J K L MN O P Q R S T U V WX Y Z A B C D E F G H
+9 J K L MN O P Q R S T U V WX Y Z A B C D E F G H I
+10 K L MN O P Q R S T U V WX Y Z A B C D E F G H I J
+11 L MN O P Q R S T U V WX Y Z A B C D E F G H I J K
+12 MN O P Q R S T U V WX Y Z A B C D E F G H I J K L
+13 N O P Q R S T U V WX Y Z A B C D E F G H I J K L M
+14 O P Q R S T U V WX Y Z A B C D E F G H I J K L MN
+15 P Q R S T U V WX Y Z A B C D E F G H I J K L MN O
+16 Q R S T U V WX Y Z A B C D E F G H I J K L MN O P
+17 R S T U V WX Y Z A B C D E F G H I J K L MN O P Q
+18 S T U V WX Y Z A B C D E F G H I J K L MN O P Q R
+19 T U V WX Y Z A B C D E F G H I J K L MN O P Q R S
+20 U V WX Y Z A B C D E F G H I J K L MN O P Q R S T
+21 V WX Y Z A B C D E F G H I J K L MN O P Q R S T U
+22 WX Y Z A B C D E F G H I J K L MN O P Q R S T U V
+23 X Y Z A B C D E F G H I J K L MN O P Q R S T U V W
+24 Y Z A B C D E F G H I J K L MN O P Q R S T U V WX
+25 Z A B C D E F G H I J K L MN O P Q R S T U V WX Y
+26 A B C D E F G H I J K L MN O P Q R S T U V WX Y Z
+
+
+Transposition Cipher
+
+Like the substitution operation, the transposition cipher is simple to understand, but it can, if properly used, produce ciphertext that is difficult to decipher. In contrast to the substitution cipher, however, the transposition cipher (or permutation cipher) simply rearranges the values within a block to create the ciphertext. This can be done at the bit level or at the byte (character) level. For an example, consider the following transposition key pattern. Key pattern: 1 4, 2 8, 3 1, 4 5, 5 7, 6 2, 7 6, 8 3. In this key, the bit or byte (character) in position 1 (with position 1 being at the far right) moves to position 4 (counting from the right), and the bit or byte in position 2 moves to position 8, and so on. This is similar to another newspaper puzzle favorite: the Word Jumble, as illustrated in Figure 8-3. The following rows show the numbering of bit locations for this key; the plaintext message 00100101011010111001010101010100, which is broken into 8-bit blocks for clarity; and the ciphertext that is produced when the transposition key depicted above is applied to the plaintext:
+
+Bit locations:                 87654321 87654321 87654321 87654321
+Plaintext 8-bit blocks:        00100101|01101011|10010101|01010100
+Ciphertext:                    00001011|10111010|01001101|01100001
+
+Reading from right to left in the example above, the first bit of plaintext (position 1 of the first byte) becomes the fourth bit (in position 4) of the first byte of the ciphertext. Similarly, the second bit of the plaintext (position 2) becomes the eighth bit (position 8) of the ciphertext, and so on. To examine further how this transposition key works, look at its effects on a plaintext message comprised of letters instead of bits. Replacing the 8-bit block of plaintext with the example plaintext message presented earlier, “SACK GAUL SPARE NO ONE, yields the following:
+
+Letter locations:               87654321|87654321|87654321|87654321|
+Plaintext:                      SACKGAUL|SPARENOO|NE | |
+Key: Same key as above, but characters transposed, not bits.
+Ciphertext: U                   KAGLSCA|ORPEOSAN| E N | |
+
+Here, reading from right to left, the letter in position 1 of the first block of plaintext, “L,” becomes the letter at position 4 in the ciphertext. In other words, the “L” that is the eighth letter of the plaintext is the “L” at the fifth letter of the ciphertext. The letter in position 2 “Ben Franklin’s Airport Woes” “Those who desire to give up freedom in order to gain will not have, nor do they deserve, either one.”
+
+RSTUT
+HPRI E C
+EDNOEC
+DIN EHD
+BIESSCR
+v I Y p ARC
+
+of the first block of plaintext, “U,” becomes the letter at position 8 in the ciphertext. In other words, the “U” that is the seventh letter of the plaintext is the “U” that is the first letter of the ciphertext. This process continues using the specified pattern. In addition to being credited with inventing a substitution cipher, Julius Caesar was associated with an early version of the transposition cipher. In the Caesar block cipher, the recipient of the coded message knows to fit the text to a prime number square (in practice, this means that if there are fewer than twenty-five characters, the recipient uses a 5 x 5 square). For example, if you are the recipient of the Caesar ciphertext shown below you would make a square of five columns and five rows, and then write the letters of the message into the square, filling the slots from left to right, top to bottom. Then you read the message from the opposite direction—that is, from top to bottom, left to right
+
+Ciphertext: SGS_NAAPNECUAO_KLR _ _ _ _ EO
+            SGS_N
+            AAPNE
+            CUAO
+            KLR__
+            __EO_
+
+Reading from top to bottom, left to right reveals the plaintext “SACK GAUL SPARE NO ONE.”
+
+When mechanical and electronic cryptosystems became more widely used, transposition ciphers and substitution ciphers were combined to produce highly secure encryption processes. To make the encryption even stronger (more difficult to cryptanalyze) the keys and block sizes can be made much larger (up to 64 or 128 bits in size), which produces substantially more complex substitutions or transpositions.
+
+Exclusive OR
+
+The exclusive OR operation (XOR) is a function of Boolean algebra in which two bits are compared, and if the two bits are identical, the result is a binary 0. If the two bits are not the same, the result is a binary 1. XOR encryption is a very simple symmetric cipher that is used in many applications where security is not a defined requirement. Table 8-3 shows an XOR truth table with the results of all the possible combinations of two bits. To see how XOR works, consider an example in which the plaintext is the word “CAT.” The ASCII binary representation of the plaintext is “01000011 01000001 01010100”. 
+
+In order to encrypt the plaintext, a key value should be selected. In this case, the bit pattern for the letter “V” (01010110) is used, and is repeated for each character to be encrypted, written
+
+First Bit        Second Bit              Result
+0                   0                      0
+0                   1                      1
+1                   0                      1
+1                   1                      0
+
+Text Value                    Binary Value
+CAT as bits                   010000110100000101010100
+VVV as key                    0 1 0 1 0 1 1 0 0 1 0 1 0 1 1 0 0 1 0 1 0 1 1 0
+Cipher                        000101010001011100000010
+
+left to right. Performing the XOR operation on the two bit streams (the values above) produces the results. The row labeled “Cipher” contains the bit stream that will be transmitted; when this cipher is received, it can be decrypted using the key value “V.” Note that the XOR encryption method is very simple to implement and equally simple to break. The XOR encryption method should not be used by itself when an organization is transmitting or storing sensitive data. Actual encryption algorithms used to protect data typically use the XOR operator as part of a more complex encryption process. You can combine the XOR operation with a block cipher operation to produce a simple but powerful operation. In the example that follows, the first row shows a character message “5E5 •” requiring encryption. The second row shows this message in binary notation. 
+
+In order to apply an 8-bit block cipher method, the binary message is broken into 8-bit blocks in the row labeled “Message blocks.” The fourth row shows the 8-bit key (01010101) chosen for the encryption. To encrypt the message, you must perform the XOR operation on each 8-bit block by using the XOR function on the message bit and the key bit to determine the bits of the ciphertext until the entire message is enciphered. The result is shown in the row labeled “Ciphertext.” This ciphertext can now be sent to a receiver, who will be able to decipher the message by simply knowing the algorithm (XOR) and the key (01010101).
+
+Message (text): “5E5 •”
+Message (binary): 00110101 01000101 00110101 00101011 10010101
+Message blocks: 00110101 01000101 00110101 00101011 10010101
+Key: 01010101 01010101 01010101 01010101 01010101
+Ciphertext: 01100000 00010000 01100000 01111110 11000000
+
+If the receiver cannot apply the key to the ciphertext and derive the original message, either the cipher was applied with an incorrect key or the cryptosystem was not used correctly.
+
+Vernam Cipher
+
+Also known as the one-time pad, the Vernam cipher, which was developed by AT&T, uses a set of characters only one time for each encryption process (hence the name one-time pad). The pad in the name comes from the days of manual encryption and decryption when the key values for each ciphering session were prepared by hand and bound into an easy-to-use form—that is, a pad of paper. To perform the Vernam cipher encryption operation, the pad values are added to numeric values that represent the plaintext that needs to be encrypted. Each character of the plaintext is turned into a number and a pad value for that position is added to it. The resulting sum for that character is then converted back to a ciphertext letter for transmission. If the sum of the two values exceeds 26, then 26 is subtracted from the Text Value Binary Value
+
+CAT as bits 010000110100000101010100
+VVV as key 0 1 0 1 0 1 1 0 0 1 0 1 0 1 1 0 0 1 0 1 0 1 1 0
+Cipher 000101010001011100000010
+
+
+total. (The process of keeping a computed number within a specific range is called a modulo; thus, requiring that all numbers be in the range 1–26 is referred to as modulo 26. In modulo 26, if a number is larger than 26, then 26 is sequentially subtracted from it until the number is in the proper range.) To examine the Vernam cipher and its use of modulo, consider the following example, which uses “SACK GAUL SPARE NO ONE” as plaintext. In the first step of this encryption process, the letter “S” is converted into the number 19 (because it is the nineteenth letter of the alphabet), and the same conversion is applied to the rest of the letters of the plaintext message, as shown below.
+
+Plaintext: SACKGAULSPARENOONE
+Plaintext value: 19 01 03 11 07 01 21 12 19 16 01 18 05 14 15 15 14 05
+One-time pad text: FPQRNSBIEHTZLACDGJ
+One time pad value: 06 16 17 18 14 19 02 09 05 08 20 26 12 01 03 04 07 10
+Sum of plaintext and pad: 25 17 20 29 21 20 23 21 24 24 21 44 17 15 18 19 21 15
+After modulo Subtraction: 03 18
+Ciphertext: YQTCUTWUXXURQORSUO
+
+Rows three and four in this example show, respectively, the one-time pad text that was chosen for this encryption and the one-time pad value. As you can see, the pad value, like the plaintext value, is derived from the position of each pad text letter in the alphabet; thus the pad text letter “F” is assigned the position number 06. This conversion process is repeated for the entire one-time pad text. Next, the plaintext value and the one-time pad value are added together—the first such sum is 25. Since 25 is in the range of 1 to 26, no modulo 26 subtraction is required. The sum remains 25, and yields the ciphertext “Y,” as shown above. Skipping ahead to the fourth character of the plaintext, “K,” we find that the plaintext value for it is 11. The pad text is “R” and the pad value is 18. The sum of 11 and 18 is 29. Since 29 is larger than 26, 26 is subtracted from it, which yields the value 3. 
+
+The ciphertext for this plaintext character is then the third letter of the alphabet, “C.” Decryption of any ciphertext generated from a one-time pad requires either knowledge of the pad values or the use of elaborate and (the encrypting party hopes) very difficult cryptanalysis. Using the pad values and the ciphertext, the decryption process works as follows: “Y” becomes the number 25, from which we subtract the pad value for the first letter of the message, 06. This yields a value of 19, or the letter “S.” This pattern continues until the fourth letter of the ciphertext where the ciphertext letter is “C” and the pad value is 18. Subtracting 18 from 3 yields negative 15. Since modulo 26 is employed, which requires that all numbers are in the range of 1–26, you must add 26 to the negative 15. This operations gives a sum of 11, which means that fourth letter of the message is “K.”
+
+
+Book or Running Key Cipher
+
+One encryption method made popular by spy movies involves using the text in a book as the key to decrypt a message. The ciphertext consists of a list of codes representing the page number, line number, and word number of the plaintext word. The algorithm is the mechanical process of looking up the references from the ciphertext and converting each reference to a word by using the ciphertext’s value and the key (the book). For example, from a copy of a particular popular novel, one may send the message: 259,19,8; 22,3,8; 375,7,4; 394,17,2. Although almost any book can be used, dictionaries and thesauruses are typically the most popular sources as they are likely to contain almost any word that might be needed. 
+
+The recipient of a running key cipher must first know which book is used—in this case, suppose it is the science fiction novel A Fire Upon the Deep, the 1992 TOR edition. To decrypt the ciphertext, the receiver acquires the book and turns to page 259, finds line 19, and selects the eighth word in that line (which is “sack”). Then the receiver turns to page 22, line 3, and selects the eighth word again, and so forth. In this example, the resulting message is “SACK ISLAND SHARP PATH.” If dictionaries are used, the message consists of only the page number and the number of the word on the page. An even more sophisticated version might use multiple books, perhaps even in a particular sequence for each word or phrase.
+
+
+Hash Functions
+
+In addition to ciphers, another important encryption technique that is often incorporated into cryptosystems is the hash function. Hash functions are mathematical algorithms that generate a message summary or digest (sometimes called a fingerprint) to confirm the identity of a specific message and to confirm that there have not been any changes to the content. While they do not create a ciphertext, hash functions confirm message identity and integrity, both of which are critical functions in e-commerce. Hash algorithms are public functions that create a hash value, also known as a message digest, by converting variable-length messages into a single fixed-length value. The message digest is a fingerprint of the author’s message that is compared with the recipient’s locally calculated hash of the same message. If both hashes are identical after transmission, the message has arrived without modification. 
+
+Hash functions are considered one-way operations in that the same message always provides the same hash value, but the hash value itself cannot be used to determine the contents of the message. Hashing functions do not require the use of keys, but it is possible to attach a message authentication code (MAC)—a key-dependent, one-way hash function—that allows only specific recipients (symmetric key holders) to access the message digest. Because hash functions are one-way, they are used in password verification systems to confirm the identity of the user. In such systems, the hash value, or message digest, is calculated based upon the originally issued password, and this message digest is stored for later comparison. When the user logs on for the next session, the system calculates a hash value based on the user’s password input, and this value is compared against the stored value to confirm identity.
+
+The Secure Hash Standard (SHS) is a standard issued by the National Institute of Standards and Technology (NIST). Standard document FIPS 180-1 specifies SHA-1 (Secure Hash Algorithm 1) as a secure algorithm for computing a condensed representation of a message or data file. SHA-1 produces a 160-bit message digest, which can be used as an input to a digital signature algorithm. SHA-1 is based on principles modeled after MD4 (which is part of theMDx family of hash algorithms created by Ronald Rivest). New hash algorithms (SHA-256,  SHA-384, and SHA-512) have been proposed by NIST as standards for 128, 192, and 256 bits, respectively. The number of bits used in the hash algorithm is a measurement of the strength of the algorithm against collision attacks. 
+
+SHA-256 is essentially a 256-bit block cipher algorithm that creates a key by encrypting the intermediate hash value, with the message block functioning as the key. The compression function operates on each 512-bit message block and a 256-bit intermediate message digest.1 As shown in Figure 8-4, there are free tools that can calculate hash values using a number of popular algorithms.
+
+
+A recent attack method called rainbow cracking has generated concern about the strength of the processes used for password hashing. In general, if attackers gain access to a file of hashed passwords, they can use a combination of brute force and dictionary attacks to reveal user passwords. Passwords that are dictionary words or poorly constructed can be easily cracked. Well-constructed passwords take a long time to crack even using the fastest computers, but by using a rainbow table—a database of precomputed hashes from sequentially calculated passwords—the rainbow cracker simply looks up the hashed password and reads out the text version, no brute force required. This type of attack is more properly classified as a time–memory tradeoff attack.
+
+To defend against this type of attack, you must first protect the file of hashed passwords and implement strict limits to the number of attempts allowed per login session. You can also use an approach called password hash salting. Salting is the process of providing a non-secret, random piece of data to the hashing function when the hash is first calculated. The use of the salt value creates a different hash and when a large set of salt values are used, rainbow cracking fails since the time-memory tradeoff is no longer in the attacker’s favor. The salt value is not kept a secret: it is stored along with the account identifier so that the hash value can be recreated during authentication.
