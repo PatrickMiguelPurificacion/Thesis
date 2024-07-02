@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, setDoc, getDocs, query, where, writeBatch } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, setDoc, getDocs, query, where, writeBatch, or } from 'firebase/firestore';
 import { db } from '../firebase';
 
 interface Deck {
@@ -6,10 +6,14 @@ interface Deck {
   cardNum: number;
   deckColor: string;
   userID: string;
+  global: boolean;
 }
 
-export const fetchDecks = async (userEmail: string) => {
-  const q = query(collection(db, 'decks'), where('userID', '==', userEmail));
+export const fetchDecks = async (userEmail: string | null) => {
+  const q = query(collection(db, 'decks'), or(
+    where('userID', '==', userEmail),
+    where('global', '==', true),
+  ));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 };

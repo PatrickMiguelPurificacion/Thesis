@@ -8,19 +8,19 @@ import { useState, useEffect, useCallback} from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 //Components
-import NavBar from '../components/NavBar';
+import NavBar from '../../components/NavBar';
 
 //Modals
-import DeckModal from '../modals/DeckModal';
+import DeckModal from '../../modals/DeckModal';
 
 //Firebase
 import { getDocs, collection, query, where} from 'firebase/firestore';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 
 //Notifications
 import { toast } from 'sonner';
-import { deleteDeck, fetchDecks } from '../services/DeckService';
+import { deleteDeck, fetchDecks } from '../../services/DeckService';
 
 export default function Decks() {
   //Ensures user is in session
@@ -30,6 +30,9 @@ export default function Decks() {
       redirect('/signin');
     },
   });
+
+  // if (!session?.data?.snapshot?.admin)
+  //   return redirect('/home');
 
   const router = useRouter();
 
@@ -49,7 +52,7 @@ export default function Decks() {
     const getDecks = useCallback(async () => {
       if (session.data?.user?.email) {
         try {
-          const decks = await fetchDecks(session.data.user.email);
+          const decks = await fetchDecks('global');
           setDecksArray(decks);
         } catch (error) {
           console.error('Error fetching decks:', error);
@@ -96,18 +99,18 @@ export default function Decks() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <NavBar userEmail={session?.data?.user?.email} />
+      <NavBar />
        
       <div className="flex-grow overflow-y-auto p-8">
       
       <header className="text-white py-6 px-8 mb-2" style={{ backgroundColor: '#142059' }}>
-        <h1 className="text-2xl font-semibold text-center">Flashcard Decks</h1>
+        <h1 className="text-2xl font-semibold text-center">Global Flashcard Decks</h1>
       </header>
 
       <button
         className="disabled:opacity-40 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-600 bg-blue-500 mt-3"
         onClick={handleAddDeck}>
-        Add New Deck
+        Add New Global Deck
       </button>    
       
       {/* Modal to Handle Adding or Updating */} 
@@ -135,13 +138,13 @@ export default function Decks() {
               <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
                 <button
                   onClick={() => handleDelete(deck.id)}
-                  className={`text-white hover:bg-gray-800 py-2 px-2 rounded-md ${deck.global ? 'opacity-0 pointer-events-none' : ''}`}
+                  className="text-white hover:bg-gray-800 py-2 px-2 rounded-md"
                 >
                   <FaTrash />
                 </button>
                 <button
                   onClick={() => handleEditDeck(deck)}
-                  className={`text-white hover:bg-gray-800 py-2 px-2 rounded-md ml-auto ${deck.global ? 'opacity-0 pointer-events-none' : ''}`}
+                  className="text-white hover:bg-gray-800 py-2 px-2 rounded-md ml-auto"
                 >
                   <FaEdit />
                 </button>
