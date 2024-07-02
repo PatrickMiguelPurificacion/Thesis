@@ -4,7 +4,7 @@ import './globals.css'
 import SessionProvider from './SessionProvider';
 import {Toaster} from 'sonner';
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
