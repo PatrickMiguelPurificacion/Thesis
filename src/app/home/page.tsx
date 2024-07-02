@@ -25,7 +25,7 @@ export default function Home() {
 
   return (
     <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
-      <NavBar userEmail={session?.data?.user?.email} /> {/* Calls the NavBar component */}
+      <NavBar /> {/* Calls the NavBar component */}
       
       <div className="flex-grow overflow-y-auto bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
         <div className="mb-5">

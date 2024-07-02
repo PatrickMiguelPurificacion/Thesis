@@ -16,7 +16,7 @@ export default function Signup() {
 
   // Add and Authenticate User to the Database
   const signup = async () => {
-    if (!email.endsWith('@mymail.mapua.edu.ph') || !email.endsWith('@mapua.edu.ph')) {
+    if (!email.endsWith('@mymail.mapua.edu.ph') && !email.endsWith('@mapua.edu.ph')) {
       toast.error('Email should be your Mapua Email');
       return;
     }
@@ -31,7 +31,8 @@ export default function Signup() {
         lastname: newUser.lastname.trim(),
         studentNum: newUser.studentNum.trim(),
         email: email.trim(),
-        uid: user.uid // adding UID for reference
+        uid: user.uid, // adding UID for reference
+        admin: false,
       });
 
       // Redirect to sign-in page

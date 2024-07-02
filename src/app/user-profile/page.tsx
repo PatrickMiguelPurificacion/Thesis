@@ -54,7 +54,7 @@ export default function Profile() {
 
     return (
       <div className="flex h-screen">
-        <NavBar userEmail={session?.data?.user?.email} />
+        <NavBar />
         <div className="flex-grow overflow-y-auto bg-gray-300 p-8">
           <div className="mb-5">
             <div className="bg-custom-blue p-4 shadow-md mb-4 rounded-lg" style={{ backgroundColor: '#142059' }}>

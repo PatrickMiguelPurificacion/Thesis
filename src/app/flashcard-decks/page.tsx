@@ -96,7 +96,7 @@ export default function Decks() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <NavBar userEmail={session?.data?.user?.email} />
+      <NavBar />
        
       <div className="flex-grow overflow-y-auto p-8">
       
