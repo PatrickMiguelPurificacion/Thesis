@@ -114,7 +114,7 @@
           <header className="text-white py-6 px-8 flex justify-between items-center"  style={{ backgroundColor: '#142059' }}>
             <div>
               <button
-                onClick={() => router.back()}
+                onClick={() => router.push('/flashcard-decks')}
                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Back to Decks

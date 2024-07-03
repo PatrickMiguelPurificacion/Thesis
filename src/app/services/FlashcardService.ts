@@ -1,11 +1,20 @@
-import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { FieldPath, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
-
 interface Flashcard {
   cardQuestion: string;
   cardAnswer: string;
   deckID: string | null;
   userID: string;
+  data: {
+    [key: string]: FlashcardData;
+  }
+  // lastReviewTime: Date;
+  // nextReviewTime: Date;
+  // interval: number;
+  // easeFactor: number;
+}
+
+interface FlashcardData {
   lastReviewTime: Date;
   nextReviewTime: Date;
   interval: number;
@@ -18,7 +27,7 @@ export const fetchFlashcards = async (deckId: string) => {
         return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 };
 
-export const fetchReviewFlashcards = async (deckId: string) => {
+export const fetchReviewFlashcards = async (deckId: string, userEmail: string) => {
   // Get the current date and set to the beginning of the day
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to the beginning of the day
@@ -37,11 +46,18 @@ export const fetchReviewFlashcards = async (deckId: string) => {
   const flashcardsQuery = query(
     collection(db, 'flashcards'),
     where('deckID', '==', deckId),
-    where('nextReviewTime', '<', tomTimestamp) //Makes sure that the cards shown are those scheduled for today and the late reviews
   );
-
+  
+  const flashcards : Flashcard[] = [];
   const flashcardsSnapshot = await getDocs(flashcardsQuery);
-  const flashcards = flashcardsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  flashcardsSnapshot.docs.forEach((doc) => {
+    //Makes sure that the cards shown are those scheduled for today and the late reviews
+    let data = doc.data();
+    if (data.data == null || data.data[userEmail] == null)
+      flashcards.push({ ...data, id: doc.id });
+    else if (data.data[userEmail].nextReviewTime < tomTimestamp)
+      flashcards.push({ ...data, id: doc.id });
+  })
 
   console.log("Fetched flashcards:", flashcards);
 
@@ -52,6 +68,12 @@ export const fetchReviewFlashcards = async (deckId: string) => {
 
 export const createFlashcard = async (flashcard: Flashcard, deckId: string | null) => {
   try {
+    flashcard.data[flashcard.userID] = {
+      lastReviewTime: new Date(),
+      nextReviewTime: new Date(),
+      interval: 1,
+      easeFactor: 2.5,
+    };
     const flashcardRef = await addDoc(collection(db, 'flashcards'), flashcard);
     
     if (deckId) {
@@ -74,7 +96,6 @@ export const updateFlashcard = async (flashcardId: string, flashcard: Flashcard)
     throw error;
   }
 };
-
 
 export async function deleteFlashcard(flashcardId: string, deckId: string | null) {
   try {
