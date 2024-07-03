@@ -135,13 +135,13 @@ export default function Decks() {
               <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
                 <button
                   onClick={() => handleDelete(deck.id)}
-                  className={`text-white hover:bg-gray-800 py-2 px-2 rounded-md ${deck.global ? 'opacity-0 pointer-events-none' : ''}`}
+                  className={`text-white hover:bg-gray-800 py-2 px-2 rounded-md ${(deck.global && session?.data?.snapshot?.admin) || (!deck.global) ? '' : 'opacity-0 pointer-events-none'}`}
                 >
                   <FaTrash />
                 </button>
                 <button
                   onClick={() => handleEditDeck(deck)}
-                  className={`text-white hover:bg-gray-800 py-2 px-2 rounded-md ml-auto ${deck.global ? 'opacity-0 pointer-events-none' : ''}`}
+                  className={`text-white hover:bg-gray-800 py-2 px-2 rounded-md ml-auto ${(deck.global && session?.data?.snapshot?.admin) || (!deck.global) ? '' : 'opacity-0 pointer-events-none'}`}
                 >
                   <FaEdit />
                 </button>

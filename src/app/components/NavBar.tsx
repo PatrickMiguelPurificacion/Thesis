@@ -58,7 +58,7 @@ export default function NavBar() {
             onClick={() => router.push('/admin/decks')} 
             className="text-white w-full hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"
           >
-            Edit Flashcards
+            Global Flashcards
           </button>
         </div>
       }

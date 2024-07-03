@@ -31,6 +31,7 @@
     const [flashcardModalState, setFlashcardModalState] = useState(false);
     const [currentFlashcard, setCurrentFlashcard] = useState<any | null>(null);
     const [deckName, setDeckName] = useState('');
+    const [isGlobal, setIsGlobal] = useState(true);
 
     const [reviewModalState, setReviewModalState] = useState(false);
     const [deckIDToReview, setDeckIDToReview] = useState('');
@@ -71,6 +72,7 @@
           const deckData = deckSnapshot.data();
           if (deckData) {
             setDeckName(deckData.deckName);
+            setIsGlobal(deckData.global === true);
           }
         }
       };
@@ -112,7 +114,7 @@
           <header className="text-white py-6 px-8 flex justify-between items-center"  style={{ backgroundColor: '#142059' }}>
             <div>
               <button
-                onClick={() => router.push('/flashcard-decks')}
+                onClick={() => router.back()}
                 className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Back to Decks
@@ -140,12 +142,15 @@
             )}
           </div>
 
-          <button
-            className="disabled:opacity-40 flex w-full justify-center rounded-md bg-blue-500 mt-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-            onClick={handleAddFlashcard}
-          >
-            Add New Flashcard
-          </button>
+          {((isGlobal && session?.data?.snapshot?.admin)
+            || !isGlobal)
+            && <button
+              className="disabled:opacity-40 flex w-full justify-center rounded-md bg-blue-500 mt-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+              onClick={handleAddFlashcard}
+            >
+              Add New Flashcard
+            </button>
+          }
 
           <div>
             {flashcardModalState && (
@@ -168,7 +173,7 @@
                   <div className="p-4 bg-white">
                     <h3 className="text-lg font-semibold mb-2">{flashcard.cardQuestion}</h3>
                     <p className="text-gray-600">{flashcard.cardAnswer}</p>
-                    <div className="flex justify-end mt-2">
+                    {((isGlobal && session?.data?.snapshot?.admin) || !isGlobal) && <div className="flex justify-end mt-2">
                       <button
                         className="text-gray-500 hover:text-gray-800"
                         onClick={() => handleEditFlashcard(flashcard)}
@@ -181,7 +186,7 @@
                       >
                         <FaTrash />
                       </button>
-                    </div>
+                    </div>}
                   </div>
                 </div>
               ))
