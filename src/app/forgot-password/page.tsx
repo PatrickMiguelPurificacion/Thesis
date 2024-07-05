@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { auth } from '../firebase';
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useRouter } from 'next/navigation';
+import logo from "./../assets/logo.png";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function ForgotPassword() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-40 w-50"
-            src="https://i.ibb.co/fDK7V8t/Secu-Spire-logo.png"
+            src={logo.src}
             alt="SecuSpire logo"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">

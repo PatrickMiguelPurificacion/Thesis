@@ -5,6 +5,7 @@ import { redirect, useRouter } from 'next/navigation';
 import NavBar from '../components/NavBar';
 import { FaBook, FaChalkboard, FaBookReader, FaArrowRight } from 'react-icons/fa'; 
 import { IoMdCard } from 'react-icons/io'; 
+import logo from "./../assets/logo.png";
 
 export default function Home() {
 
@@ -31,7 +32,11 @@ export default function Home() {
         <div className="mb-5">
           {/* Application Data Box */}
           <div className="bg-white p-4 shadow-md mb-4 flex items-center"> {/* Set display to flex and align items to center */}
-            <img className="h-20 w-30 mx-3" src="https://i.ibb.co/fDK7V8t/Secu-Spire-logo.png" alt="SecuSpire logo" /> {/* Margin right for spacing */}
+            <img
+              className="h-20 w-30 mx-3"
+              src={logo.src}
+              alt="SecuSpire logo"
+            />
             <div>
               <h2 className="text-xl font-semibold mb-2">Secuspire</h2>
               <p>Learn Information Security and Assurance using Spaced Repetition and Other Features</p>
