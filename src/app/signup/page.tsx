@@ -62,7 +62,10 @@ export default function Signup() {
           </h2>
 
           <div className="grid grid-cols-2 gap-5">
-            <input type="text" placeholder="First Name" className="border border-black py-1 px-2"
+            <input
+              type="text"
+              placeholder="First Name"
+              className="border rounded-md border-black py-1 px-2"
               id="firstname"
               name="firstname"
               value={newUser.firstname}
@@ -71,17 +74,24 @@ export default function Signup() {
               required
             />
 
-            <input type="text" placeholder="Last Name" className="border border-black py-1 px-2"
+            <input
+              type="text"
+              placeholder="Last Name"
+              className="border rounded-md border-black py-1 px-2"
               id="lastname"
               name="lastname"
               value={newUser.lastname}
               onChange={(e) => setUser({ ...newUser, lastname: e.target.value })}
               autoComplete="lastname"
-              required />
+              required
+            />
           </div>
 
           <div className="mt-5">
-            <input type="email" placeholder="Email" className="border border-black py-1 px-2 w-full"
+            <input
+              type="email"
+              placeholder="Email"
+              className="border rounded-md border-black py-1 px-2 w-full"
               id="email"
               name="email"
               autoComplete="email"
@@ -91,7 +101,10 @@ export default function Signup() {
           </div>
 
           <div className="mt-5">
-            <input type="number" placeholder="Student Number" className="border border-black py-1 px-2 w-full"
+            <input
+              type="number"
+              placeholder="Student Number"
+              className="border rounded-md border-black py-1 px-2 w-full"
               id="studentNum"
               name="studentNum"
               value={newUser.studentNum}
@@ -102,7 +115,10 @@ export default function Signup() {
           </div>
 
           <div className="mt-5">
-            <input type="password" placeholder="Password" className="border border-black py-1 px-2 w-full"
+            <input
+              type="password"
+              placeholder="Password"
+              className="border rounded-md border-black py-1 px-2 w-full"
               id="password"
               name="password"
               autoComplete="current-password"
@@ -112,7 +128,10 @@ export default function Signup() {
           </div>
 
           <div className="mt-5">
-            <input type="password" placeholder="Confirm Password" className="border border-black py-1 px-2 w-full"
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="border rounded-md border-black py-1 px-2 w-full"
               id="passwordAgain"
               name="passwordAgain"
               autoComplete="current-password"
