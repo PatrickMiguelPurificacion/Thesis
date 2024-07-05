@@ -47,21 +47,19 @@ export default function Signup() {
 
   // Return the UI
   return (
-    <>
-      <br /><br /><br />
-      <div className="min-h-screen py-39 bg-gradient-to-t(115deg, (#9F7AEA, #FEE2FE)">
-        <div className="container mx-auto">
-          <div className="flex w-8/12 bg-white rounded-x1 mx-auto shadow-ig overflow-hidden">
-            <img
-              className="w-1/2 h-50 object-center object-contain p-32"
-              src={logo.src}
-              // src="https://i.ibb.co/6XmvNCT/register-logo.png"
-              alt="regsi"
+      <div className="flex flex-column flex-1 items-center justify-center min-h-full px-6 py-39 bg-gradient-to-t(115deg, (#9F7AEA, #FEE2FE)">
+          <div className="grid grid-cols-1 max-w-[768px] sm:grid-cols-2 bg-white rounded-lg shadow-ig overflow-hidden">
+            <div
+              className="w-full h-[200px] sm:h-full bg-contain bg-[length:auto_100%] sm:bg-[length:65%_auto] bg-center bg-no-repeat mt-6 sm:mt-0"
+              style={{
+                backgroundImage: `url(${logo.src})`,
+                // src="https://i.ibb.co/6XmvNCT/register-logo.png"
+              }}
             />
-            <div className="w-1/2 py-16 px-12">
-              <p className="mb-5 text-2xl">
+            <div className="py-6 sm:py-16 px-12">
+              <h2 className="text-center font-bold leading-9 tracking-tight text-black mb-5 text-2xl">
                 Create your Account
-              </p>
+              </h2>
 
               <div className="grid grid-cols-2 gap-5">
                 <input type="text" placeholder="First Name" className="border border-black py-1 px-2"
@@ -138,8 +136,6 @@ export default function Signup() {
               </div>
             </div>
           </div>
-        </div>
       </div>
-    </>
   )
 }
