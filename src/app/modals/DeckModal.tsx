@@ -71,8 +71,8 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50"> 
-      <div className="relative bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-xl flex">
-        <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/2 pr-4">
+      <div className="relative bg-white shadow-md rounded p-8 w-full m-4 max-w-xl grid grid-cols-2 gap-x-8">
+        <div className="w-full">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Deck Name
@@ -104,29 +104,40 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
             <p className="text-sm mt-4">Check the Color on the Sample Deck on the Right</p>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex flex-row flex-wrap justify-between gap-4">
             <button onClick={() => setModalState(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
               Cancel
             </button>
+
             <button onClick={saveDeck} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
               {deckID ? 'Update' : 'Create'}
             </button>
           </div>
         </div>
 
-        <div className="w-full md:w-1/3 lg:w-2/3 xl:w-1/2 pl-8 pr-4">
-          <div className="w-full h-full rounded py-16 text-gray-700 relative flex flex-col justify-between" style={{ backgroundColor: selectedColor }}>
-            <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
-              <div className="hover:bg-gray-800 text-white py-2 px-2 rounded-md">
-                <FaTrash />
+        <div className="w-full relative">
+          <div
+            className="w-full h-full rounded py-16 text-gray-700 relative flex flex-col justify-between"
+            style={{ backgroundColor: selectedColor }}
+          >
+            <div className="mt-auto">
+              <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
+                <div className="hover:bg-gray-800 text-white py-2 px-2 rounded-md">
+                  <FaTrash />
+                </div>
+
+                <div className="hover:bg-gray-800 text-white py-2 px-2 rounded-md ml-auto">
+                  <FaEdit />
+                </div>
               </div>
-              <div className="hover:bg-gray-800 text-white py-2 px-2 rounded-md ml-auto">
-                <FaEdit />
-              </div>
-            </div>
-            <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center">
-              <p className="text-center text-base text-white">Sample Deck</p>
-              <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: {deck.cardNum}</p>
+
+              <button
+                onClick={() => handleReview(deck.id)}
+                className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center"
+              >
+                <p className="text-center text-base text-white">Sample Deck</p>
+                <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: 10</p>
+              </button>
             </div>
           </div>
         </div>
