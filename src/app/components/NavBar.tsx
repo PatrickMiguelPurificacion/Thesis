@@ -1,7 +1,11 @@
 import { redirect, useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { FaBars } from 'react-icons/fa';
 
 export default function NavBar() {
+  const [navOpen, setNavOpen] = useState(false);
+
   const session = useSession({
     required: true,
     onUnauthenticated() {
@@ -32,23 +36,30 @@ export default function NavBar() {
   // "text-white w-full hover:bg-blue-500 py-2 px-6 transition duration-300 ease-in-out"
 
   return (
-    <div className="flex-none flex-col h-screen text-white w-1/5 overflow-y-auto" style={{ backgroundColor: '#142059' }}>
+    <nav className={`${navOpen ? 'w-fit' : 'w-[80px]'} sm:w-1/5 flex-none flex-col h-screen text-white overflow-y-auto transition duration-300 ease-in-out`} style={{ backgroundColor: '#142059' }}>
+      <div className="border-b border-gray-100 py-5">
+        <FaBars
+          size="24"
+          className="block sm:hidden mx-auto cursor-pointer"
+          onClick={() => setNavOpen(val => !val)}
+        />
 
-      <h1 className="text-base text-center my-5 font-bold text-white-700 border-b border-gray-100 pb-4 w-full">
-        Navigation
-      </h1>
+        <h1 className="hidden sm:block text-base text-center font-bold text-white-700 w-full">
+          Navigation
+        </h1>
+      </div>
       
-      <div className="flex flex-col space-y-4">
+      <div className={`${navOpen ? 'flex' : 'hidden'} sm:flex flex-col gap-y-4 items-stretch py-4`}>
         {navLinks.map((val: string[]) => getNavLink(val[0], val[1]))}
       </div>
 
       {session?.data?.snapshot?.admin && 
-        <div className="flex flex-col pt-4 border-t border-gray-700 mt-4 space-y-4">
+        <div className={`${navOpen ? 'flex' : 'hidden'} sm:flex flex-col gap-y-4 items-stretch py-4 border-t border-gray-700`}>
           {getNavLink('Global Flashcards', '/admin/decks')}
         </div>
       }
       
-      <div className="flex flex-col py-4 border-t border-gray-700 mt-4 space-y-4">
+      <div className={`${navOpen ? 'flex' : 'hidden'} sm:flex flex-col gap-y-4 items-stretch py-4 border-t border-gray-700`}>
         {getNavLink('User Profile', '/user-profile')}
 
         <button
@@ -58,6 +69,6 @@ export default function NavBar() {
           Sign Out
         </button>
       </div>
-    </div>
+    </nav>
   );
 }
