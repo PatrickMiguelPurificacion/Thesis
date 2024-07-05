@@ -107,28 +107,44 @@
       getFlashcards(); // Refresh flashcards after closing the modal
     };
 
+    const backButton = () => (
+      <button
+        onClick={() => router.push('/flashcard-decks')}
+        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Back to Decks
+      </button>
+    );
+
+    const headerText = () => (
+      <h1 className="text-2xl font-semibold text-center">{deckName}</h1>
+    );
+
+    const reviewButton = () => (
+      <button
+        onClick={() => currentDeckID && handleReview(currentDeckID)}
+        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Review Cards
+      </button>
+    );
+
     return (
       <div className="flex h-screen">
         <NavBar />
         <div className="flex-grow overflow-y-auto bg-gray-100 p-8">
-          <header className="text-white py-6 px-8 flex justify-between items-center"  style={{ backgroundColor: '#142059' }}>
-            <div>
-              <button
-                onClick={() => router.push('/flashcard-decks')}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Back to Decks
-              </button>
+          <header className="hidden md:flex justify-between items-center text-white py-6 px-8 bg-[#142059]">
+            {backButton()}
+            {headerText()}
+            {reviewButton()}
+          </header>
+
+          <header className="flex md:hidden flex-col justify-between items-stretch text-white py-6 px-8 bg-[#142059]">
+            <div className="flex flex-row flex-wrap gap-x-8 gap-y-2 justify-center items-center mb-4">
+              {backButton()}
+              {reviewButton()}
             </div>
-            <h1 className="text-2xl font-semibold text-center">{deckName}</h1>
-            <div>
-              <button
-                onClick={() => currentDeckID && handleReview(currentDeckID)}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Review Cards
-              </button>
-            </div>
+            {headerText()}
           </header>
 
           <div>
