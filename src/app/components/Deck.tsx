@@ -1,12 +1,24 @@
+import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { fetchReviewFlashcards } from "../services/FlashcardService";
 
 export default function Deck({
   deck,
   handleDelete,
   handleEditDeck,
   handleReview,
+  userEmail,
   isAdmin,
 }: any) {
+  const [forReviewCount, setForReviewCount] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let cards = await fetchReviewFlashcards(deck.id, userEmail);
+      setForReviewCount(cards.length);
+    })();
+  }, []);
+
   return (
     <div
       key={deck.id}
@@ -37,7 +49,8 @@ export default function Deck({
           className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center"
         >
           <p className="text-center text-base text-white">{deck.deckName}</p>
-          <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: {deck.cardNum}</p>
+          <p className="text-center text-xs text-white mt-1">Number of Cards: {deck.cardNum}</p>
+          <p className="text-center text-xs text-white mt-1 pb-4">Cards for Review: {forReviewCount == null ? 'loading' : forReviewCount}</p>
         </button>
       </div>
       </div>

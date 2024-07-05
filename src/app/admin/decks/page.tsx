@@ -127,6 +127,7 @@ export default function Decks() {
             handleEditDeck={handleEditDeck}
             handleReview={handleReview}
             isAdmin={session?.data?.snapshot?.admin}
+            email={session?.data?.user?.email}
           />
         ))}
       </div>

@@ -99,7 +99,7 @@ export default function KanbanBoard() {
           <h1 className="text-2xl font-semibold">Kanban Board</h1>
         </header>
 
-        <div className="flex w-full space-x-4 mt-4 overflow-x-auto">
+        <div className="flex w-full space-x-4 mt-4 overflow-x-auto pb-4">
           {Object.entries(columns).map(([columnId, column]) => (
             <div key={columnId} className="w-1/3 min-w-[256px] bg-white rounded shadow p-4">
               <div className="flex justify-between items-center mb-4">
