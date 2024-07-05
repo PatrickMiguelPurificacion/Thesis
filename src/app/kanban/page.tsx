@@ -94,14 +94,14 @@ export default function KanbanBoard() {
     <div className="flex h-screen">
       <NavBar userEmail={session?.user?.email} />
 
-      <div className="flex-grow overflow-y-auto bg-gray-100 p-8">
+      <div className="flex-grow overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
         <header className="text-white py-6 px-8 flex justify-between items-center"  style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold">Kanban Board</h1>
         </header>
 
-        <div className="flex space-x-4 mt-4">
+        <div className="flex w-full space-x-4 mt-4 overflow-x-auto">
           {Object.entries(columns).map(([columnId, column]) => (
-            <div key={columnId} className="w-1/3 bg-white rounded shadow p-4">
+            <div key={columnId} className="w-1/3 min-w-[256px] bg-white rounded shadow p-4">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">{column.name}</h2>
                 <button
