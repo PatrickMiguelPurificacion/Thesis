@@ -5,7 +5,14 @@ import { updateUserDetails } from '../services/UserService';
 
 interface Props {
   setModalState: (state: boolean) => void;
-  initialDetails?: {firstname:string, lastname:string, studentNum: number, email: string, uid: string}
+  initialDetails?: {
+    firstname:string,
+    lastname:string,
+    studentNum: number,
+    email: string,
+    uid: string,
+    admin: boolean,
+  }
   userID: string | null;
 }
 
@@ -16,7 +23,8 @@ const ProfileEditModal = ({ setModalState, initialDetails, userID }: Props) => {
     lastname: initialDetails?.lastname || '',
     studentNum: initialDetails?.studentNum || 0,
     email: initialDetails?.email || '',
-    uid: initialDetails?.uid || '' 
+    uid: initialDetails?.uid || '' ,
+    admin: initialDetails?.admin || false,
   });
 
   useEffect(() => {
@@ -27,7 +35,8 @@ const ProfileEditModal = ({ setModalState, initialDetails, userID }: Props) => {
         lastname: initialDetails.lastname,
         studentNum: initialDetails.studentNum,
         email: initialDetails.email,
-        uid: initialDetails.uid
+        uid: initialDetails.uid,
+        admin: false,
       });
     }
   }, [initialDetails]);

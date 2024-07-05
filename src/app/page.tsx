@@ -17,6 +17,11 @@ export default function Home() {
     },
   });
 
+  if (status === "authenticated") {
+    console.log("User is already authenticated. Redirecting to Home page...");
+    return redirect('/home');
+  }
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
       {status === 'loading' && (

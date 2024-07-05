@@ -32,7 +32,7 @@ const ReviewingPage = () => {
     const getFlashcards = async () => {
       if (cramDeckID) {
         try {
-          const flashcards = await fetchReviewFlashcards(cramDeckID);
+          const flashcards = await fetchReviewFlashcards(cramDeckID, session?.data?.user?.email);
           console.log("Flashcards in component:", flashcards);
           setFlashcardsArray(flashcards);
         } catch (error) {
@@ -58,7 +58,10 @@ const ReviewingPage = () => {
 
   const handleRateDifficulty = async (difficulty: string) => {
     const flashcard = flashcardsArray[currentCardIndex];
-    let { easeFactor, interval } = flashcard;
+    let easeFactor = flashcard.data[session?.data?.user?.email] == null
+      ? 2.5 : flashcard.data[session?.data?.user?.email].easeFactor;
+    let interval = flashcard.data[session?.data?.user?.email] == null
+      ? 2.5 : flashcard.data[session?.data?.user?.email].interval;
 
     switch (difficulty) {
       case 'easy':
@@ -83,8 +86,8 @@ const ReviewingPage = () => {
     const intervalInMilliseconds = interval * 24 * 3600 * 1000;
     const nextReviewTime = new Date(now.getTime() + intervalInMilliseconds);
 
-    const updatedFlashcard = {
-      ...flashcard,
+    const updatedFlashcard = { ...flashcard };
+    updatedFlashcard.data[session?.data?.user?.email] = {
       lastReviewTime: now,
       nextReviewTime,
       interval,

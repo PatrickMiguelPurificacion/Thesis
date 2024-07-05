@@ -22,6 +22,7 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
     deckColor: initialDeck?.deckColor || DEFAULT_COLOR,
     cardNum: initialDeck?.cardNum || 0,
     userID: session?.user?.email || '',
+    global: initialDeck?.global || false,
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
         deckColor: initialDeck.deckColor || DEFAULT_COLOR,
         cardNum: initialDeck.cardNum || 0,
         userID: session?.user?.email || '',
+        global: initialDeck?.global || false,
       });
       setSelectedColor(initialDeck.deckColor || DEFAULT_COLOR);
     }

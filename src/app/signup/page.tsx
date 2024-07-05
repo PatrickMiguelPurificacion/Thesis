@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { auth, db } from '../firebase';
 import { collection, addDoc } from "firebase/firestore";
 import { toast } from 'sonner';
+import logo from "./../assets/logo.png";
 
 export default function Signup() {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function Signup() {
 
   // Add and Authenticate User to the Database
   const signup = async () => {
-    if (!email.endsWith('@mymail.mapua.edu.ph') || !email.endsWith('@mapua.edu.ph')) {
+    if (!email.endsWith('@mymail.mapua.edu.ph') && !email.endsWith('@mapua.edu.ph')) {
       toast.error('Email should be your Mapua Email');
       return;
     }
@@ -31,7 +32,8 @@ export default function Signup() {
         lastname: newUser.lastname.trim(),
         studentNum: newUser.studentNum.trim(),
         email: email.trim(),
-        uid: user.uid // adding UID for reference
+        uid: user.uid, // adding UID for reference
+        admin: false,
       });
 
       // Redirect to sign-in page
@@ -50,9 +52,12 @@ export default function Signup() {
       <div className="min-h-screen py-39 bg-gradient-to-t(115deg, (#9F7AEA, #FEE2FE)">
         <div className="container mx-auto">
           <div className="flex w-8/12 bg-white rounded-x1 mx-auto shadow-ig overflow-hidden">
-            <div className="w-1/2">
-              <img className="w-1/18 h-50" src="https://i.ibb.co/6XmvNCT/register-logo.png" alt="regsi" />
-            </div>
+            <img
+              className="w-1/2 h-50 object-center object-contain p-32"
+              src={logo.src}
+              // src="https://i.ibb.co/6XmvNCT/register-logo.png"
+              alt="regsi"
+            />
             <div className="w-1/2 py-16 px-12">
               <p className="mb-5 text-2xl">
                 Create your Account

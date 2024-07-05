@@ -2,6 +2,7 @@
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import logo from "./../assets/logo.png";
 
 export default function Signin() {
   
@@ -16,7 +17,11 @@ export default function Signin() {
     <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">
       <div className="bg-white shadow-md rounded-lg px-20 py-6 max-w-md">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img className="mx-auto h-40 w-50" src="https://i.ibb.co/fYbdZkM/Secu-Spire.png" alt="SecuSpire logo"/>
+          <img
+            src={logo.src}
+            alt="SecuSpire logo"
+            className="mx-auto h-40 w-50"
+          />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
             Sign in to your account
           </h2>

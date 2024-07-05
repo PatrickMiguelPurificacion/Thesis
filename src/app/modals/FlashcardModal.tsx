@@ -17,10 +17,11 @@ const FlashcardModal = ({ setModalState, initialFlashcard, cardID, deckId }: Pro
     cardAnswer: '',
     deckID: deckId,
     userID: session?.user?.email || '',
-    lastReviewTime: new Date(),
-    nextReviewTime: new Date(),
-    interval: 1,
-    easeFactor: 2.5,
+    data: {},
+    // lastReviewTime: new Date(),
+    // nextReviewTime: new Date(),
+    // interval: 1,
+    // easeFactor: 2.5,
   });
 
   useEffect(() => {

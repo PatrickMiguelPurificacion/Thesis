@@ -5,6 +5,7 @@ import { redirect, useRouter } from 'next/navigation';
 import NavBar from '../components/NavBar';
 import { FaBook, FaChalkboard, FaBookReader, FaArrowRight } from 'react-icons/fa'; 
 import { IoMdCard } from 'react-icons/io'; 
+import logo from "./../assets/logo.png";
 
 export default function Home() {
 
@@ -25,13 +26,17 @@ export default function Home() {
 
   return (
     <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
-      <NavBar userEmail={session?.data?.user?.email} /> {/* Calls the NavBar component */}
+      <NavBar /> {/* Calls the NavBar component */}
       
       <div className="flex-grow overflow-y-auto bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
         <div className="mb-5">
           {/* Application Data Box */}
           <div className="bg-white p-4 shadow-md mb-4 flex items-center"> {/* Set display to flex and align items to center */}
-            <img className="h-20 w-30 mx-3" src="https://i.ibb.co/fDK7V8t/Secu-Spire-logo.png" alt="SecuSpire logo" /> {/* Margin right for spacing */}
+            <img
+              className="h-20 w-30 mx-3"
+              src={logo.src}
+              alt="SecuSpire logo"
+            />
             <div>
               <h2 className="text-xl font-semibold mb-2">Secuspire</h2>
               <p>Learn Information Security and Assurance using Spaced Repetition and Other Features</p>

@@ -7,6 +7,7 @@ interface UserDetails {
   studentNum: number;
   email: string;
   uid: string;
+  admin: boolean;
 }
 
 export const fetchUserDetails = async (userEmail: string) => {
