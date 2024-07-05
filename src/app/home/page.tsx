@@ -7,6 +7,18 @@ import { FaBook, FaChalkboard, FaBookReader, FaArrowRight } from 'react-icons/fa
 import { IoMdCard } from 'react-icons/io'; 
 import logo from "./../assets/logo.png";
 
+interface Summary {
+  header: string;
+  text: string;
+}
+
+interface Feature {
+  icon: JSX.Element;
+  header: string;
+  text: string;
+  path: string;
+}
+
 export default function Home() {
 
   // Making sure that user is authenticated. If not, they are redirected to the sign-in page
@@ -19,50 +31,73 @@ export default function Home() {
 
   const router = useRouter();
 
-  // Sample data to replace placeholders
-  const keepNotes = "Learn from the Learn Page and Highlight your learnings. Note what you learned on your notebook.";
-  const flashcardsToReview = "Make sure to go through your flashcards daily. Check if you have any reviews today.";
-  const nextDeadlines = "Keep track of your upcoming deadlines to stay on top of your studies.";
+  const summaryCards: Summary[] = [
+    {
+      header: "Review Everyday",
+      text: "Make sure to go through your flashcards daily. Check if you have any reviews today.",
+    }, {
+      header: "Track Deadlines",
+      text: "Keep track of your upcoming deadlines to stay on top of your studies.",
+    }, {
+      header: "Highlight and Keep Notes",
+      text: "Learn from the Learn Page and Highlight your learnings. Note what you learned on your notebook.",
+    }
+  ];
+
+  const featuresCards: Feature[] = [
+    {
+      icon: (<IoMdCard size={24} className="mx-auto" />),
+      header: "Flashcards",
+      text: "Review your lessons daily",
+      path: "/flashcard-decks",
+    }, {
+      icon: (<FaChalkboard size={24} className="mx-auto" />),
+      header: "Kanban Board",
+      text: "Manage and organize your tasks",
+      path: "/kanban",
+    }, {
+      icon: (<FaBookReader size={24} className="mx-auto" />),
+      header: "Learn",
+      text: "Study your course materials",
+      path: "/learn",
+    }, {
+      icon: (<FaBook size={24} className="mx-auto" />),
+      header: "Notebook",
+      text: "Add notes on your materials",
+      path: "/notebook",
+    }
+  ];
 
   return (
-    <div className="flex h-screen"> {/* Set the parent container to flex and full screen height */}
-      <NavBar /> {/* Calls the NavBar component */}
+    <div className="flex h-screen">
+      <NavBar />
       
-      <div className="flex-grow overflow-y-auto bg-gray-100 p-8"> {/* Utilize the remaining space and add padding */}
+      <div className="flex-grow overflow-y-auto bg-gray-100 p-8">
         <div className="mb-5">
-          {/* Application Data Box */}
-          <div className="bg-white p-4 shadow-md mb-4 flex items-center"> {/* Set display to flex and align items to center */}
+          <div className="bg-white p-4 shadow-md mb-4 flex flex-col sm:flex-row items-center gap-x-4">
             <img
-              className="h-20 w-30 mx-3"
+              className="h-20 w-30"
               src={logo.src}
               alt="SecuSpire logo"
             />
-            <div>
-              <h2 className="text-xl font-semibold mb-2">Secuspire</h2>
-              <p>Learn Information Security and Assurance using Spaced Repetition and Other Features</p>
+            <div className="w-full">
+              <h2 className="text-xl font-semibold mb-2 text-center sm:text-left">
+                Secuspire
+              </h2>
+              <p className="text-center sm:text-left">
+                Learn Information Security and Assurance using Spaced Repetition and Other Features
+              </p>
             </div>
           </div>
-
         </div>
-
       
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-       
-          <div className="bg-white p-4 shadow-md text-center">
-            <h2 className="text-xl font-semibold mb-2">Review Everyday</h2>
-            <p>{flashcardsToReview}</p>
-          </div>
-
-          <div className="bg-white p-4 shadow-md text-center">
-            <h2 className="text-xl font-semibold mb-2">Track Deadlines</h2>
-            <p>{nextDeadlines}</p>
-          </div>
-         
-          <div className="bg-white p-4 shadow-md text-center">
-            <h2 className="text-xl font-semibold mb-2">Highlight and Keep Notes</h2>
-            <p>{keepNotes}</p>
-          </div>
-
+          {summaryCards.map((summary: Summary, idx: number) => (
+            <div className="bg-white p-4 shadow-md text-center flex flex-col items-center justify-center">
+              <h2 className="text-xl font-semibold mb-2">{summary.header}</h2>
+              <p>{summary.text}</p>
+            </div>
+          ))}
         </div>
 
         {/* Divider */}
@@ -72,57 +107,33 @@ export default function Home() {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Features</h2>
           {/* Four Cards with Buttons */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            
-            {/* Card 1 */}
-            <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2">
-                <IoMdCard size={24} className="mx-auto" /> 
-              </div>
-              <h2 className="text-xl font-semibold mb-2"> 
-                Flashcards 
-              </h2>
-              <p>Review your lessons daily</p>
-              <button onClick={() => router.push('/flashcard-decks')} className="flex mt-3 text-blue-500"><FaArrowRight className="mt-1 mr-2" />See Card Decks</button>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-            {/* Card 2 */}
-            <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2">
-                <FaChalkboard size={24} className="mx-auto" />
-              </div>
-              <h2 className="text-xl font-semibold mb-2"> 
-                Kanban Board
-              </h2>
-              <p>Manage and organize your tasks</p>
-              <button onClick={() => router.push('/kanban')} className="flex ml-5 mt-3 text-blue-500"><FaArrowRight className="mt-1 mr-2" /> See Tasks</button>
-            </div>
+            {featuresCards.map((feat: Feature, idx: number) => (
+              <div
+                key={`feature-card-${idx}`}
+                className="bg-white px-6 py-10 rounded-md shadow-md text-center flex flex-col items-center justify-items-center"
+              >
+                <div className="mb-2">
+                  {feat.icon}
+                </div>
+                <h2 className="text-xl font-semibold mb-2"> 
+                  {feat.header}
+                </h2>
 
-            {/* Card 3 */}
-            <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2">
-                <FaBookReader size={24} className="mx-auto" /> 
-              </div>
-              <h2 className="text-xl font-semibold mb-2"> 
-                Learn
-              </h2>
-              <p>Study your course materials</p>
-              <button onClick={() => router.push('/learn')} className="flex mt-3 ml-3 text-blue-500"><FaArrowRight className="mr-2 mt-1" />See Material</button>
-            </div>
+                <p>{feat.text}</p>
 
-            {/* Card 4 */}
-            <div className="bg-white p-10 rounded-md shadow-md text-center">
-              <div className="mb-2">
-                <FaBook size={24} className="mx-auto" /> 
+                <button
+                  onClick={() => router.push(feat.path)}
+                  className="flex mt-3 text-blue-500 items-center gap-x-2"
+                >
+                  <FaArrowRight
+                    className="mt-1 mr-2 shrink-0"
+                  />See Card Decks
+                </button>
               </div>
-              <h2 className="text-xl font-semibold mb-2"> 
-                Notebook
-              </h2>
-              <p>Add notes on your materials</p>
-              <button onClick={() => router.push('/notebook')} className="flex mt-3 text-blue-500"><FaArrowRight className="mr-2 mt-1" />See Notebooks</button>
-            </div>
+            ))}
           </div>
-
         </div>
       </div>
     </div>
