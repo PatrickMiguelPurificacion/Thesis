@@ -56,6 +56,7 @@ export default function NavBar() {
       {session?.data?.snapshot?.admin && 
         <div className={`${navOpen ? 'flex' : 'hidden'} sm:flex flex-col gap-y-4 items-stretch py-4 border-t border-gray-700`}>
           {getNavLink('Global Flashcards', '/admin/decks')}
+          {getNavLink('All Users', '/admin/users')}
         </div>
       }
       
