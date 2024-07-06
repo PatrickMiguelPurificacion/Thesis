@@ -93,7 +93,7 @@ export default function Home() {
       
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           {summaryCards.map((summary: Summary, idx: number) => (
-            <div className="bg-white p-4 shadow-md text-center flex flex-col items-center justify-center">
+            <div key={`summary-card-${idx}`} className="bg-white p-4 shadow-md text-center flex flex-col items-center justify-center">
               <h2 className="text-xl font-semibold mb-2">{summary.header}</h2>
               <p>{summary.text}</p>
             </div>
