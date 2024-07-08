@@ -2,10 +2,8 @@
 
 //Next.js and React
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import {useRouter} from 'next/navigation';
-import { useState, useEffect, useCallback} from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { redirect, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 
 //Components
 import NavBar from '../../components/NavBar';
@@ -14,9 +12,9 @@ import NavBar from '../../components/NavBar';
 import DeckModal from '../../modals/DeckModal';
 
 //Notifications
+import Deck from '@/app/components/Deck';
 import { toast } from 'sonner';
 import { deleteDeck, fetchDecks } from '../../services/DeckService';
-import Deck from '@/app/components/Deck';
 
 export default function Decks() {
   //Ensures user is in session
@@ -115,7 +113,9 @@ export default function Decks() {
         <DeckModal 
         setModalState={handleModalClose} // Use handleModalClose to refresh decks after closing the modal
         initialDeck={currentDeck}
-        deckID={currentDeck?.id || null} />
+        deckID={currentDeck?.id || null}
+        isGlobal={true}
+        />
         )}
       </div>
 

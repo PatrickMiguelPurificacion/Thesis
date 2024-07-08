@@ -1,18 +1,19 @@
 import { useSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'sonner';
 import { addDeck, updateDeck } from '../services/DeckService';
-import { FaTrash, FaEdit } from 'react-icons/fa';
 
 interface Props {
   setModalState: (state: boolean) => void;
   initialDeck?: { deckName: string; deckColor: string; cardNum: number; userID: string };
   deckID: string | null;
+  isGlobal?: boolean;
 }
 
 const DEFAULT_COLOR = '#142059'; // Set your default color here
 
-const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
+const DeckModal = ({ setModalState, initialDeck, deckID, isGlobal = false }: Props) => {
   const { data: session } = useSession();
   
   const [selectedColor, setSelectedColor] = useState(initialDeck?.deckColor || DEFAULT_COLOR);
@@ -22,7 +23,7 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
     deckColor: initialDeck?.deckColor || DEFAULT_COLOR,
     cardNum: initialDeck?.cardNum || 0,
     userID: session?.user?.email || '',
-    global: initialDeck?.global || false,
+    global: initialDeck?.global || isGlobal || false,
   });
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const DeckModal = ({ setModalState, initialDeck, deckID }: Props) => {
         deckColor: initialDeck.deckColor || DEFAULT_COLOR,
         cardNum: initialDeck.cardNum || 0,
         userID: session?.user?.email || '',
-        global: initialDeck?.global || false,
+        global: initialDeck?.global || isGlobal || false,
       });
       setSelectedColor(initialDeck.deckColor || DEFAULT_COLOR);
     }
