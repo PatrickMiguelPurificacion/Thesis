@@ -23,12 +23,12 @@ export default function Home() {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
+    <div className="flex flex-col gap-y-4 items-center justify-center h-screen bg-gray-900 text-white">
       {status === 'loading' && (
-        <div className="text-center">
-          <h1 className="text-2xl mb-4">Loading...</h1>
+        <>
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-        </div>
+          <h1 className="text-2xl mb-4">Loading...</h1>
+        </>
       )}
     </div>
   );

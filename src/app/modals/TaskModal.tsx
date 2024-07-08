@@ -83,9 +83,9 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="md:w-[60vw] bg-white rounded-lg shadow-md z-50 p-6 flex">
+      <div className="md:w-[60vw] bg-white rounded-lg shadow-md z-50 p-6 m-4 grid grid-cols-2 gap-x-4">
         {/* Left Column */}
-        <div className="flex-1 pr-4">
+        <div className="">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
               Task Title
@@ -135,7 +135,7 @@ const TaskModal = ({ setModalState, initialTask, taskId, columnId }: Props) => {
         </div>
         
         {/* Right Column */}
-        <div className="flex-1 pl-4">
+        <div className="">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="columnId">
               Task Progress

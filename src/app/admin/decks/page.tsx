@@ -13,14 +13,10 @@ import NavBar from '../../components/NavBar';
 //Modals
 import DeckModal from '../../modals/DeckModal';
 
-//Firebase
-import { getDocs, collection, query, where} from 'firebase/firestore';
-import { db } from '../../firebase';
-import { doc, deleteDoc } from 'firebase/firestore';
-
 //Notifications
 import { toast } from 'sonner';
 import { deleteDeck, fetchDecks } from '../../services/DeckService';
+import Deck from '@/app/components/Deck';
 
 export default function Decks() {
   //Ensures user is in session
@@ -123,42 +119,16 @@ export default function Decks() {
         )}
       </div>
 
-      <div className="flex flex-wrap mt-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 gap-8">
         {decksArray.map((deck) => (
-          <div
-            key={deck.id}
-            className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 relative mb-4"
-          >
-            <div
-              className="w-full h-full rounded py-16 text-gray-700 relative flex flex-col justify-between"
-              style={{ backgroundColor: deck.deckColor }}
-            >
-
-            <div className="mt-auto">
-              <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
-                <button
-                  onClick={() => handleDelete(deck.id)}
-                  className="text-white hover:bg-gray-800 py-2 px-2 rounded-md"
-                >
-                  <FaTrash />
-                </button>
-                <button
-                  onClick={() => handleEditDeck(deck)}
-                  className="text-white hover:bg-gray-800 py-2 px-2 rounded-md ml-auto"
-                >
-                  <FaEdit />
-                </button>
-              </div>
-              <button
-                onClick={() => handleReview(deck.id)}
-                className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center"
-              >
-                <p className="text-center text-base text-white">{deck.deckName}</p>
-                <p className="text-center text-xs text-white mt-1 pb-4">Number of Cards: {deck.cardNum}</p>
-              </button>
-            </div>
-            </div>
-          </div>
+          <Deck
+            deck={deck}
+            handleDelete={handleDelete}
+            handleEditDeck={handleEditDeck}
+            handleReview={handleReview}
+            isAdmin={session?.data?.snapshot?.admin}
+            email={session?.data?.user?.email}
+          />
         ))}
       </div>
     </div>

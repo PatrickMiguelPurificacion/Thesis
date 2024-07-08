@@ -13,9 +13,8 @@ export default function Signin() {
 
   //SignIn uses next-auth from react, but authentication is firebase
   return (
-    <>
-    <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8">
-      <div className="bg-white shadow-md rounded-lg px-20 py-6 max-w-md">
+    <div className="flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12">
+      <div className="bg-white shadow-md rounded-lg px-6 sm:px-20 py-6 max-w-md">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             src={logo.src}
@@ -47,7 +46,7 @@ export default function Signin() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-x-4">
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-black">
                   Password
                 </label>
@@ -89,7 +88,6 @@ export default function Signin() {
           </p>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   )
 }

@@ -56,7 +56,7 @@ const NotebookModal = ({ setModalState, initialNotebook, notebookID }: Props) =>
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="relative bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-xl">
+      <div className="relative bg-white shadow-md rounded p-8 m-4 w-full max-w-xl">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Notebook Name
