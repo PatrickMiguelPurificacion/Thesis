@@ -28,6 +28,7 @@ export default function Decks() {
   });
 
   const [allUsers, setAllUsers] = useState<UserDetails[]>([]);
+  const [userNum, setUserNum] = useState(null);
 
   // if (!session?.data?.snapshot?.admin)
   //   return redirect('/home');
@@ -57,6 +58,7 @@ export default function Decks() {
     (async () => {
       const users = await fetchAllUsers();
       setAllUsers(users);
+      setUserNum(users.length);
     })();
   }, [session]);
 
@@ -67,7 +69,7 @@ export default function Decks() {
       <div className="flex-grow overflow-y-auto p-8">
         <header className="text-white py-6 px-8 mb-2" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">All Users</h1>
-
+          <h2 className="text-xl font-semibold text-center">{userNum} Total Users</h2>
         </header>
 
         {allUsers.map((user: UserDetails, idx: number) => (
