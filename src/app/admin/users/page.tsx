@@ -14,8 +14,8 @@ interface UserDetails {
   email: string;
   uid: string;
   admin: boolean;
-  lastActive: Date;
-  recentActiveDays: Date[];
+  lastActive: Timestamp;
+  recentActiveDays: Timestamp[];
 }
 
 export default function Decks() {
@@ -28,7 +28,7 @@ export default function Decks() {
   });
 
   const [allUsers, setAllUsers] = useState<UserDetails[]>([]);
-  const [userNum, setUserNum] = useState(null);
+  const [userNum, setUserNum] = useState(Number);
 
   // if (!session?.data?.snapshot?.admin)
   //   return redirect('/home');

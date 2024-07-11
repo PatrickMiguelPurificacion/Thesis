@@ -92,7 +92,7 @@ export default function KanbanBoard() {
 
   return (
     <div className="flex h-screen">
-      <NavBar userEmail={session?.user?.email} />
+      <NavBar/>
 
       <div className="flex-grow overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
         <header className="text-white py-6 px-8 flex justify-between items-center"  style={{ backgroundColor: '#142059' }}>

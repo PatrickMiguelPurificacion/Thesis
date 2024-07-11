@@ -154,7 +154,7 @@ export default function Learn() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <NavBar userEmail={session?.user?.email} />
+      <NavBar/>
 
       <div className="flex-grow p-8">
         <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
