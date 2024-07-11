@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/firebase";
 import { fetchUserDetails } from "@/app/services/UserService";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -37,7 +37,7 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    session: async (session, user) => {
+    session: async (session: any) => {
       const db_user = await fetchUserDetails(session.session.user.email)
       session.session.snapshot = db_user[0];
       return Promise.resolve(session.session);

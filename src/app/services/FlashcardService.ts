@@ -1,4 +1,4 @@
-import { FieldPath, Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, deleteDoc, doc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
 interface Flashcard {
   cardQuestion: string;
@@ -7,7 +7,8 @@ interface Flashcard {
   userID: string;
   data: {
     [key: string]: FlashcardData;
-  }
+  };
+  id?: string;
   // lastReviewTime: Date;
   // nextReviewTime: Date;
   // interval: number;
@@ -54,9 +55,9 @@ export const fetchReviewFlashcards = async (deckId: string, userEmail: string) =
     //Makes sure that the cards shown are those scheduled for today and the late reviews
     let data = doc.data();
     if (data.data == null || data.data[userEmail] == null)
-      flashcards.push({ ...data, id: doc.id });
+      flashcards.push({ ...data, id: doc.id } as Flashcard);
     else if (data.data[userEmail].nextReviewTime < tomTimestamp)
-      flashcards.push({ ...data, id: doc.id });
+      flashcards.push({ ...data, id: doc.id } as Flashcard);
   })
 
   console.log("Fetched flashcards:", flashcards);

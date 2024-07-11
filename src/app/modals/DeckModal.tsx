@@ -6,7 +6,7 @@ import { addDeck, updateDeck } from '../services/DeckService';
 
 interface Props {
   setModalState: (state: boolean) => void;
-  initialDeck?: { deckName: string; deckColor: string; cardNum: number; userID: string };
+  initialDeck?: { deckName: string; deckColor: string; cardNum: number; userID: string; global: boolean; };
   deckID: string | null;
   isGlobal?: boolean;
 }
@@ -133,7 +133,6 @@ const DeckModal = ({ setModalState, initialDeck, deckID, isGlobal = false }: Pro
               </div>
 
               <button
-                onClick={() => handleReview(deck.id)}
                 className="w-full text-sm text-white bg-opacity-70 bg-gray-800 hover:bg-gray-800 py-2 px-4 mb-6 flex flex-col items-center"
               >
                 <p className="text-center text-base text-white">Sample Deck</p>

@@ -1,14 +1,13 @@
+import { UserDetails } from "@/types/user-details";
 import {
   collection,
-  doc,
   getDocs,
-  query,
-  setDoc,
+  query
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const fetchAllUsers = async () => {
+export const fetchAllUsers = async () : Promise<UserDetails[]> => {
   const q = query(collection(db, "users"));
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as UserDetails));
 };

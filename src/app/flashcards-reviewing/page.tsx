@@ -1,17 +1,21 @@
 'use client';
 
+import { doc, getDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import { redirect, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { FaTimes } from "react-icons/fa";
 import { toast } from "sonner";
 import { db } from "../firebase";
-import NavBar from "../components/NavBar";
 import { fetchReviewFlashcards, updateFlashcard } from "../services/FlashcardService";
-import { getDoc, doc } from "firebase/firestore";
-import { FaTimes } from "react-icons/fa";
 
-const ReviewingPage = () => {
+const ReviewingPage = () => (
+  <Suspense>
+    <ReviewingPageActual />
+  </Suspense>
+)
+
+const ReviewingPageActual = () => {
   const router = useRouter();
   const session = useSession({
     required: true,
@@ -32,7 +36,7 @@ const ReviewingPage = () => {
     const getFlashcards = async () => {
       if (cramDeckID) {
         try {
-          const flashcards = await fetchReviewFlashcards(cramDeckID, session?.data?.user?.email);
+          const flashcards = await fetchReviewFlashcards(cramDeckID, session?.data?.user?.email!);
           console.log("Flashcards in component:", flashcards);
           setFlashcardsArray(flashcards);
         } catch (error) {
@@ -58,10 +62,10 @@ const ReviewingPage = () => {
 
   const handleRateDifficulty = async (difficulty: string) => {
     const flashcard = flashcardsArray[currentCardIndex];
-    let easeFactor = flashcard.data[session?.data?.user?.email] == null
-      ? 2.5 : flashcard.data[session?.data?.user?.email].easeFactor;
-    let interval = flashcard.data[session?.data?.user?.email] == null
-      ? 2.5 : flashcard.data[session?.data?.user?.email].interval;
+    let easeFactor = flashcard.data[session?.data?.user?.email!] == null
+      ? 2.5 : flashcard.data[session?.data?.user?.email!].easeFactor;
+    let interval = flashcard.data[session?.data?.user?.email!] == null
+      ? 2.5 : flashcard.data[session?.data?.user?.email!].interval;
 
     switch (difficulty) {
       case 'easy':
@@ -87,7 +91,7 @@ const ReviewingPage = () => {
     const nextReviewTime = new Date(now.getTime() + intervalInMilliseconds);
 
     const updatedFlashcard = { ...flashcard };
-    updatedFlashcard.data[session?.data?.user?.email] = {
+    updatedFlashcard.data[session?.data?.user?.email!] = {
       lastReviewTime: now,
       nextReviewTime,
       interval,

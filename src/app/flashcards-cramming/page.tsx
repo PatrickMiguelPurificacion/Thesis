@@ -1,16 +1,21 @@
 'use client';
 
-import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { getDoc, doc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { FaAngleLeft, FaAngleRight, FaTimes } from "react-icons/fa";
+import { toast } from "sonner";
 import { db } from "../firebase";
 import { fetchFlashcards } from "../services/FlashcardService";
-import { toast } from "sonner";
-import { FaAngleLeft, FaAngleRight, FaTimes } from "react-icons/fa";
 
-const CrammingPage = () => {
+const CrammingPage = () => (
+  <Suspense>
+    <CrammingPageActual />
+  </Suspense>
+);
+
+const CrammingPageActual = () => {
   const router = useRouter();
   const session = useSession({
     required: true,

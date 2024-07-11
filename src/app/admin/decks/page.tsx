@@ -3,7 +3,7 @@
 //Next.js and React
 import { useSession } from 'next-auth/react';
 import { redirect, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 //Components
 import NavBar from '../../components/NavBar';
@@ -120,7 +120,8 @@ export default function Decks() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 gap-8">
-        {decksArray.map((deck) => (
+        {decksArray.map((deck, idx) => (
+          <React.Fragment key={`deck-${idx}`}>
           <Deck
             deck={deck}
             handleDelete={handleDelete}
@@ -129,6 +130,7 @@ export default function Decks() {
             isAdmin={session?.data?.snapshot?.admin}
             email={session?.data?.user?.email}
           />
+          </React.Fragment>
         ))}
       </div>
     </div>

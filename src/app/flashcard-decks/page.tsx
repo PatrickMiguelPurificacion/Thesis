@@ -2,10 +2,8 @@
 
 //Next.js and React
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import {useRouter} from 'next/navigation';
-import { useState, useEffect, useCallback} from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { redirect, useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
 
 //Components
 import NavBar from '../components/NavBar';
@@ -15,8 +13,8 @@ import DeckModal from '../modals/DeckModal';
 
 //Notifications
 import { toast } from 'sonner';
-import { deleteDeck, fetchDecks } from '../services/DeckService';
 import Deck from '../components/Deck';
+import { deleteDeck, fetchDecks } from '../services/DeckService';
 
 export default function Decks() {
   //Ensures user is in session
@@ -118,6 +116,7 @@ export default function Decks() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 gap-8">
         {decksArray.map((deck) => (
+          <React.Fragment key={`deck-${deck.id}`}>
           <Deck
             deck={deck}
             handleDelete={handleDelete}
@@ -126,6 +125,7 @@ export default function Decks() {
             isAdmin={session?.data?.snapshot?.admin}
             email={session?.data?.user?.email}
           />
+          </React.Fragment>
         ))}
       </div>
     </div>

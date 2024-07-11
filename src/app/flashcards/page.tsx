@@ -1,22 +1,26 @@
   'use client';
 
-  import { useSearchParams } from 'next/navigation';
   import { useSession } from 'next-auth/react';
-  import { redirect } from 'next/navigation';
-  import { useState, useEffect, useCallback } from 'react';
-  import { useRouter } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
-  import { getDoc, doc } from 'firebase/firestore';
-  import { db } from '../firebase';
+  import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
-  import NavBar from '../components/NavBar';
-  import FlashcardModal from '../modals/FlashcardModal';
-  import ReviewModal from '../modals/ReviewDeck';
-  import { deleteFlashcard, fetchFlashcards } from '../services/FlashcardService';
   import { FaEdit, FaTrash } from 'react-icons/fa';
-  import { toast } from 'sonner';
+import { toast } from 'sonner';
+import NavBar from '../components/NavBar';
+import FlashcardModal from '../modals/FlashcardModal';
+import ReviewModal from '../modals/ReviewDeck';
+import { deleteFlashcard, fetchFlashcards } from '../services/FlashcardService';
 
-  const FlashcardsPage = () => {
+const FlashcardsPage = () => (
+  <Suspense>
+    <FlashcardsPageActual />
+  </Suspense>
+)
+
+  const FlashcardsPageActual = () => {
     const router = useRouter();
     const session = useSession({
       required: true,
@@ -174,7 +178,6 @@
                 setModalState={handleModalClose} // Use handleModalClose to refresh flashcards after closing the modal
                 initialFlashcard={currentFlashcard}
                 cardID={currentFlashcard?.id || null}
-                reviewID={currentFlashcard?.reviewID || null}
                 deckId={currentDeckID}
               />
             )}

@@ -1,16 +1,6 @@
-import { collection, doc, getDoc, getDocs, query, setDoc, where} from 'firebase/firestore';
+import { UserDetails } from '@/types/user-details';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
-
-interface UserDetails {
-  firstname: string;
-  lastname: string;
-  studentNum: number;
-  email: string;
-  uid: string;
-  admin: boolean;
-  lastActive: Date;
-  recentActiveDays: Date[];
-}
 
 export const fetchUserDetails = async (userEmail: string) => {
     updateLastActive(userEmail);

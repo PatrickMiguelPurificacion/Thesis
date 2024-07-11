@@ -1,18 +1,11 @@
-import { useSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import { UserDetails } from '@/types/user-details';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { updateUserDetails } from '../services/UserService';
 
 interface Props {
   setModalState: (state: boolean) => void;
-  initialDetails?: {
-    firstname:string,
-    lastname:string,
-    studentNum: number,
-    email: string,
-    uid: string,
-    admin: boolean,
-  }
+  initialDetails?: UserDetails;
   userID: string | null;
 }
 

@@ -10,7 +10,7 @@ export default function Deck({
   userEmail,
   isAdmin,
 }: any) {
-  const [forReviewCount, setForReviewCount] = useState(null);
+  const [forReviewCount, setForReviewCount] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -21,7 +21,6 @@ export default function Deck({
 
   return (
     <div
-      key={deck.id}
       className="w-full relative"
     >
       <div

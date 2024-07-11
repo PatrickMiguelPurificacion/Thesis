@@ -2,21 +2,11 @@
 
 import NavBar from '@/app/components/NavBar';
 import { fetchAllUsers } from '@/app/services/AllUsersService';
+import { UserDetails } from '@/types/user-details';
 import { Timestamp } from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-interface UserDetails {
-  firstname: string;
-  lastname: string;
-  studentNum: number;
-  email: string;
-  uid: string;
-  admin: boolean;
-  lastActive: Timestamp;
-  recentActiveDays: Timestamp[];
-}
 
 export default function Decks() {
   //Ensures user is in session
@@ -56,7 +46,7 @@ export default function Decks() {
 
   useEffect(() => {
     (async () => {
-      const users = await fetchAllUsers();
+      const users: UserDetails[] = await fetchAllUsers();
       setAllUsers(users);
       setUserNum(users.length);
     })();
@@ -75,15 +65,16 @@ export default function Decks() {
         {allUsers.map((user: UserDetails, idx: number) => (
           <div
             className="bg-white p-4 mb-4"
+            key={`user-${idx}`}
           >
             <p>
               <strong>{user.firstname} {user.lastname}</strong> ({user.email})
             </p>
             <p>
-              <strong>Last active: </strong> {formatDate(user.lastActive)}
+              <strong>Last active: </strong> {formatDate(user.lastActive as Timestamp)}
             </p>
             <p>
-              <strong>Recent active days: </strong> {formatActiveDays(user.recentActiveDays)}
+              <strong>Recent active days: </strong> {formatActiveDays(user.recentActiveDays as Timestamp[])}
             </p>
           </div>
         ))}
