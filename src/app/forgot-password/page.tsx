@@ -4,6 +4,7 @@ import { auth } from '../firebase';
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useRouter } from 'next/navigation';
 import logo from "./../assets/logo.png";
+import { toast } from 'sonner';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ export default function ForgotPassword() {
 
   const resetEmail = () => {
     sendPasswordResetEmail(auth, email);
+    toast.success("Password Reset Sent To Your Email");
   };
 
   return (

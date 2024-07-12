@@ -1,5 +1,3 @@
-Foundations of Cryptology
-
 Cryptology has a long and multicultural history
 
 Date                                                                            Event

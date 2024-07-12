@@ -1,5 +1,3 @@
-Introduction:
-
 The science of cryptography is not as enigmatic as you might think. A variety of cryptographic techniques are used regularly in everyday life. 
 
 For example, open your newspaper to the entertainment section and you’ll find the Daily Cryptogram, which is a word puzzle that involves unscrambling letters to find a hidden message. Also, although it is a dying art, many secretaries still use shorthand, or stenography, an abbreviated, symbolic writing method, to take rapid dictation. 
