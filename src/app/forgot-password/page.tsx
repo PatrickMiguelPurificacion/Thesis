@@ -10,9 +10,13 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const router = useRouter();
 
-  const resetEmail = () => {
-    sendPasswordResetEmail(auth, email);
-    toast.success("Password Reset Sent To Your Email");
+  const resetEmail = async () => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Password Reset Sent To Your Email");
+    } catch (error) {
+      toast.error("Failed to send password reset email");
+    }
   };
 
   return (
