@@ -1,21 +1,16 @@
 'use client';
 
-import { doc, getDoc } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { redirect, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { db } from "../firebase";
 import { fetchReviewFlashcards, updateFlashcard } from "../services/FlashcardService";
+import { getDoc, doc } from "firebase/firestore";
+import { FaTimes } from "react-icons/fa";
 
-const ReviewingPage = () => (
-  <Suspense>
-    <ReviewingPageActual />
-  </Suspense>
-)
-
-const ReviewingPageActual = () => {
+const ReviewingPage = () => {
   const router = useRouter();
   const session = useSession({
     required: true,
@@ -68,23 +63,28 @@ const ReviewingPageActual = () => {
       ? 2.5 : flashcard.data[session?.data?.user?.email!].interval;
 
     switch (difficulty) {
-      case 'easy':
-        easeFactor = Math.max(1.3, easeFactor + 0.2);
-        interval *= easeFactor;
-        break;
-      case 'good':
-        interval *= easeFactor;
-        break;
-      case 'hard':
-        easeFactor = Math.max(1.3, easeFactor - 0.2);
-        interval *= easeFactor;
-        break;
-      case 'again':
-        interval = 1;
-        break;
-      default:
-        break;
-    }
+        //Ease Bonus = 1.3 (Anki Default)
+        //Ease Factor = 2.5 (Anki Default)
+        //Interval = 1 Day (Anki Default)
+        
+        case 'easy':
+          easeFactor = Math.max(1.3, easeFactor + 0.15);
+          interval *= easeFactor * 1.3;
+          break;
+        case 'good':
+          interval *= easeFactor;
+          break;
+        case 'hard':
+          easeFactor = Math.max(1.3, easeFactor - 0.15);
+          interval *= 1.2 //hard interval;
+          break;
+        case 'again':
+          interval = 1;
+          easeFactor = Math.max(1.3, easeFactor - 0.2);
+          break;
+        default:
+          break;
+      }
 
     const now = new Date();
     const intervalInMilliseconds = interval * 24 * 3600 * 1000;
@@ -100,6 +100,7 @@ const ReviewingPageActual = () => {
 
     try {
       await updateFlashcard(flashcard.id, updatedFlashcard);
+      console.log("Review Updated on Flashcard: ", flashcard.id);
       toast.success('Review updated successfully!');
     } catch (error) {
       console.error('Error updating review:', error);
