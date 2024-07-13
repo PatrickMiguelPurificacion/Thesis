@@ -17,8 +17,23 @@ export default function Signup() {
 
   // Add and Authenticate User to the Database
   const signup = async () => {
-    if (!email.endsWith('@mymail.mapua.edu.ph') && !email.endsWith('@mapua.edu.ph')) {
+    if (!email.endsWith('@mymail.mapua.edu.ph')) {
       toast.error('Email should be your Mapua Email');
+      return;
+    }
+
+    if (password !== passwordAgain) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (newUser.studentNum.length !== 10) {
+      toast.error('Student number should be 10 digits');
+      return;
+    }
+
+    if (!newUser.firstname || !newUser.lastname || !newUser.studentNum || !email || !password || !passwordAgain) {
+      toast.error('All fields are required');
       return;
     }
 
@@ -36,6 +51,7 @@ export default function Signup() {
         admin: false,
       });
 
+      toast.success('Account Successfully Created!');
       // Redirect to sign-in page
       router.push('signin');
     } catch (error: any) {
@@ -53,7 +69,6 @@ export default function Signup() {
           className="w-full h-[200px] sm:h-full bg-contain bg-[length:auto_100%] sm:bg-[length:65%_auto] bg-center bg-no-repeat mt-6 sm:mt-0"
           style={{
             backgroundImage: `url(${logo.src})`,
-            // src="https://i.ibb.co/6XmvNCT/register-logo.png"
           }}
         />
         <div className="py-6 sm:py-16 px-12">
@@ -142,8 +157,8 @@ export default function Signup() {
 
           <div className="mt-5">
             <button
-              disabled={(!email || !password || !passwordAgain) || (password !== passwordAgain)}
-              onClick={async () => { await signup(); toast.success('Account Successfully Created!'); }}
+              disabled={(!email || !password || !passwordAgain)}
+              onClick={async () => { await signup(); }}
               className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
               Sign Up

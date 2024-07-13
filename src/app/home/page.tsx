@@ -5,7 +5,7 @@ import { redirect, useRouter } from 'next/navigation';
 import NavBar from '../components/NavBar';
 import { FaBook, FaChalkboard, FaBookReader, FaArrowRight } from 'react-icons/fa'; 
 import { IoMdCard } from 'react-icons/io'; 
-import logo from "./../assets/logo.png";
+import logo from "./../assets/logo-without-name.png";
 
 interface Summary {
   header: string;
