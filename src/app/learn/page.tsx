@@ -47,8 +47,6 @@ export default function Learn() {
     try {
       const fetchedHighlights = await fetchHighlights(userID);
       setHighlights(fetchedHighlights);
-
-      // Filter highlights based on the selected topic
       filterHighlights(selectedTopic, fetchedHighlights);
 
       return fetchedHighlights;
@@ -64,8 +62,6 @@ export default function Learn() {
     setSelectedTopic(topic);
     const contents = await loadChapterContents(topic);
     setChapterContents(contents);
-
-    // Filter highlights based on the selected topic
     filterHighlights(topic, highlights);
   };
 
@@ -109,10 +105,7 @@ const formatContent = (content: string, highlights: Highlighter[]) => {
     if (selection) {
       const selectedText = selection.toString().trim();
       if (selectedText) {
-        // Set the selected text details
         setSelectionDetails({ selection, text: selectedText });
-
-        // Show the color picker for highlighting
         setShowColorPicker(true);
       }
     }
@@ -130,14 +123,11 @@ const formatContent = (content: string, highlights: Highlighter[]) => {
         userID: session?.user?.email || ''
       };
 
-      // Save the new highlight to the database
       await createHighlight(newHighlight);
       toast.success('Highlight added successfully');
 
       // Refresh the highlights after saving
       fetchUserHighlights(newHighlight.userID);
-
-      // Hide the color picker
       setShowColorPicker(false);
     } catch (error) {
       console.error('Error saving highlight:', error);
@@ -150,7 +140,6 @@ const formatContent = (content: string, highlights: Highlighter[]) => {
     const confirmDeletion = window.confirm('Are you sure you want to delete this highlight?');
     if (confirmDeletion) {
       try {
-        // Delete the highlight from the database
         await deleteHighlight(highlightID);
         toast.success('Highlight deleted successfully');
 
@@ -168,7 +157,6 @@ const formatContent = (content: string, highlights: Highlighter[]) => {
 
   // Filter highlights for the selected topic
   const filterHighlights = async (topic: string, allHighlights: Highlighter[]) => {
-    // Filter highlights based on the selected topic
     const filtered = allHighlights.filter((highlight) => highlight.topic === topic);
     setFilteredHighlights(filtered);
 
@@ -179,7 +167,7 @@ const formatContent = (content: string, highlights: Highlighter[]) => {
     }
   };
 
-  // Function to escape special characters in the highlighted text
+// Function to escape special characters in the highlighted text
 const escapeRegExp = (string: string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
@@ -197,7 +185,6 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
     contents = contents.replace(regex, `<span style="background-color: ${highlight.color};">$1</span>`);
   });
 
-  // Return the content with applied highlights
   return contents;
 };
 
