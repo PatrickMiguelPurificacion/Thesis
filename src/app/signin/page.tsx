@@ -3,13 +3,30 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import logo from "./../assets/logo.png";
+import { toast } from 'sonner';
 
 export default function Signin() {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
   const router = useRouter();
+
+  const handleSignIn = async () => {
+    try {
+      const login = await signIn('credentials', { email, password, redirect: false });
+
+      if(login?.ok){
+        router.push('/home');
+      }
+
+      else{
+        toast.error('Invalid email or password');
+      }
+
+    } catch (error: any) {
+      console.error('Sign in error:', error.message);
+    }
+  };
 
   //SignIn uses next-auth from react, but authentication is firebase
   return (
@@ -71,7 +88,7 @@ export default function Signin() {
 
             <div>
               <button
-                onClick={() => signIn('credentials', {email, password, redirect: true, callbackUrl: '/home'})}
+                onClick={handleSignIn}
                 disabled={!email || !password}
                 className="disabled:opacity-40 flex w-full justify-center rounded-md bg-violet-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
