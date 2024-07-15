@@ -91,9 +91,9 @@ export default function Learn() {
 const formatContent = (content: string, highlights: Highlighter[]) => {
   
   const paragraphs = content.split('\n\n').map(paragraph => {
-    // Replace single newlines with <br><br> and preserve multiple spaces
-    const lines = paragraph.split('\n').map(line => line.replace(/ {2}/g, '&nbsp;&nbsp;')).join('<br><br>');
-    return `<p>${lines}</p>`;
+    // Replace single newlines with <br> and preserve multiple spaces
+    const lines = paragraph.split('\n').map(line => line.replace(/ {2}/g, '&nbsp;&nbsp;')).join('<br>');
+    return `<p>${lines}</p><br>`;
   }).join('<br><br>');
   
   return highlightContents(paragraphs, highlights);
