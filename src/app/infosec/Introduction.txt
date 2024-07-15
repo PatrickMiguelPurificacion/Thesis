@@ -9,4 +9,3 @@ The science of encryption, known as cryptology, encompasses cryptography and cry
 Encryption is the process of converting an original message into a form that is unreadable to unauthorized individuals—that is, to anyone without the tools to convert the encrypted message back to its original format.
 
 Decryption is the process of converting the ciphertext message back into plaintext so that it can be readily understood.
-

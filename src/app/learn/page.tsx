@@ -42,31 +42,44 @@ export default function Learn() {
     }
   }, [session]);
 
+  // Fetch the highlights of the user
   const fetchUserHighlights = async (userID: string) => {
     try {
       const fetchedHighlights = await fetchHighlights(userID);
       setHighlights(fetchedHighlights);
+
+      // Filter highlights based on the selected topic
       filterHighlights(selectedTopic, fetchedHighlights);
+
+      return fetchedHighlights;
+
     } catch (error) {
       console.error('Error fetching highlights:', error);
       toast.error('Failed to fetch highlights');
     }
   };
 
+  // Handle topic selection and load the chapter contents
   const handleTopicSelection = async (topic: string) => {
     setSelectedTopic(topic);
     const contents = await loadChapterContents(topic);
     setChapterContents(contents);
+
+    // Filter highlights based on the selected topic
     filterHighlights(topic, highlights);
   };
 
-  const loadChapterContents = async (topic: string) => {
+  // Load chapter contents and optionally apply updated highlights
+  const loadChapterContents = async (topic: string, updatedHighlights?: Highlighter[]) => {
     try {
       const response = await fetch(`/api/getContent?topic=${encodeURIComponent(topic)}`);
       if (response.ok) {
         const contents = await response.text();
-        const filtered = highlights.filter(highlight => highlight.topic === topic);
+
+        // Use the provided highlights or filter the current highlights for the topic
+        const filtered = updatedHighlights ?? highlights.filter(highlight => highlight.topic === topic);
         return formatContent(contents, filtered);
+
       } else {
         toast.error('Failed to load chapter contents');
         return '';
@@ -77,38 +90,54 @@ export default function Learn() {
       return '';
     }
   };
+
+  // Format the chapter content and apply highlights
+const formatContent = (content: string, highlights: Highlighter[]) => {
+  // Replace single newlines with <br> and double newlines with <br><br>
+  const paragraphs = content.split('\n\n').map(paragraph => {
+    // Replace single newlines with <br> and preserve multiple spaces
+    const lines = paragraph.split('\n').map(line => line.replace(/ {2}/g, '&nbsp;&nbsp;')).join('<br>');
+    return `<p>${lines}</p>`;
+  }).join('<br><br>');
   
-  const formatContent = (content: string, highlights: Highlighter[]) => {
-    // Replace single newlines with <br> and double newlines with <p>
-    const paragraphs = content.split('\n\n').map(paragraph => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`).join('');
-  
-    // Apply highlights
-    return highlightContents(paragraphs, highlights);
+  return highlightContents(paragraphs, highlights);
   };
 
+  // Handle text selection and show color picker for highlighting
   const handleHighlightAndNote = () => {
     const selection = window.getSelection();
     if (selection) {
       const selectedText = selection.toString().trim();
       if (selectedText) {
+        // Set the selected text details
         setSelectionDetails({ selection, text: selectedText });
+
+        // Show the color picker for highlighting
         setShowColorPicker(true);
       }
     }
   };
 
+  // Apply the selected highlight color to the selected text
   const applyHighlight = async (color: string) => {
     const { text } = selectionDetails;
     try {
+      // Create a new highlight object
       const newHighlight: Highlighter = {
         highlightedText: text,
         color,
         topic: selectedTopic,
         userID: session?.user?.email || ''
       };
+
+      // Save the new highlight to the database
       await createHighlight(newHighlight);
       toast.success('Highlight added successfully');
-      fetchUserHighlights(newHighlight.userID); // Refresh highlights after saving
+
+      // Refresh the highlights after saving
+      fetchUserHighlights(newHighlight.userID);
+
+      // Hide the color picker
       setShowColorPicker(false);
     } catch (error) {
       console.error('Error saving highlight:', error);
@@ -116,13 +145,20 @@ export default function Learn() {
     }
   };
 
+  // Handle highlight deletion with confirmation
   const handleDeleteHighlight = async (highlightID: string) => {
     const confirmDeletion = window.confirm('Are you sure you want to delete this highlight?');
     if (confirmDeletion) {
       try {
+        // Delete the highlight from the database
         await deleteHighlight(highlightID);
         toast.success('Highlight deleted successfully');
-        fetchUserHighlights(session?.user?.email || '');
+
+        // Fetch updated highlights after deletion
+        const updatedHighlights = await fetchUserHighlights(session?.user?.email || '');
+
+        // Reload the chapter contents with the updated highlights list
+        setChapterContents(await loadChapterContents(selectedTopic, updatedHighlights));
       } catch (error) {
         console.error('Error deleting highlight:', error);
         toast.error('Failed to delete highlight');
@@ -130,27 +166,42 @@ export default function Learn() {
     }
   };
 
-  const filterHighlights = (topic: string, allHighlights: Highlighter[]) => {
+  // Filter highlights for the selected topic
+  const filterHighlights = async (topic: string, allHighlights: Highlighter[]) => {
+    // Filter highlights based on the selected topic
     const filtered = allHighlights.filter((highlight) => highlight.topic === topic);
     setFilteredHighlights(filtered);
 
     // Update chapter contents to include highlights
     if (selectedTopic === topic) {
-      setChapterContents(loadChapterContentsWithHighlights(chapterContents, filtered));
+      const contents = await loadChapterContents(topic);
+      setChapterContents(highlightContents(contents, filtered));
     }
   };
 
-  const loadChapterContentsWithHighlights = (contents: string, highlights: Highlighter[]) => {
-    return highlightContents(contents, highlights);
-  };
+  // Function to escape special characters in the highlighted text
+const escapeRegExp = (string: string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
 
-  const highlightContents = (contents: string, highlights: Highlighter[]) => {
-    highlights.forEach(highlight => {
-      const regex = new RegExp(`(${highlight.highlightedText})`, 'gi');
-      contents = contents.replace(regex, `<span style="background-color: ${highlight.color};">$1</span>`);
-    });
-    return contents;
-  };
+// Function to apply highlights to the chapter contents
+const highlightContents = (contents: string, highlights: Highlighter[]) => {
+  highlights.forEach(highlight => {
+    // Escape special characters in the highlighted text to ensure proper regex matching
+    const escapedHighlight = escapeRegExp(highlight.highlightedText);
+
+    // Create a regex to find the exact match of the highlighted text (case insensitive)
+    const regex = new RegExp(`(${escapedHighlight})`, 'gi');
+
+    // Replace the matched text with a span containing the background color for highlighting
+    contents = contents.replace(regex, `<span style="background-color: ${highlight.color};">$1</span>`);
+  });
+
+  // Return the content with applied highlights
+  return contents;
+};
+
+
 
   return (
     <div className="flex h-screen bg-gray-100">
