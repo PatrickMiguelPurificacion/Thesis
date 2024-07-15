@@ -17,6 +17,8 @@ export default function Signup() {
 
   // Add and Authenticate User to the Database
   const signup = async () => {
+
+    // Error Handling
     if (!email.endsWith('@mymail.mapua.edu.ph')) {
       toast.error('Email should be your Mapua Email');
       return;
@@ -67,7 +69,6 @@ export default function Signup() {
     }
   };
 
-  // Return the UI
   return (
     <div className="flex flex-column flex-1 items-center justify-center min-h-full px-6 py-39 bg-gradient-to-t(115deg, (#9F7AEA, #FEE2FE)">
       <div className="grid grid-cols-1 max-w-[768px] sm:grid-cols-2 bg-white rounded-lg shadow-ig overflow-hidden">

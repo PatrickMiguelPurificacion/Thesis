@@ -29,6 +29,9 @@ export default function Deck({
       >
 
       <div className="mt-auto">
+
+      {/* If Deck is Global, only Admin can edit or delete it */}
+
         <div className="w-full text-sm text-white bg-opacity-70 bg-gray-800 px-4 pt-2 mt-4 flex items-center justify-between">
           <button
             onClick={() => handleDelete(deck.id)}

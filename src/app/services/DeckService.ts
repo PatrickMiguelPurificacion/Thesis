@@ -9,6 +9,7 @@ interface Deck {
   global: boolean;
 }
 
+// Fetches decks associated with user or the global decks
 export const fetchDecks = async (userEmail: string | null) => {
   const q = query(collection(db, 'decks'), or(
     where('userID', '==', userEmail),

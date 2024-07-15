@@ -3,14 +3,20 @@
 import { useSession } from "next-auth/react";
 import { redirect, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { db } from "../firebase";
 import { fetchReviewFlashcards, updateFlashcard } from "../services/FlashcardService";
 import { getDoc, doc } from "firebase/firestore";
 import { FaTimes } from "react-icons/fa";
 
-const ReviewingPage = () => {
+const ReviewingPage = () => (
+<Suspense>
+  <ReviewingPageActual />
+</Suspense>
+);
+
+const ReviewingPageActual = () => {
   const router = useRouter();
   const session = useSession({
     required: true,
@@ -55,18 +61,25 @@ const ReviewingPage = () => {
     fetchDeckName();
   }, [session, cramDeckID]);
 
+
   const handleRateDifficulty = async (difficulty: string) => {
     const flashcard = flashcardsArray[currentCardIndex];
+
+    // Sets default data of easeFactor and interval based on Anki Algorithm
     let easeFactor = flashcard.data[session?.data?.user?.email!] == null
       ? 2.5 : flashcard.data[session?.data?.user?.email!].easeFactor;
     let interval = flashcard.data[session?.data?.user?.email!] == null
-      ? 2.5 : flashcard.data[session?.data?.user?.email!].interval;
+      ? 1 : flashcard.data[session?.data?.user?.email!].interval;
 
+    // Handles spaced repetition formula based on Anki
     switch (difficulty) {
-        //Ease Bonus = 1.3 (Anki Default)
-        //Ease Factor = 2.5 (Anki Default)
-        //Interval = 1 Day (Anki Default)
-        
+
+        /*
+        Ease Bonus = 1.3 (Anki Default)
+        Ease Factor = 2.5 (Anki Default)
+        Interval = 1 Day (Anki Default)
+        */
+
         case 'easy':
           easeFactor = Math.max(1.3, easeFactor + 0.15);
           interval *= easeFactor * 1.3;
@@ -87,9 +100,14 @@ const ReviewingPage = () => {
       }
 
     const now = new Date();
+
+    // Converts interval to milliseconds
     const intervalInMilliseconds = interval * 24 * 3600 * 1000;
+
+    // Calculates next Review Time by adding time now and the milliseconds of the new interval
     const nextReviewTime = new Date(now.getTime() + intervalInMilliseconds);
 
+    // Updates review time in Flashcard
     const updatedFlashcard = { ...flashcard };
     updatedFlashcard.data[session?.data?.user?.email!] = {
       lastReviewTime: now,
@@ -107,7 +125,7 @@ const ReviewingPage = () => {
       toast.error('Error updating review');
     }
 
-    handleNextCard();
+    handleNextCard(); // Goes to the next card to review
   };
 
   const handleNextCard = () => {

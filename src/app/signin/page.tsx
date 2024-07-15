@@ -15,6 +15,7 @@ export default function Signin() {
     try {
       const login = await signIn('credentials', { email, password, redirect: false });
 
+      // Error Handling
       if(login?.ok){
         router.push('/home');
       }

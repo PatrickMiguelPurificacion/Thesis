@@ -76,7 +76,7 @@ const FlashcardsPage = () => (
           const deckData = deckSnapshot.data();
           if (deckData) {
             setDeckName(deckData.deckName);
-            setIsGlobal(deckData.global === true);
+            setIsGlobal(deckData.global === true); // For Global Decks in Admin
           }
         }
       };
@@ -162,6 +162,8 @@ const FlashcardsPage = () => (
             )}
           </div>
 
+          {/* If the Deck is Global, only Admin can Add the Flashcards */}
+
           {((isGlobal && session?.data?.snapshot?.admin)
             || !isGlobal)
             && <button
@@ -192,6 +194,9 @@ const FlashcardsPage = () => (
                   <div className="p-4 bg-white">
                     <h3 className="text-lg font-semibold mb-2">{flashcard.cardQuestion}</h3>
                     <p className="text-gray-600">{flashcard.cardAnswer}</p>
+
+                    {/* If Flashcard is Global, only admin can edit or delete the flashcard */}
+
                     {((isGlobal && session?.data?.snapshot?.admin) || !isGlobal) && <div className="flex justify-end mt-2">
                       <button
                         className="text-gray-500 hover:text-gray-800"

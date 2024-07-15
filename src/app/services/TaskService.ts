@@ -27,6 +27,7 @@ export interface Tag {
     text: string;
 }
 
+// Fetch tasks accoridng to their column
 export const fetchTasks = async (userID: string, columnId: string) => {
   const q = query(collection(db, 'tasks'), 
   where('userId','==', userID), 

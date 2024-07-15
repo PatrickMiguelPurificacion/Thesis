@@ -1,33 +1,28 @@
 'use client';
 
-//Next.js and React
+// Next.js and React
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
-//Components
+// Components
 import NavBar from '../components/NavBar';
 
-//Modals
+// Modals
 import NotebookModal from '../modals/NotebookModal';
 import NoteModal from '../modals/NoteModal';
 
-//Firebase
-import { getDocs, collection, query, where, getDoc, runTransaction } from 'firebase/firestore';
-import { db } from '../firebase';
-import { doc, deleteDoc } from 'firebase/firestore';
-
-//Services
+// Services
 import { deleteNotebook, fetchNotebooks } from '../services/NotebookService';
 import { deleteNote, fetchNotes } from '../services/NoteService';
 
-//Notifications
+// Notifications
 import { toast } from 'sonner';
 
 export default function Notebook() {
-  //Ensures user is in session
+  // Ensures user is in session
   const session = useSession({
     required: true,
     onUnauthenticated() {
@@ -37,8 +32,8 @@ export default function Notebook() {
 
   const router = useRouter();
 
-  //Adding Notebook
-  const [notebooksArray, setNotebooksArray] = useState<{ [key: string]: any }[]>([]); //Stores notebooks retrieved from database
+  // Adding Notebook
+  const [notebooksArray, setNotebooksArray] = useState<{ [key: string]: any }[]>([]); // Stores notebooks retrieved from database
   const [notebookModalState, setNotebookModalState] = useState(false); // For showing the notebook modal or not
   const [selectedNotebookId, setSelectedNotebookId] = useState(''); // Gets the Notebook Selected for ViewNotes
   const [currentNotebook, setCurrentNotebook] = useState<any | null>(null); // For Storing the Notebook to be edited
@@ -71,7 +66,7 @@ export default function Notebook() {
     setNotebookModalState(true);
   };
 
-  //Editing Notebook
+  // Editing Notebook
   const handleEditNotebook = (notebook: any) => {
     console.log('Editing notebook:', notebook.id);
     setCurrentNotebook(notebook);
@@ -83,7 +78,7 @@ export default function Notebook() {
     getNotebooks(); // Refresh Notebooks after closing the modal
   };
 
-  //Function for Deleting the Document based on the notebookID
+  // Function for Deleting the Document based on the notebookID
   const handleDeleteNotebook = async (notebookId: string) => {
     const confirmation = window.confirm('Are you sure you want to delete this notebook?');
     if (confirmation) {
@@ -91,7 +86,7 @@ export default function Notebook() {
         await deleteNotebook(notebookId);
         setNotebooksArray(notebooksArray.filter((notebook) => notebook.id !== notebookId));
         toast.success('Notebook Deleted Successfully!');
-        getNotes();
+        getNotes(); // Refreshes Notes when Notebook is deleted
       } catch (error) {
         console.error('Error deleting notebook:', error);
         toast.error('Error deleting Notebook');
@@ -102,12 +97,12 @@ export default function Notebook() {
 
 
 
-  //For Notes
+  // For Notes
   const [noteModalState, setNoteModalState] = useState(false);
   const [notesArray, setNotesArray] = useState<{ [key: string]: any }[]>([]); // Placing the notes in an array
   const [currentNote, setCurrentNote] = useState<any | null>(null); // For Storing the Notebook to be edited
 
-  //Gets the Note Data from the Database and stores them in an array
+  // Gets the Note Data from the Database and stores them in an array
     const getNotes = useCallback(async () => {
       if (selectedNotebookId) {
         try {
@@ -124,20 +119,20 @@ export default function Notebook() {
     getNotes();
   },[selectedNotebookId, getNotes])
 
-  //Adding Notes
+  // Adding Notes
   const handleAddNote = () => {
     setCurrentNote(null);
     setNoteModalState(true);
   };
 
-  //Edit Note
+  // Edit Note
   const handleEditNote = (note: any) => {
     console.log('Editing note:', note.id);
     setCurrentNote(note);
     setNoteModalState(true);
   };
 
-  //Function for Deleting the Document based on the noteID
+  // Function for Deleting the Document based on the noteID
   const handleNoteDelete = async (noteId: string) => {
     const confirmation = window.confirm('Are you sure you want to delete this note?');
     if (confirmation) {

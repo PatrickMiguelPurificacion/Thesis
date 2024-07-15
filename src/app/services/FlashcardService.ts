@@ -9,10 +9,6 @@ interface Flashcard {
     [key: string]: FlashcardData;
   };
   id?: string;
-  // lastReviewTime: Date;
-  // nextReviewTime: Date;
-  // interval: number;
-  // easeFactor: number;
 }
 
 interface FlashcardData {
@@ -22,28 +18,30 @@ interface FlashcardData {
   easeFactor: number;
 }
 
+// Fetch all the Flashcards of the Deck
 export const fetchFlashcards = async (deckId: string) => {
   const q = query(collection(db, 'flashcards'), where('deckID', '==', deckId));
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 };
 
+// Fetch only Review Flashcards
 export const fetchReviewFlashcards = async (deckId: string, userEmail: string) => {
   // Get the current date and set to the beginning of the day
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set to the beginning of the day
 
-  //Get the date yesterday
+  // Get the date yesterday
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   const yesterdayTimestamp = Timestamp.fromDate(yesterday);
 
-  //Get the date tomorrow
+  // Get the date tomorrow
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
   const tomTimestamp = Timestamp.fromDate(tomorrow);
 
-  //Filter the Flashcards to show only those being Reviewed Today and the ones from previous dates
+  // Filter the Flashcards to show only those being Reviewed Today and the ones from previous dates
   const flashcardsQuery = query(
     collection(db, 'flashcards'),
     where('deckID', '==', deckId),
@@ -52,10 +50,14 @@ export const fetchReviewFlashcards = async (deckId: string, userEmail: string) =
   const flashcards : Flashcard[] = [];
   const flashcardsSnapshot = await getDocs(flashcardsQuery);
   flashcardsSnapshot.docs.forEach((doc) => {
-    //Makes sure that the cards shown are those scheduled for today and the late reviews
+    // Makes sure that the cards shown are those scheduled for today and the late reviews
     let data = doc.data();
-    if (data.data == null || data.data[userEmail] == null)
+
+    // If data or user-specific data is missing, include the flashcard
+    if (data.data == null || data.data[userEmail] == null) 
       flashcards.push({ ...data, id: doc.id } as Flashcard);
+    
+    // If next review time is before tomorrow, include the flashcard
     else if (data.data[userEmail].nextReviewTime < tomTimestamp)
       flashcards.push({ ...data, id: doc.id } as Flashcard);
   })
@@ -64,8 +66,6 @@ export const fetchReviewFlashcards = async (deckId: string, userEmail: string) =
 
   return flashcards;
 };
-
-
 
 export const createFlashcard = async (flashcard: Flashcard, deckId: string | null) => {
   try {
@@ -79,7 +79,7 @@ export const createFlashcard = async (flashcard: Flashcard, deckId: string | nul
     
     if (deckId) {
       const deckRef = doc(db, 'decks', deckId);
-      await updateDoc(deckRef, { cardNum: increment(1) }); // Increases the number of flashcards from the notebook when added
+      await updateDoc(deckRef, { cardNum: increment(1) }); // Increases the number of flashcards on the deck when added
     }
 
     return flashcardRef.id;
