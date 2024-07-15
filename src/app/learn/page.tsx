@@ -89,10 +89,10 @@ export default function Learn() {
 
   // Format the chapter content and apply highlights
 const formatContent = (content: string, highlights: Highlighter[]) => {
-  // Replace single newlines with <br> and double newlines with <br><br>
+  
   const paragraphs = content.split('\n\n').map(paragraph => {
-    // Replace single newlines with <br> and preserve multiple spaces
-    const lines = paragraph.split('\n').map(line => line.replace(/ {2}/g, '&nbsp;&nbsp;')).join('<br>');
+    // Replace single newlines with <br><br> and preserve multiple spaces
+    const lines = paragraph.split('\n').map(line => line.replace(/ {2}/g, '&nbsp;&nbsp;')).join('<br><br>');
     return `<p>${lines}</p>`;
   }).join('<br><br>');
   
