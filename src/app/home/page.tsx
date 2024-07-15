@@ -129,7 +129,7 @@ export default function Home() {
                 >
                   <FaArrowRight
                     className="mt-1 mr-2 shrink-0"
-                  />See Card Decks
+                  />See {feat.header}
                 </button>
               </div>
             ))}

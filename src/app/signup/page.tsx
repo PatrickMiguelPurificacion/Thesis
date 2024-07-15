@@ -32,6 +32,11 @@ export default function Signup() {
       return;
     }
 
+    if (password.length < 6) {
+      toast.error('Password should be atleast 6 characters long');
+      return;
+    }
+
     if (!newUser.firstname || !newUser.lastname || !newUser.studentNum || !email || !password || !passwordAgain) {
       toast.error('All fields are required');
       return;
@@ -42,6 +47,7 @@ export default function Signup() {
       const user = userCredential.user;
 
       // Add user details to Firestore
+      
       await addDoc(collection(db, 'users'), {
         firstname: newUser.firstname.trim(),
         lastname: newUser.lastname.trim(),
@@ -57,7 +63,7 @@ export default function Signup() {
     } catch (error: any) {
       console.error('Error creating user:', error.message);
       // Handle error
-      toast.error('Error creating account');
+      toast.error('Error creating account:', error.message);
     }
   };
 
