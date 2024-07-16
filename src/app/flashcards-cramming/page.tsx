@@ -78,7 +78,7 @@ const CrammingPageActual = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center bg-blue-100">
+    <div className="flex flex-col h-screen justify-center items-center bg-blue-100 flex-grow overflow-y-auto overflow-x-auto p-4 md:p-8">
       
       <div className="max-w-4xl w-full bg-blue-500 text-white rounded-lg shadow-lg p-6 flex-1 mt-6 mb-6 relative">
         <header className="text-center mb-4">
@@ -91,8 +91,8 @@ const CrammingPageActual = () => {
         <div className="flex justify-between mt-6 py-6">
           <button onClick={handlePrevCard} disabled={currentCardIndex === 0} className="btn hover:bg-blue-600 hover:text-white"><FaAngleLeft size={40} /></button>
           <div className="flashcard mb-4 mt-6 py-4">
-            <h3 className="font-semibold text-lg text-center">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
-            {answerShown && <p className="text-lg text-center">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>}
+            <h3 className="font-semibold text-lg text-center mx-6">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
+            {answerShown && <p className="font-bold text-xl text-center mt-4 mx-6">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>}
           </div>
           <button onClick={handleNextCard} disabled={currentCardIndex === flashcardsArray.length - 1} className="btn hover:bg-blue-600 hover:text-white"><FaAngleRight size={40} /></button>
         </div>

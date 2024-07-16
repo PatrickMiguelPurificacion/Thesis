@@ -99,6 +99,11 @@ const ReviewingPageActual = () => {
           break;
       }
 
+    // Apply fuzz factor
+    const fuzzPercentage = 0.05; // 5% fuzz
+    const fuzz = (Math.random() * 2 - 1) * fuzzPercentage * interval; // Random value between -5% and +5% of interval
+    interval += fuzz;
+
     const now = new Date();
 
     // Converts interval to milliseconds
@@ -142,43 +147,39 @@ const ReviewingPageActual = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center bg-blue-100">
+    <div className="flex flex-col h-screen justify-center items-center bg-blue-100 p-4 md:p-8 flex-grow overflow-y-auto">
       <div className="max-w-4xl w-full bg-blue-500 text-white rounded-lg shadow-lg p-6 flex-1 mt-6 mb-6 relative">
-      <header className="text-center mb-4">
+        <header className="text-center mb-4">
           <h1 className="text-2xl font-semibold mt-6 py-6 mb-6">Reviewing {deckName}</h1>
           <button onClick={handleStopReviewing} className="absolute top-2 right-2 bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded">
             <FaTimes size={20} />
           </button>
         </header>
 
-        <div className="flex justify-center items-center w-full mt-6 py-6">
-            {flashcardsArray.length === 0 ? (
-              <p className="text-center text-gray-600">There are No Scheduled Reviews Today</p>
-            ) : (
-              <>
-                <div className="flashcard mb-4 mt-6 py-4">
-                  <h3 className="font-semibold text-lg text-center">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
-                  {showAnswer && (
-                    <p className="text-lg text-center text-white">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-          <div className="flex justify-center py-6 mt-6">
-                  <div>
-                    <button onClick={() => handleRateDifficulty('easy')} className="difficulty-btn bg-green-500 hover:bg-green-600 mr-2">Easy</button>
-                    <button onClick={() => handleRateDifficulty('good')} className="difficulty-btn bg-yellow-500 hover:bg-yellow-600 mr-2">Good</button>
-                    <button onClick={() => handleRateDifficulty('hard')} className="difficulty-btn bg-red-500 hover:bg-red-600 mr-2">Hard</button>
-                    <button onClick={() => handleRateDifficulty('again')} className="difficulty-btn bg-purple-500 hover:bg-purple-600 mr-2">Again</button>
-                    <button onClick={handleShowAnswer} className="show-answer-btn bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
-                    {showAnswer ? 'Hide Answer' : 'Show Answer'}
-                    </button>
-                  </div>
-                  
-                </div>
+        <div className="flex justify-center items-center w-full mt-4 py-6">
+          {flashcardsArray.length === 0 ? (
+            <p className="text-center text-gray-600">There are No Scheduled Reviews Today</p>
+          ) : (
+            <div className="flashcard mb-4 mt-6 py-4 text-center">
+              <h3 className="font-semibold text-lg mx-6">{flashcardsArray[currentCardIndex]?.cardQuestion}</h3>
+              {showAnswer && (
+                <p className="font-bold text-xl text-white mt-5 mx-6">{flashcardsArray[currentCardIndex]?.cardAnswer}</p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-center py-6 mt-6 space-y-4 md:space-y-0 md:space-x-4">
+          <button onClick={() => handleRateDifficulty('easy')} className="difficulty-btn bg-green-500 hover:bg-green-600 py-2 px-4 rounded">Easy</button>
+          <button onClick={() => handleRateDifficulty('good')} className="difficulty-btn bg-yellow-500 hover:bg-yellow-600 py-2 px-4 rounded">Good</button>
+          <button onClick={() => handleRateDifficulty('hard')} className="difficulty-btn bg-red-500 hover:bg-red-600 py-2 px-4 rounded">Hard</button>
+          <button onClick={() => handleRateDifficulty('again')} className="difficulty-btn bg-purple-500 hover:bg-purple-600 py-2 px-4 rounded">Again</button>
+          <button onClick={handleShowAnswer} className="show-answer-btn bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
+            {showAnswer ? 'Hide Answer' : 'Show Answer'}
+          </button>
         </div>
       </div>
+    </div>
   );
 };
 
