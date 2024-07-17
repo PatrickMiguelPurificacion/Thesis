@@ -158,7 +158,7 @@ export default function Notebook() {
     <div className="flex h-screen bg-gray-100 overflow-y-auto">
       <NavBar />
 
-      <div className="flex-grow p-8">
+      <div className="flex-grow p-8 overflow-y-auto">
         <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">Notebooks</h1>
         </header>

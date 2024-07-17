@@ -68,6 +68,11 @@ export default function Learn() {
   // Load chapter contents and optionally apply updated highlights
   const loadChapterContents = async (topic: string, updatedHighlights?: Highlighter[]) => {
     try {
+      
+      if (!topic) {
+        return '';
+      }
+      
       const response = await fetch(`/api/getContent?topic=${encodeURIComponent(topic)}`);
       if (response.ok) {
         const contents = await response.text();
@@ -194,7 +199,7 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
     <div className="flex h-screen bg-gray-100">
       <NavBar/>
 
-      <div className="flex-grow p-8">
+      <div className="flex-grow p-8 overflow-y-auto">
         <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">Cryptography</h1>
         </header>
