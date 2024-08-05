@@ -32,6 +32,12 @@ const ReviewingPageActual = () => {
   const [deckName, setDeckName] = useState('');
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [intervals, setIntervals] = useState<{ [key: string]: string }>({
+    easy: '',
+    good: '',
+    hard: '',
+    again: '',
+  });
 
   useEffect(() => {
     const getFlashcards = async () => {
@@ -40,6 +46,9 @@ const ReviewingPageActual = () => {
           const flashcards = await fetchReviewFlashcards(cramDeckID, session?.data?.user?.email!);
           console.log("Flashcards in component:", flashcards);
           setFlashcardsArray(flashcards);
+          if (flashcards.length > 0) {
+            calculateIntervals(flashcards[0]); // Calculate intervals for the first flashcard
+          }
         } catch (error) {
           console.error('Error fetching flashcards:', error);
           toast.error('Error Fetching Flashcards');
@@ -61,6 +70,51 @@ const ReviewingPageActual = () => {
     fetchDeckName();
   }, [session, cramDeckID]);
 
+  // This is for the displayed calculation
+  const calculateIntervals = (flashcard: any) => {
+    if (!flashcard) return;
+
+    const difficulties = ['easy', 'good', 'hard', 'again'];
+    const newIntervals: { [key: string]: string } = {};
+
+    let easeFactor = flashcard.data[session?.data?.user?.email!]?.easeFactor || 2.5;
+    let interval = flashcard.data[session?.data?.user?.email!]?.interval || 1;
+
+    difficulties.forEach(difficulty => {
+      let calculatedInterval = interval;
+      let calculatedEaseFactor = easeFactor;
+
+      switch (difficulty) {
+        case 'easy':
+          calculatedEaseFactor = Math.max(1.3, calculatedEaseFactor + 0.15);
+          calculatedInterval *= calculatedEaseFactor * 1.3;
+          break;
+        case 'good':
+          calculatedInterval *= calculatedEaseFactor;
+          break;
+        case 'hard':
+          calculatedEaseFactor = Math.max(1.3, calculatedEaseFactor - 0.15);
+          calculatedInterval *= 1.2;
+          break;
+        case 'again':
+          calculatedInterval = 1;
+          calculatedEaseFactor = Math.max(1.3, calculatedEaseFactor - 0.2);
+          break;
+        default:
+          break;
+      }
+
+      // Apply fuzz factor
+      const fuzzPercentage = 0.05; // 5% fuzz
+      const fuzz = (Math.random() * 2 - 1) * fuzzPercentage * calculatedInterval; // Random value between -5% and +5% of interval
+      calculatedInterval += fuzz;
+
+      // Convert interval to days
+      newIntervals[difficulty] = Math.round(calculatedInterval) + ' d';
+    });
+
+    setIntervals(newIntervals);
+  };
 
   const handleRateDifficulty = async (difficulty: string) => {
     const flashcard = flashcardsArray[currentCardIndex];
@@ -155,7 +209,6 @@ const ReviewingPageActual = () => {
             <FaTimes size={20} />
           </button>
         </header>
-
         <div className="flex justify-center items-center w-full mt-4 py-6">
           {flashcardsArray.length === 0 ? (
             <p className="text-center text-gray-600">There are No Scheduled Reviews Today</p>
@@ -170,13 +223,32 @@ const ReviewingPageActual = () => {
         </div>
 
         <div className="flex flex-col md:flex-row justify-center py-6 mt-6 space-y-4 md:space-y-0 md:space-x-4">
-          <button onClick={() => handleRateDifficulty('easy')} className="difficulty-btn bg-green-500 hover:bg-green-600 py-2 px-4 rounded">Easy</button>
-          <button onClick={() => handleRateDifficulty('good')} className="difficulty-btn bg-yellow-500 hover:bg-yellow-600 py-2 px-4 rounded">Good</button>
-          <button onClick={() => handleRateDifficulty('hard')} className="difficulty-btn bg-red-500 hover:bg-red-600 py-2 px-4 rounded">Hard</button>
-          <button onClick={() => handleRateDifficulty('again')} className="difficulty-btn bg-purple-500 hover:bg-purple-600 py-2 px-4 rounded">Again</button>
+          <div className="flex flex-col items-center">
+            <p className="text-lg text-white mb-2">{intervals['easy'] || ''}</p>
+            <button onClick={() => handleRateDifficulty('easy')} disabled={!showAnswer}
+              className={`bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded ${!showAnswer ? 'opacity-50 cursor-not-allowed' : ''}`}>Easy</button>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-lg text-white mb-2">{intervals['good'] || ''}</p>
+            <button onClick={() => handleRateDifficulty('good')} disabled={!showAnswer}
+              className={`bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded ${!showAnswer ? 'opacity-50 cursor-not-allowed' : ''}`}>Good</button>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-lg text-white mb-2">{intervals['hard'] || ''}</p>
+            <button onClick={() => handleRateDifficulty('hard')} disabled={!showAnswer}
+              className={`bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded ${!showAnswer ? 'opacity-50 cursor-not-allowed' : ''}`}>Hard</button>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-lg text-white mb-2">{intervals['again'] || ''}</p>
+            <button onClick={() => handleRateDifficulty('again')} disabled={!showAnswer}
+              className={`bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded ${!showAnswer ? 'opacity-50 cursor-not-allowed' : ''}`}>Again</button>
+          </div>
+          <div className="flex flex-col items-center">
+          <p className="text-lg text-blue-400 mb-2">{'.'}</p>
           <button onClick={handleShowAnswer} className="show-answer-btn bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
             {showAnswer ? 'Hide Answer' : 'Show Answer'}
           </button>
+          </div>
         </div>
       </div>
     </div>
