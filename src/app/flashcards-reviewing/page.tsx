@@ -92,7 +92,7 @@ const ReviewingPageActual = () => {
           interval *= 1.2 //hard interval;
           break;
         case 'again':
-          interval = 1;
+          interval = 10 / (24 * 60); // 10 minutes converted to days
           easeFactor = Math.max(1.3, easeFactor - 0.2);
           break;
         default:
