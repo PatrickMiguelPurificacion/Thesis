@@ -100,41 +100,45 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Divider */}
-        <hr className="mt-6 mb-4 border-t-2 border-gray-300" />
+        {session.status === "authenticated"
+          && !session.data?.snapshot?.admin
+          && (
+            <>
+              <hr className="mt-6 mb-4 border-t-2 border-gray-300" />
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Features</h2>
+                {/* Four Cards with Buttons */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        {/* Features Section */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Features</h2>
-          {/* Four Cards with Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {featuresCards.map((feat: Feature, idx: number) => (
+                    <div
+                      key={`feature-card-${idx}`}
+                      className="bg-white px-6 py-10 rounded-md shadow-md text-center flex flex-col items-center justify-items-center"
+                    >
+                      <div className="mb-2">
+                        {feat.icon}
+                      </div>
+                      <h2 className="text-xl font-semibold mb-2"> 
+                        {feat.header}
+                      </h2>
 
-            {featuresCards.map((feat: Feature, idx: number) => (
-              <div
-                key={`feature-card-${idx}`}
-                className="bg-white px-6 py-10 rounded-md shadow-md text-center flex flex-col items-center justify-items-center"
-              >
-                <div className="mb-2">
-                  {feat.icon}
+                      <p>{feat.text}</p>
+
+                      <button
+                        onClick={() => router.push(feat.path)}
+                        className="flex mt-3 text-blue-500 items-center gap-x-2"
+                      >
+                        <FaArrowRight
+                          className="mt-1 mr-2 shrink-0"
+                        />See {feat.header}
+                      </button>
+                    </div>
+                  ))}
                 </div>
-                <h2 className="text-xl font-semibold mb-2"> 
-                  {feat.header}
-                </h2>
-
-                <p>{feat.text}</p>
-
-                <button
-                  onClick={() => router.push(feat.path)}
-                  className="flex mt-3 text-blue-500 items-center gap-x-2"
-                >
-                  <FaArrowRight
-                    className="mt-1 mr-2 shrink-0"
-                  />See {feat.header}
-                </button>
               </div>
-            ))}
-          </div>
-        </div>
+            </>
+          )
+        }
       </div>
     </div>
   )
