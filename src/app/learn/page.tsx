@@ -199,14 +199,14 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
     <div className="flex h-screen bg-gray-100">
       <NavBar/>
 
-      <div className="flex-grow p-8 overflow-y-auto">
-        <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
+      <div className="flex-grow p-8 overflow-y-auto flex flex-col h-full">
+        <header className="text-white py-6 px-8 grow-0 shrink-0" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">Cryptography</h1>
         </header>
 
-        <div className="flex">
-          <div className="w-1/3 pr-4 border-r border-gray-300">
-            <div className="mt-4 max-h-96 overflow-y-auto">
+        <div className="flex min-h-0">
+          <div className="w-1/3 pr-4 border-r border-gray-300 overflow-y-auto">
+            <div className="mt-4 overflow-y-auto">
               {topics.map((topic) => (
                 <div key={topic} className="mb-4">
                   <div
@@ -222,7 +222,7 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
             </div>
           </div>
 
-          <div className="w-2/3 pl-4 max-h-96 overflow-y-auto">
+          <div className="w-2/3 pl-4 overflow-y-auto">
             {selectedTopic ? (
               <>
                 <div className="flex justify-between items-center mb-4">
