@@ -7,6 +7,7 @@ import NavBar from '../components/NavBar';
 import { toast } from 'sonner';
 import { Highlighter, createHighlight, fetchHighlights, deleteHighlight } from '../services/HighlightService';
 import { redirect } from 'next/navigation';
+import { MdDelete, MdDescription } from 'react-icons/md';
 
 const topics = [
   'Introduction',
@@ -234,20 +235,27 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
                   onMouseUp={handleHighlightAndNote}
                   dangerouslySetInnerHTML={{ __html: chapterContents }}
                 ></div>
-                <div className="mt-4">
+                <div className="my-4">
                   <h3 className="text-lg font-semibold">Highlights</h3>
                   <ul>
                     {filteredHighlights.map((highlight, index) => (
-                      <li key={index} className="mb-2 flex justify-between items-center">
-                        <span style={{ backgroundColor: highlight.color }} className="px-1 rounded-md">
+                      <li key={index} className="mb-2 flex flex-row justify-between items-center gap-2">
+                        <span style={{ backgroundColor: highlight.color }} className="px-1 rounded-md grow">
                           {highlight.highlightedText}
                         </span>
-                        <button
-                          className="ml-2 text-red-500"
-                          onClick={() => handleDeleteHighlight(highlight.id || '')}
-                        >
-                          Delete
-                        </button>
+
+                        <div className="flex flex-row shrink-0 grow-0">
+                          <MdDescription
+                            size="24"
+                            className="cursor-pointer"
+                            onClick={() => {}}
+                          />
+                          <MdDelete
+                            size="24"
+                            className="cursor-pointer"
+                            onClick={() => handleDeleteHighlight(highlight.id || '')}
+                          />
+                        </div>
                       </li>
                     ))}
                   </ul>
