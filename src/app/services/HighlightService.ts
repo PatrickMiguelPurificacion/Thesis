@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query, where, deleteDoc, doc } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where, deleteDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 export interface Highlighter {
@@ -7,6 +7,11 @@ export interface Highlighter {
   userID: string;
   topic: string;
   id?: string; // Optional if you need to track document IDs from Firestore
+}
+
+export const getHighlight = async (highlightID: string) => {
+  const d = await getDoc(doc(db, "highlights", highlightID));
+  return {...d.data(), id: d.id};
 }
 
 export const fetchHighlights = async (userID: string) => {

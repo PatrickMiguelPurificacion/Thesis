@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import { Highlighter, createHighlight, fetchHighlights, deleteHighlight } from '../services/HighlightService';
 import { redirect } from 'next/navigation';
 import { MdDelete, MdDescription } from 'react-icons/md';
+import NoteModal from '../modals/NoteModal';
+import { addNotebook, checkIfNotebookExists, createLearnNotebookIfDoesntExist } from '../services/NotebookService';
 
 const topics = [
   'Introduction',
@@ -36,6 +38,10 @@ export default function Learn() {
   const [filteredHighlights, setFilteredHighlights] = useState<Highlighter[]>([]);
   const [selectionDetails, setSelectionDetails] = useState<{ selection: Selection | null, text: string }>({ selection: null, text: '' });
   const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const [activeNoteModal, setActiveNoteModal] = useState(false);
+  const [activeNotebookID, setActiveNotebookID] = useState("");
+  const [activeHighlightID, setActiveHighlightID] = useState("");
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -248,7 +254,25 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
                           <MdDescription
                             size="24"
                             className="cursor-pointer"
-                            onClick={() => {}}
+                            onClick={async () => {
+                              // create notebook if it doesn't exist
+                              const id = await createLearnNotebookIfDoesntExist(
+                                session?.user?.email!,
+                                selectedTopic,
+                                {
+                                  notebookName: selectedTopic,
+                                  notesNum: 0,
+                                  userID: session?.user?.email!,
+                                  topic: selectedTopic,
+                                }
+                              );
+
+                              setActiveNotebookID(id);
+                              setActiveHighlightID(highlight.id!)
+
+                              // show modal
+                              setActiveNoteModal(true);
+                            }}
                           />
                           <MdDelete
                             size="24"
@@ -291,6 +315,19 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
               </button>
             </div>
           </div>
+        )}
+
+        {activeNoteModal && (
+          <NoteModal
+            setModalState={() => {
+              setActiveNoteModal(false);
+            }}
+            notebookID={activeNotebookID}
+            noteID={null}
+            highlightID={activeHighlightID}
+            // initialNote={currentNote}
+            // noteID={currentNote?.id || null}
+          />
         )}
       </div>
     </div>

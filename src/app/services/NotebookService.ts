@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, setDoc, getDocs, query, where, writeBatch } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, setDoc, getDocs, query, where, writeBatch, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 interface Notebook {
@@ -13,9 +13,21 @@ export const fetchNotebooks = async (userEmail: string) => {
   return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 };
 
-export const addNotebook = async (notebook: Notebook) => {
+export const createLearnNotebookIfDoesntExist = async (userID: string, topic: string, notebook: Notebook): Promise<string> => {
+  const d = await getDocs(query(
+    collection(db, "notebooks"),
+    where("userID", "==", userID),
+    where("topic", "==", topic),
+  ));
+
+  if (d.docs.length === 0) return await addNotebook(notebook);
+  return d.docs[0].id;
+}
+
+export const addNotebook = async (notebook: Notebook): Promise<string> => {
   try{
-  await addDoc(collection(db, 'notebooks'), notebook);
+    const newdoc = await addDoc(collection(db, 'notebooks'), notebook);
+    return newdoc.id;
   } catch (error) {
     console.error('Error creating notebook:', error);
     throw error;

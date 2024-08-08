@@ -8,15 +8,17 @@ interface Props {
   initialNote?: any;
   noteID?: string | null;
   notebookID: string | null;
+  highlightID?: string | null;
 }
 
-const NoteModal = ({ setModalState, initialNote, noteID, notebookID }: Props) => {
+const NoteModal = ({ setModalState, initialNote, noteID, notebookID, highlightID }: Props) => {
   const { data: session } = useSession();
   const [note, setNote] = useState({
     noteTitle: '',
     noteContent: '',
     notebookID: notebookID,
     userID: session?.user?.email || '',
+    highlightID: highlightID || '',
   });
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const NoteModal = ({ setModalState, initialNote, noteID, notebookID }: Props) =>
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <div className="relative bg-white shadow-md rounded p-8 m-4 w-full max-w-xl">
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">Note Title</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Note Title {highlightID}</label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="noteTitle"

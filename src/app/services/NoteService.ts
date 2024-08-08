@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export interface Note {
@@ -29,6 +29,21 @@ export const createNote = async (note: Note, notebookId: string | null) => {
     throw error;
   }
 };
+
+export const createLearnNote = async (userID: string, topic: string, note: Note) => {
+  // find notebook
+  const notebook = await getDocs(query(
+    collection(db, "notebooks"),
+    where("userID", "==", userID),
+    where("topic", "==", topic),
+  ));
+
+  // create note
+  if (notebook.docs.length) {
+    const notebookID = notebook.docs[0].id;
+    createNote(note, notebookID);
+  }
+}
 
 export const updateNote = async (noteId: string, note: Note) => {
   try {
