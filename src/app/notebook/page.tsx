@@ -20,6 +20,7 @@ import { deleteNote, fetchNotes } from '../services/NoteService';
 
 // Notifications
 import { toast } from 'sonner';
+import { getHighlight, Highlighter } from '../services/HighlightService';
 
 export default function Notebook() {
   // Ensures user is in session
@@ -37,6 +38,8 @@ export default function Notebook() {
   const [notebookModalState, setNotebookModalState] = useState(false); // For showing the notebook modal or not
   const [selectedNotebookId, setSelectedNotebookId] = useState(''); // Gets the Notebook Selected for ViewNotes
   const [currentNotebook, setCurrentNotebook] = useState<any | null>(null); // For Storing the Notebook to be edited
+
+  const [highlights, setHighlights] = useState<{[key:string]: Highlighter}>({});
 
   
     const getNotebooks = useCallback(async () => {
@@ -107,6 +110,27 @@ export default function Notebook() {
       if (selectedNotebookId) {
         try {
           const notes = await fetchNotes(selectedNotebookId); // Call fetchNotes function with the selected notebook ID
+
+          const promises: Promise<any>[] = [];
+          notes.forEach(note => {
+            if (note.highlightID != null) {
+              promises.push(new Promise(async (res, rej) => {
+                const h = await getHighlight(note.highlightID);
+                res(h);
+              }));
+            }
+          });
+
+          Promise.all(promises).then((values) => {
+            console.log(values);
+            
+            const h = {...highlights};
+            values.forEach(value => {
+              h[value.id] = value;
+            });
+            setHighlights(h);
+          })
+
           setNotesArray(notes);
         } catch (error) {
           console.error('Error fetching notes:', error);
@@ -114,6 +138,8 @@ export default function Notebook() {
         }
       }
   }, [selectedNotebookId]);
+
+  console.log(highlights);
 
   useEffect(() => {
     getNotes();
@@ -158,15 +184,15 @@ export default function Notebook() {
     <div className="flex h-screen bg-gray-100 overflow-y-auto">
       <NavBar />
 
-      <div className="flex-grow p-8 overflow-y-auto">
+      <div className="flex-grow p-8 overflow-y-auto flex flex-col h-full">
         <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">Notebooks</h1>
         </header>
 
         {/* This is for the Notebook Section of the Page */}
-        <div className="flex">
-          <div className="w-1/3 pr-4 border-r border-gray-300">
-            <div className="mt-4 max-h-96 overflow-y-auto">
+        <div className="flex min-h-0 grow">
+          <div className="w-1/3 pr-4 border-r border-gray-300 overflow-y-auto">
+            <div className="mt-4 overflow-y-auto">
               {notebooksArray.map((notebook) => (
                 <div key={notebook.id} className="mb-4">
                   <div
@@ -212,7 +238,7 @@ export default function Notebook() {
           </div>
 
           {/* This is for the Notes Section of the Page */}
-          <div className="w-2/3 pl-4">
+          <div className="w-2/3 pl-4 overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold mt-4">Notes</h2>
               {selectedNotebookId && ( //Ensures that the Add New Note Button only shows up when there is a notebook selected
@@ -235,11 +261,20 @@ export default function Notebook() {
             )}
 
             {/* Displaying the Notes on one side of the screen */}
-            <div className="mt-4 max-h-96 overflow-y-auto">
+            <div className="mt-4 overflow-y-auto">
               {notesArray.map((note) => (
                 <div key={note.id} className="w-full mb-4 border rounded-md overflow-hidden shadow-md">
                   <div className="p-4 bg-yellow-200">
+                    {note.highlightID && (
+                      <p
+                        style={{
+                          backgroundColor: highlights[note.highlightID]?.color ?? "white",
+                        }}
+                        className="px-1 rounded-md mb-2 w-fit"
+                      >{highlights[note.highlightID]?.highlightedText ?? ""}</p>
+                    )}
                     <div className="flex justify-between items-center">
+
                       <h3 className="text-lg font-semibold mb-2">{note.noteTitle}</h3>
                       <div className="space-x-2">
                         <button onClick={() => handleEditNote(note)} className="text-gray-500 hover:text-gray-800">

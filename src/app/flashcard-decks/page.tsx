@@ -43,7 +43,7 @@ export default function Decks() {
     const getDecks = useCallback(async () => {
       if (session.data?.user?.email) {
         try {
-          const decks = await fetchDecks(session.data.user.email);
+          const decks = await fetchDecks(session.data?.user?.email ?? "");
           setDecksArray(decks);
         } catch (error) {
           console.error('Error fetching decks:', error);
@@ -115,7 +115,7 @@ export default function Decks() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 gap-8">
-        {decksArray.map((deck) => (
+        {session?.data?.user?.email && decksArray.map((deck) => (
           <React.Fragment key={`deck-${deck.id}`}>
           <Deck
             deck={deck}
@@ -123,7 +123,7 @@ export default function Decks() {
             handleEditDeck={handleEditDeck}
             handleReview={handleReview}
             isAdmin={session?.data?.snapshot?.admin}
-            email={session?.data?.user?.email}
+            userEmail={session?.data?.user?.email ?? ""}
           />
           </React.Fragment>
         ))}

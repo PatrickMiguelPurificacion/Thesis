@@ -7,6 +7,9 @@ import NavBar from '../components/NavBar';
 import { toast } from 'sonner';
 import { Highlighter, createHighlight, fetchHighlights, deleteHighlight } from '../services/HighlightService';
 import { redirect } from 'next/navigation';
+import { MdDelete, MdDescription } from 'react-icons/md';
+import NoteModal from '../modals/NoteModal';
+import { addNotebook, checkIfNotebookExists, createLearnNotebookIfDoesntExist } from '../services/NotebookService';
 
 const topics = [
   'Introduction',
@@ -35,6 +38,10 @@ export default function Learn() {
   const [filteredHighlights, setFilteredHighlights] = useState<Highlighter[]>([]);
   const [selectionDetails, setSelectionDetails] = useState<{ selection: Selection | null, text: string }>({ selection: null, text: '' });
   const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const [activeNoteModal, setActiveNoteModal] = useState(false);
+  const [activeNotebookID, setActiveNotebookID] = useState("");
+  const [activeHighlightID, setActiveHighlightID] = useState("");
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -199,14 +206,14 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
     <div className="flex h-screen bg-gray-100">
       <NavBar/>
 
-      <div className="flex-grow p-8 overflow-y-auto">
-        <header className="text-white py-6 px-8" style={{ backgroundColor: '#142059' }}>
+      <div className="flex-grow p-8 overflow-y-auto flex flex-col h-full">
+        <header className="text-white py-6 px-8 grow-0 shrink-0" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">Cryptography</h1>
         </header>
 
-        <div className="flex">
-          <div className="w-1/3 pr-4 border-r border-gray-300">
-            <div className="mt-4 max-h-96 overflow-y-auto">
+        <div className="flex min-h-0">
+          <div className="w-1/3 pr-4 border-r border-gray-300 overflow-y-auto">
+            <div className="mt-4 overflow-y-auto">
               {topics.map((topic) => (
                 <div key={topic} className="mb-4">
                   <div
@@ -222,7 +229,7 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
             </div>
           </div>
 
-          <div className="w-2/3 pl-4 max-h-96 overflow-y-auto">
+          <div className="w-2/3 pl-4 overflow-y-auto">
             {selectedTopic ? (
               <>
                 <div className="flex justify-between items-center mb-4">
@@ -234,20 +241,45 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
                   onMouseUp={handleHighlightAndNote}
                   dangerouslySetInnerHTML={{ __html: chapterContents }}
                 ></div>
-                <div className="mt-4">
+                <div className="my-4">
                   <h3 className="text-lg font-semibold">Highlights</h3>
                   <ul>
                     {filteredHighlights.map((highlight, index) => (
-                      <li key={index} className="mb-2 flex justify-between items-center">
-                        <span style={{ backgroundColor: highlight.color }} className="px-1 rounded-md">
+                      <li key={index} className="mb-2 flex flex-row justify-between items-center gap-2">
+                        <span style={{ backgroundColor: highlight.color }} className="px-1 rounded-md grow">
                           {highlight.highlightedText}
                         </span>
-                        <button
-                          className="ml-2 text-red-500"
-                          onClick={() => handleDeleteHighlight(highlight.id || '')}
-                        >
-                          Delete
-                        </button>
+
+                        <div className="flex flex-row shrink-0 grow-0">
+                          <MdDescription
+                            size="24"
+                            className="cursor-pointer"
+                            onClick={async () => {
+                              // create notebook if it doesn't exist
+                              const id = await createLearnNotebookIfDoesntExist(
+                                session?.user?.email!,
+                                selectedTopic,
+                                {
+                                  notebookName: selectedTopic,
+                                  notesNum: 0,
+                                  userID: session?.user?.email!,
+                                  topic: selectedTopic,
+                                }
+                              );
+
+                              setActiveNotebookID(id);
+                              setActiveHighlightID(highlight.id!)
+
+                              // show modal
+                              setActiveNoteModal(true);
+                            }}
+                          />
+                          <MdDelete
+                            size="24"
+                            className="cursor-pointer"
+                            onClick={() => handleDeleteHighlight(highlight.id || '')}
+                          />
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -283,6 +315,19 @@ const highlightContents = (contents: string, highlights: Highlighter[]) => {
               </button>
             </div>
           </div>
+        )}
+
+        {activeNoteModal && (
+          <NoteModal
+            setModalState={() => {
+              setActiveNoteModal(false);
+            }}
+            notebookID={activeNotebookID}
+            noteID={null}
+            highlightID={activeHighlightID}
+            // initialNote={currentNote}
+            // noteID={currentNote?.id || null}
+          />
         )}
       </div>
     </div>

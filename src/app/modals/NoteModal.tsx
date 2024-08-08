@@ -8,15 +8,17 @@ interface Props {
   initialNote?: any;
   noteID?: string | null;
   notebookID: string | null;
+  highlightID?: string | null;
 }
 
-const NoteModal = ({ setModalState, initialNote, noteID, notebookID }: Props) => {
+const NoteModal = ({ setModalState, initialNote, noteID, notebookID, highlightID }: Props) => {
   const { data: session } = useSession();
   const [note, setNote] = useState({
     noteTitle: '',
     noteContent: '',
     notebookID: notebookID,
     userID: session?.user?.email || '',
+    highlightID: highlightID || '',
   });
 
   useEffect(() => {
