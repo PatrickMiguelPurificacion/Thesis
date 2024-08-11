@@ -5,6 +5,7 @@ interface Notebook {
   notebookName: string;
   notesNum: number;
   userID: string;
+  topic?: string;
 }
 
 export const fetchNotebooks = async (userEmail: string) => {

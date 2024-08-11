@@ -9,7 +9,7 @@ import { Highlighter, createHighlight, fetchHighlights, deleteHighlight } from '
 import { redirect } from 'next/navigation';
 import { MdDelete, MdDescription } from 'react-icons/md';
 import NoteModal from '../modals/NoteModal';
-import { addNotebook, checkIfNotebookExists, createLearnNotebookIfDoesntExist } from '../services/NotebookService';
+import { addNotebook, createLearnNotebookIfDoesntExist } from '../services/NotebookService';
 
 const topics = [
   'Introduction',

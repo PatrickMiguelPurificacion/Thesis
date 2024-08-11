@@ -115,7 +115,7 @@ export default function Notebook() {
           notes.forEach(note => {
             if (note.highlightID != null) {
               promises.push(new Promise(async (res, rej) => {
-                const h = await getHighlight(note.highlightID);
+                const h = await getHighlight(note.highlightID!);
                 res(h);
               }));
             }

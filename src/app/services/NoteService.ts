@@ -6,12 +6,13 @@ export interface Note {
   noteContent: string;
   notebookID?: string | null;
   userID: string;
+  highlightID?: string;
 }
 
 export const fetchNotes = async (selectedNotebookId: string) => {
   const q = query(collection(db, 'notes'), where('notebookID', '==', selectedNotebookId));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as (Note & {id: string;})[];
 };
 
 export const createNote = async (note: Note, notebookId: string | null) => {
