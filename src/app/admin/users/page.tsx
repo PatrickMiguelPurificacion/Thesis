@@ -52,17 +52,55 @@ export default function Decks() {
     })();
   }, [session]);
 
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+
+  const usersFilter = (user: UserDetails) => {
+    const dates = ((user.recentActiveDays ?? []) as Timestamp[]).map((value) => value.seconds * 1000);
+
+    const _from = from ? new Date(from).getTime() : undefined;
+    const __to = to ? new Date(to) : undefined;
+    const _to = to ? __to?.setDate(__to.getDate() + 1) : undefined;
+
+    return (
+      (from ? dates.filter(date => date >= _from!).length > 0 : true) &&
+      (to ? dates.filter(date => date < _to!).length > 0 : true)
+    );
+  }
+
   return (
     <div className="flex h-screen bg-gray-100">
       <NavBar />
 
       <div className="flex-grow overflow-y-auto p-8">
-        <header className="text-white py-6 px-8 mb-2" style={{ backgroundColor: '#142059' }}>
+        <header className="text-white py-6 px-8 mb-4" style={{ backgroundColor: '#142059' }}>
           <h1 className="text-2xl font-semibold text-center">All Users</h1>
           <h2 className="text-xl font-semibold text-center">{userNum} Total Users</h2>
         </header>
 
-        {allUsers.map((user: UserDetails, idx: number) => (
+        <div className="flex flex-row gap-6 mb-4 items-center">
+          <div className="flex flex-row gap-2 items-center">
+            <p className="font-bold">From:</p>
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => setFrom((e.target as HTMLInputElement).value)}
+            />
+          </div>
+
+          <div className="flex flex-row gap-2 items-center">
+            <p className="font-bold">To:</p>
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => setTo((e.target as HTMLInputElement).value)}
+            />
+          </div>
+
+          <p>Found {allUsers.filter(usersFilter).length} out of {allUsers.length} users</p>
+        </div>
+
+        {allUsers.filter(usersFilter).map((user: UserDetails, idx: number) => (
           <div
             className="bg-white p-4 mb-4"
             key={`user-${idx}`}

@@ -48,8 +48,6 @@ export const updateLastActive = async (userEmail: string) => {
       recent.push(new Date());
     }
 
-    // Limits 'recentActiveDays' array to 10 entries only
-    if (recent.length > 10) recent.shift(); // Remove oldest entry if array length is more than 10
     nu.recentActiveDays = recent;
 
     await setDoc(doc(db, 'users', snapshot.docs[0].id), nu);
