@@ -38,7 +38,7 @@ export default function Decks() {
     let strs: string[] = [];
     for (let i = 0; i < dates.length; i++) {
       let d = new Date(dates[i].seconds * 1000);
-      strs.push(`${d.getFullYear()}-${d.getMonth().toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`);
+      strs.push(`${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`);
     }
 
     return strs.join(', ');
